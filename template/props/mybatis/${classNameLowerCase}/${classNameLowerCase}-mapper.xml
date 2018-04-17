@@ -1,0 +1,83 @@
+<#include "/macro.include"/> 
+<#include "/custom.include"/> 
+<#assign className = table.className>   
+<#assign classNameLowerCase = className?lower_case>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${basepackage}.mapper.${className}Mapper">
+
+	<resultMap type="${basepackage}.model.${className}" id="${className}Map">
+	
+	<#list table.columns as c>
+		<result column="${c.sqlName}" property="${c.columnNameLower}"/>
+	</#list>		
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="update${className}"  parameterType="${basepackage}.model.${className}">
+		<![CDATA[
+		update
+		 ${table.sqlName}
+		set 
+		<#list table.columns as c>
+		   <#if c.pk==false>
+		${c.sqlName}={${c.columnNameLower}},
+		   </#if>
+		</#list>
+		<#list table.columns as c>
+		   <#if c.pk==true>
+		where ${c.sqlName} ={${c.columnNameLower}}
+			</#if>
+		</#list>
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="add${className}" parameterType="${basepackage}.model.${className}" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  ${table.sqlName} (
+			<#list table.columns as c>
+				<#if c.pk==false>
+				${c.sqlName},		
+				</#if>						
+			</#list>
+		)
+		values(
+			<#list table.columns as u>
+				<#if u.pk==false>
+				{${u.columnNameLower}},
+				</#if>
+			</#list>
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="delete${className}" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from ${table.sqlName}
+			<#list table.columns as c>
+			  <#if c.pk==true>
+			  	where ${c.sqlName} ={${c.columnNameLower}}
+			  </#if>
+			 </#list>
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="find${className}" parameterType="${basepackage}.model.${className}" resultMap="${className}Map">
+	   <![CDATA[
+		select * from ${table.sqlName} where 1=1
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="find${className}ByPage" parameterType="${basepackage}.model.${className}" resultMap="${className}Map">
+		<![CDATA[
+		select  * from ${table.sqlName} where 1=1
+		]]>
+	</select>
+	
+</mapper>	

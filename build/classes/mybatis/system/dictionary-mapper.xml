@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.system.mapper.SystemDictionaryMapper">
+	
+	<resultMap type="com.suyin.system.model.SystemDictionary" id="systemDictionaryResultMap">
+		<association property="sonTrees" column="dictionary_id"  select="findEasyUITreeIsChildren" ></association>
+	</resultMap>	
+	
+	
+	
+	<!-- 检查当前节点是否有子集 -->
+	<select id="findEasyUITreeIsChildren" resultType="java.lang.Integer" parameterType="java.lang.String" >
+		SELECT COUNT(0) FROM system_data_dictionary WHERE parentId=#{dictionary_id}
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="addSystemDictionary" parameterType="com.suyin.system.model.SystemDictionary">
+		insert into
+		system_data_dictionary
+		(
+		parentId,
+		dictionary_name,
+		dictionary_value,
+		dictionary_type,
+		module_type,
+		dictionary_explain,
+		dictionary_code
+		)
+		values
+		(
+		#{parentId},
+		#{dictionary_name},
+		#{dictionary_value},
+		#{dictionary_type},
+		#{module_type},
+		#{dictionary_explain},
+		#{dictionary_code}
+		)
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="deleteSystemDictionary" parameterType="com.suyin.system.model.SystemDictionary">
+		delete from system_data_dictionary where dictionary_id=#{dictionary_id} OR parentId=#{dictionary_id}
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="updateSystemDictionary" parameterType="com.suyin.system.model.SystemDictionary">
+		update system_data_dictionary	set
+		parentId=#{parentId},
+		dictionary_name=#{dictionary_name},
+		dictionary_value=#{dictionary_value},
+		dictionary_type=#{dictionary_type},
+		module_type=#{module_type},
+		dictionary_explain=#{dictionary_explain},
+		dictionary_code=#{dictionary_code}
+		where 
+		dictionary_id=#{dictionary_id}
+	</update>
+	
+	<!-- 查询 -->
+	<select id="findSystemDictionaryByPage" parameterType="com.suyin.system.model.SystemDictionary" resultMap="systemDictionaryResultMap">
+		select *,dictionary_id as id,dictionary_name as name,dictionary_name as text from system_data_dictionary where 1=1
+		AND	parentId=0
+		<if test="null!=dictionary_name and ''!=dictionary_name">
+				AND dictionary_name like '%${dictionary_name}%'
+		</if>
+		<if test="null!=dictionary_code and ''!=dictionary_code">
+				AND dictionary_code like '%${dictionary_code}%'
+		</if>
+		<if test="null!=dictionary_id and ''!=dictionary_id ">
+		   		AND	dictionary_id=#{dictionary_id}
+		</if>
+		order by dictionary_id	asc
+	</select>
+	
+	
+	<!-- 查询 -->
+	<select id="findSystemDictionary" parameterType="com.suyin.system.model.SystemDictionary" resultMap="systemDictionaryResultMap">
+		select *,dictionary_id as id,dictionary_name as name,dictionary_name as text from system_data_dictionary where 1=1
+		<if test="null!=parentId and ''!=parentId ">
+		   		AND	parentId=#{parentId}
+		</if>
+		<if test="null!=dictionary_id and ''!=dictionary_id ">
+		   		AND	dictionary_id=#{dictionary_id}
+		</if>
+		order by dictionary_id	asc
+	</select>
+</mapper>

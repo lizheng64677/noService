@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.system.mapper.UserMapper">
+
+	<resultMap type="com.suyin.system.model.SystemUser" id="userMap">
+		<result column="id" property="id"/>
+		<result column="loginName" property="loginName"/>
+		<result column="loginPwd" property="loginPwd"/>
+		<result column="state" property="state"/>
+		<result column="nickName" property="nickName"/>
+		<result column="iconUrl" property="iconUrl"/>
+		<result column="createTime" property="createTime"/> 
+		<result column="remark" property="remark"/> 
+	</resultMap>
+	<select id="findUser" parameterType="com.suyin.system.model.SystemUser" resultMap="userMap">
+		SELECT * FROM system_user WHERE 1=1
+		<if test="null!=id and ''!=id">
+			and id=#{id}
+		</if>
+		<if test="null!=loginName and ''!=loginName">
+			and loginName=#{loginName}
+		</if>
+		<if test="null!=loginPwd and ''!=loginPwd">
+			and loginPwd=#{loginPwd}
+		</if>
+	</select>
+	<select id="findUserByPage" parameterType="com.suyin.system.model.SystemUser" resultMap="userMap">
+		SELECT * FROM system_user WHERE 1=1
+		<if test="null!=id and ''!=id">
+			and id=#{id}
+		</if>
+		<if test="null!=loginName and ''!=loginName">
+			and loginName=#{loginName}
+		</if>
+		<if test="null!=loginPwd and ''!=loginPwd">
+			and loginPwd=#{loginPwd}
+		</if>
+	</select>
+	<!-- 插入 -->
+	<insert id="addUser" parameterType="com.suyin.system.model.SystemUser" useGeneratedKeys="true" keyProperty="id">
+		INSERT system_user(
+			loginName,loginPwd,state,nickName,iconUrl,createTime,remark
+		)
+		values(
+			#{loginName},#{loginPwd},#{state},#{nickName},#{iconUrl},now(),#{remark}
+		)
+	
+	</insert>
+	<!-- 更新 -->
+	<update id="updateUser"  parameterType="com.suyin.system.model.SystemUser">
+		update system_user
+		set loginName=#{loginName},
+		nickName=#{nickName},iconUrl=#{iconUrl},state=${state},
+		remark=#{remark}
+		where id=#{id}
+	</update>
+	<update id="updateUserPwd"  parameterType="com.suyin.system.model.SystemUser">
+		update system_user
+		set loginPwd=#{loginPwd}
+		where loginName=#{loginName}
+	</update>
+	<!-- 删除 -->
+	<delete id="deleteUser" parameterType="java.lang.String">
+		DELETE FROM  system_user WHERE id =#{id}
+	</delete>
+	<!-- 新增用户对应角色的关联信息 -->
+	<insert id="addUserRefRole" parameterType="java.util.List">
+		INSERT user_role(
+			user_id,role_id,is_default
+		)
+		values
+		<foreach collection="list" item="map" index="index" separator=",">
+		(
+			#{map.userId},#{map.roleId},#{map.isDefault}
+		)
+		</foreach>
+	
+	</insert>
+	
+	
+	<!-- 删除用户对应角色的关联信息 -->
+	<delete id="deleteUserRefRole" parameterType="java.lang.String">
+		DELETE FROM  user_role WHERE user_id =#{userId}
+	</delete>
+	<!-- 用户默认角色设置 -->
+	<update id="upadteUserDefaultRole" parameterType="java.util.HashMap">
+		UPDATE user_role SET is_default=#{isDefault} where user_role_id=#{userRoleId}
+	</update>
+</mapper>

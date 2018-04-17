@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.member.mapper.CategoryMapper">
+	<!-- 商家品类管理 -->
+	<resultMap type="com.suyin.member.model.Category" id="CategoryMap">
+	
+		<result column="cg_id" property="cgId"/>
+		<result column="cg_name" property="cgName"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateCategory"  parameterType="com.suyin.member.model.Category">
+		<![CDATA[
+		update
+		 t_category
+		set 
+		cg_name=#{cgName},
+		update_time=now()
+		where cg_id =#{cgId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addCategory" parameterType="com.suyin.member.model.Category" useGeneratedKeys="true" keyProperty="cgId">
+	<![CDATA[
+
+		insert  t_category (
+				cg_name,		
+				create_time,		
+				update_time		
+		)
+		values(
+				#{cgName},
+				now(),
+				now()
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteCategory" parameterType="java.lang.String">
+		<![CDATA[
+		delete from  t_category
+			  	where cg_id =#{cgId}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findCategory" parameterType="com.suyin.member.model.Category" resultMap="CategoryMap">
+	   <![CDATA[
+			select
+			t.cg_id,
+			t.cg_name,
+			date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time
+		from
+			t_category t
+		where
+			1 = 1
+			
+		]]>
+		<if test="null!=cgId and ''!=cgId">
+		
+			and t.cg_id=#{cgId}
+		</if>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findCategoryByPage" parameterType="com.suyin.member.model.Category" resultMap="CategoryMap">
+		<![CDATA[
+		select
+			t.cg_id,
+			t.cg_name,
+			date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time
+		from
+			t_category t
+		where
+			1 = 1
+		]]>
+		order by t.create_time desc
+	</select>
+	
+</mapper>	

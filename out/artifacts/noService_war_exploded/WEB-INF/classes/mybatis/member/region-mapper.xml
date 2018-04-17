@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.member.mapper.RegionMapper">
+	<!-- 商圈管理 -->
+	<resultMap type="com.suyin.member.model.Region" id="RegionMap">
+	
+		<result column="region_id" property="regionId"/>
+		<result column="region_name" property="regionName"/>
+		<result column="city_id" property="cityId"/>
+		<result column="provin_id" property="provinId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateRegion"  parameterType="com.suyin.member.model.Region">
+		<![CDATA[
+		update
+		 t_region
+		set 
+		region_name=#{regionName},
+		city_id=#{cityId},
+		provin_id=#{provinId},
+		update_time=now()
+		where region_id =#{regionId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addRegion" parameterType="com.suyin.member.model.Region" useGeneratedKeys="true" keyProperty="regionId">
+	<![CDATA[
+
+		insert  t_region (
+				region_name,		
+				city_id,
+				provin_id,		
+				create_time,		
+				update_time		
+		)
+		values(
+				#{regionName},
+				#{cityId},
+				#{provinId},
+				now(),
+				now()
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteRegion" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_region
+			  	where region_id =#{regionId}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findRegion" parameterType="com.suyin.member.model.Region" resultMap="RegionMap">
+	   <![CDATA[
+		select
+			t.city_id,
+			t.region_id,
+			t.provin_id,
+			t.region_name,
+			date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time
+		from
+			t_region t
+		where
+			1 = 1
+		]]>
+		<if test="null!=regionId and ''!=regionId">
+		
+			and region_id=#{regionId}
+			
+		</if>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findRegionByPage" parameterType="com.suyin.member.model.Region" resultMap="RegionMap">
+		<![CDATA[
+		select
+			t.city_id,
+			t.provin_id,
+			t.region_id,
+			t.region_name,
+			date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time
+
+		from
+			t_region t
+		where
+			1 = 1
+		order by t.create_time desc
+		]]>
+	</select>
+	
+</mapper>	

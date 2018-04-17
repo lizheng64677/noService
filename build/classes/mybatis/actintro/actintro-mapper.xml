@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.actinfo.mapper.ActIntroMapper">
+
+	<resultMap type="com.suyin.actinfo.model.ActIntro" id="ActIntroMap">
+	
+		<result column="act_intro_id" property="actIntroId"/>
+		<result column="content" property="content"/>
+		<result column="type" property="type"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateActIntro"  parameterType="com.suyin.actinfo.model.ActIntro">
+		<![CDATA[
+		update
+		 t_act_intro
+		set 
+		content=#{content},
+		type=#{type},
+		update_time=now()
+		where act_intro_id =#{actIntroId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addActIntro" parameterType="com.suyin.actinfo.model.ActIntro" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_act_intro (
+				content,		
+				type,		
+				create_time
+		)
+		values(
+				#{content},
+				#{type},
+				now()
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteActIntro" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_act_intro   	WHERE find_in_set(act_intro_id,#{actIntroId})>0
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findActIntro" parameterType="com.suyin.actinfo.model.ActIntro" resultMap="ActIntroMap">
+	   <![CDATA[
+		select * from t_act_intro where 1=1
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findActIntroByPage" parameterType="com.suyin.actinfo.model.ActIntro" resultMap="ActIntroMap">
+		<![CDATA[
+		select  * from t_act_intro where 1=1
+		]]>
+	</select>
+	
+	<!-- 根据id查询信息 -->
+	<select id="findActIntroById" parameterType="com.suyin.actinfo.model.ActIntro" resultMap="ActIntroMap">
+		select 
+			act_intro_id,
+			content,
+			type,
+			create_time,
+			update_time 
+		from 
+			t_act_intro 
+		where 
+			act_intro_id=#{actIntroId}
+	</select>
+</mapper>	

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.experience.mapper.ExpPrototypeMapper">
+
+	<resultMap type="com.suyin.experience.model.ExpPrototype" id="ExpPrototypeMap">
+	
+		<result column="prototype_id" property="prototypeId"/>
+		<result column="exp_id" property="expId"/>
+		<result column="dictionary_id" property="dictionaryId"/>
+		<result column="text_value" property="textValue"/>
+		<result column="is_selected" property="isSelected"/>
+		<result column="create_time" property="createTime"/>
+	
+	</resultMap>
+	<!-- 添加活动动态属性信息 -->
+	<insert id="addExpPrototype" parameterType="com.suyin.experience.model.ExpPrototype">
+		insert into t_exp_prototype
+			(
+			exp_id,
+			dictionary_id,
+			text_value,
+			is_selected,
+			create_time,
+			module_type
+			)
+			values
+			(
+			#{expId},
+			#{dictionaryId},
+			#{textValue},
+			#{isSelected},
+			now(),
+			#{moduleType}
+			)
+	
+	</insert>
+	<insert id="addExpTaskPrototype" parameterType="com.suyin.experience.model.ExpPrototype">
+		insert into t_exp_prototype
+			(
+			exp_id,
+			dictionary_id,
+			text_value,
+			is_selected,
+			create_time,
+			module_type
+			)
+			values
+			(
+			#{expId},
+			#{dictionaryId},
+			#{textValue},
+			#{isSelected},
+			now(),
+			1
+			)
+	
+	</insert>
+	<!-- 查询活动对应活动所选项 -->
+	<select id="findExpPrototypeOption" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<![CDATA[
+		select
+		s.dictionary_name,
+		s.dictionary_value,
+		s.dictionary_id,
+		d.text_value,
+		ifnull(d.is_selected, 0) as selected
+		from
+		system_data_dictionary s
+		left join (
+		select
+			*
+		from
+			t_exp_prototype
+		where
+		 exp_id = #{expId}
+		and dictionary_id in (
+			select
+				dictionary_id
+			from
+				system_data_dictionary
+			where
+				parentid = #{dictionary_id}
+			)
+		) d on s.dictionary_id = d.dictionary_id
+		where
+		s.parentid = #{dictionary_id}
+		]]>
+
+	</select>
+	<select id="findExpTaskPrototypeOption" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<![CDATA[
+		select
+		s.dictionary_name,
+		s.dictionary_value,
+		s.dictionary_id,
+		d.text_value,
+		ifnull(d.is_selected, 0) as selected
+		from
+		system_data_dictionary s
+		left join (
+		select
+			*
+		from
+			t_exp_prototype 
+		where
+		 exp_id = #{expId} and module_type=1
+		and dictionary_id in (
+			select
+				dictionary_id
+			from
+				system_data_dictionary
+			where
+				parentid = #{dictionary_id}
+			)
+		) d on s.dictionary_id = d.dictionary_id
+		where
+		s.parentid = #{dictionary_id}
+		]]>
+
+	</select>
+	
+	<!-- 获取所有用户动态属性 -->
+	<select id="findExpPrototype" resultType="java.util.HashMap">
+		<![CDATA[
+		select
+		dictionary_id,
+		dictionary_name,
+		dictionary_type
+		from
+		system_data_dictionary
+		where
+		system_data_dictionary.parentId = 0
+		and system_data_dictionary.module_type = 1
+		]]>
+	</select>
+	
+	<select id="findExpTaskPrototype" resultType="java.util.HashMap" parameterType="string">
+		
+	</select>
+
+	<delete id="deleteExpTaskPrototype" parameterType="java.lang.String">
+		delete from t_exp_prototype where exp_id=#{expId} and module_type=1
+	</delete>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteExpPrototype" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_exp_prototype
+			  	where exp_id =#{expId}
+		]]>
+	</delete>
+	
+	<!-- 根据活动id查询是否配置动态属性 -->
+	<select id="findExpByExpId" parameterType="com.suyin.experience.model.ExpPrototype" resultMap="ExpPrototypeMap">
+	   <![CDATA[
+		select  * from t_exp_prototype t where t.exp_id=#{expId}
+		]]>
+	</select>
+	<!-- 查询属性集合 -->
+	<select id="findExpByExpIdList"  parameterType="com.suyin.experience.model.ExpPrototype" resultMap="ExpPrototypeMap">
+		<![CDATA[ 	
+				select  * from t_exp_prototype t where t.exp_id=#{expId}
+		]]>
+	</select>
+	
+</mapper>	

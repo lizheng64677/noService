@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.coin.mapper.NouserCoinTellerMapper">
+	
+	
+	<!--信息更新 -->
+	<update id="updateNouserCoinTellerStatus"  parameterType="hashmap">
+		<![CDATA[
+		update
+		 t_nouser_coin_teller
+		set 
+				status=#{status},
+				update_time=now()
+		where find_in_set(log_id,#{ids})>0
+		]]>
+	</update>
+
+	<update id="updateNouserCoinOrMoney" parameterType="hashmap">
+		<if test="status=='1'.toString()">
+			update  t_nouser_static_prototype nsp inner join 
+			(
+			select user_id ,sum(money) as money,sum(coin) as coin from t_nouser_coin_teller ncl where find_in_set(ncl.log_id,#{ids})>0 group by user_id
+			) ncl on nsp.user_id=ncl.user_id
+			set nsp.frozen_gold_coin=(nsp.frozen_gold_coin-ncl.coin)
+			,nsp.money=nsp.money+ncl.money
+		</if>
+		<if test="status=='2'.toString()">
+			update  t_nouser_static_prototype nsp inner join 
+			(
+			select user_id ,sum(coin) as coin from t_nouser_coin_teller ncl where find_in_set(ncl.log_id,#{ids})>0 group by user_id
+			) ncl on nsp.user_id=ncl.user_id
+			set nsp.frozen_gold_coin=(nsp.frozen_gold_coin-ncl.coin),
+			nsp.gold_coin=(nsp.gold_coin+ncl.coin)
+		</if>		
+	</update>
+	
+	<insert id="addCashLog" parameterType="hashmap">
+		insert into t_nouser_cash_log(user_id,content,money,direction,create_time)
+		select user_id,'金币转换',money,'1',now() from t_nouser_coin_teller 
+		where find_in_set(log_id,#{ids})>0
+	</insert>
+	<insert id="addCoinLog" parameterType="hashmap">
+		insert into t_nouser_coin_log(user_id,content,gold_coin,direction,create_time)
+		select user_id,'金币转换',coin,'1',now() from t_nouser_coin_teller 
+		where find_in_set(log_id,#{ids})>0
+	</insert>
+	<!-- 更新日志状态及显示内容 -->
+	<update id="updateCoinLog" parameterType="hashmap">
+		<![CDATA[
+	 	update
+		 t_nouser_coin_log t
+		set 
+				t.direction=#{direction},
+				t.content=#{content},
+				t.status=#{log_status},
+				t.update_time=now()
+		where find_in_set(t.coinTellerId,#{ids})>0
+	]]>
+	
+	</update>
+	
+	<!-- 查询信息列表 -->
+	<select id="findNouserCoinTeller" parameterType="com.suyin.coin.model.NouserCoinTeller" resultType="com.suyin.coin.model.NouserCoinTeller">
+		select log_id as logId,
+		coin,
+		money,
+		status,
+		date_format(nct.create_time,'%Y-%m-%d %T') as createTime,
+		date_format(nct.update_time,'%Y-%m-%d %T') as updateTime,
+		n.user_phone
+		from t_nouser_coin_teller nct 
+		inner join t_nouser n on nct.user_id=n.user_id
+		where 1=1
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findNouserCoinTellerByPage" parameterType="com.suyin.coin.model.NouserCoinTeller" resultType="com.suyin.coin.model.NouserCoinTeller">
+		select log_id as logId,
+		coin,
+		money,
+		status,
+		nct.user_id as userId,
+		date_format(nct.create_time,'%Y-%m-%d %T') as createTime,
+		date_format(nct.update_time,'%Y-%m-%d %T') as updateTime,
+		n.user_phone as userPhone
+		from t_nouser_coin_teller nct 
+		inner join t_nouser n on nct.user_id=n.user_id
+		where 1=1
+		<if test="status!=null">
+			and status=#{status}
+		</if>
+		order by nct.create_time desc
+	</select>
+	
+	
+	<!-- 查询金币提现累积记录 -->
+	<select id="coinTellerRecordList" parameterType="com.suyin.coin.model.NouserCoinTeller" resultType="com.suyin.coin.model.NouserCoinTeller">
+	select DISTINCT(
+		select max(update_time)  from t_nouser_coin_teller where user_id=t.user_id) as updateTime,(
+		select sum(coin)  from t_nouser_coin_teller where user_id=t.user_id) as coin,(
+		select sum(1) from t_nouser_coin_teller where  user_id=t.user_id)as count ,b.user_id,a.ali_user_name as userName,t.user_phone as userPhone from t_nouser_coin_teller b
+		join t_nouser t on t.user_id = b.user_id
+		join t_nouser_static_prototype a on t.user_id = a.user_id
+		where
+			b.`status` = 1
+				<if test="userPhone!=null">
+		and t.user_phone = #{userPhone}
+	</if>
+		order by b.update_time desc
+	</select>
+	
+	<!-- 查询金币提现累积记录 备用 -->
+	<select id="coinTellerRecordList1" parameterType="com.suyin.coin.model.NouserCoinTeller" resultType="com.suyin.coin.model.NouserCoinTeller">
+	<![CDATA[
+		select
+			b.user_id,
+			a.ali_user_name as 'userName',
+			t.user_phone as 'userPhone'
+		from
+			t_nouser_coin_teller b
+		join t_nouser t on t.user_id = b.user_id
+		join t_nouser_static_prototype a on t.user_id = a.user_id
+		where
+			b.`status` = 1
+	]]>
+	<if test="userPhone!=null">
+		and t.user_phone = #{userPhone}
+	</if>
+		order by b.update_time desc
+	</select>
+	
+	<select id="findCoinLogByUserByPage" resultType="com.suyin.coin.model.CoinLog" parameterType="com.suyin.coin.model.CoinLog">
+		select log_id as logId,user_id as userId,content,gold_coin as goldCoin,direction,
+		date_format(create_time,'%Y-%m-%d %H:%i:%S') as createTime,status
+		from t_nouser_coin_log where user_id=#{userId}
+		order by create_time desc
+	</select>
+	
+</mapper>	

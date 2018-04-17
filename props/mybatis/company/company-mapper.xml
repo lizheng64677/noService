@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.company.mapper.CompanyMapper">
+
+	
+	
+
+	<resultMap type="com.suyin.company.model.Company" id="CompanyMap">
+		<result column="company_id" property="companyId"/>
+		<result column="image" property="image"/>
+		<result column="title" property="title"/>
+		<result column="url" property="url"/>
+		<result column="module" property="module"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+	
+	
+	
+	
+	<!-- 信息插入 -->
+	<insert id="addCompany" parameterType="com.suyin.company.model.Company" useGeneratedKeys="true" keyColumn="company_id" keyProperty="companyId" >
+	<![CDATA[
+		insert t_company (
+				image,
+				title,
+				url,
+				module,
+				create_time
+		)
+		values(
+				#{image},
+				#{title},
+				#{url},
+				#{module},
+				now()
+		)
+		]]>
+	</insert>	
+	
+	<!--信息更新 -->
+	<update id="updateCompany"  parameterType="com.suyin.company.model.Company">
+		<![CDATA[
+		update
+		 t_company
+		set 
+				image=#{image},
+				title=#{title},
+				url=#{url},
+				module=#{module},
+				create_time=now()
+		where company_id=#{companyId}
+		]]>
+	</update>
+
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteCompany" parameterType="java.lang.String">
+		<![CDATA[
+		delete from t_company
+		where find_in_set (company_id,#{companyId})>0
+		]]>
+	</delete>
+	
+	<select id="findCompanyById" parameterType="com.suyin.company.model.Company" resultMap="CompanyMap">
+		select * from t_company where 1=1 and company_id=#{companyId}
+	</select>
+	
+	<!-- 查询信息列表 -->
+	<select id="findCompany" parameterType="com.suyin.company.model.Company" resultMap="CompanyMap">
+	   <![CDATA[
+		select * from t_company where 1=1
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findCompanyByPage" parameterType="com.suyin.company.model.Company" resultMap="CompanyMap">
+		<![CDATA[
+		select * from t_company where 1=1
+		]]>
+	</select>
+	
+</mapper>	

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.weChat.mapper.WeChatMenuMapper">
+
+	<resultMap type="com.suyin.weChat.model.db.WeChatMenu" id="weChatMenuMap">
+
+	</resultMap>
+
+	<!-- 查询条件 -->
+	<sql id="findWeChatMenuCondition">
+		WHERE 1=1
+		<if test="null!=id and ''!=id">
+			AND id =#{id}
+		</if>
+		<if test="null!=level and ''!=level">
+			AND level =#{level}
+		</if>
+		<if test="null!=parentId and ''!=parentId">
+			AND parentId =#{parentId}
+		</if>
+		<if test="null!=createUser and ''!=createUser">
+			AND createUser =#{createUser}
+		</if>
+		ORDER BY id ASC
+	</sql>
+
+	<sql id="weChatMenuColumns">
+		*,nodeName as text,nodeName as name,parentId as
+		_parentId
+	</sql>
+
+
+	<select id="getWeChatMenu" parameterType="com.suyin.weChat.model.db.WeChatMenu"
+		resultMap="weChatMenuMap">
+		SELECT
+		<include refid="weChatMenuColumns" />
+		FROM wechat_menu
+		<include refid="findWeChatMenuCondition" />
+	</select>
+
+
+	<select id="findWeChatMenu" parameterType="com.suyin.weChat.model.db.WeChatMenu"
+		resultMap="weChatMenuMap">
+		SELECT
+		<include refid="weChatMenuColumns" />
+		FROM wechat_menu
+		<include refid="findWeChatMenuCondition" />
+	</select>
+
+	<insert id="addWeChatMenu" parameterType="com.suyin.weChat.model.db.WeChatMenu">
+		INSERT INTO
+		wechat_menu
+		(
+		parentId,
+		nodeName,
+		nodeType,
+		nodeKey,
+		moduleUrl,
+		description,
+		createtime,
+		updatetime,
+		level,
+		createUser
+		)
+		VALUES
+		(
+		#{parentId},
+		#{name},
+		#{nodeType},
+		#{nodeKey},
+		#{moduleUrl},
+		#{description},
+		#{createtime},
+		#{updatetime},
+		#{level},
+		#{createUser}
+		)
+	</insert>
+
+	<delete id="deleteWeChatMenu" parameterType="com.suyin.weChat.model.db.WeChatMenu">
+		DELETE FROM
+		wechat_menu WHERE id=${id} OR parentId=#{id}
+	</delete>
+
+	<update id="updateWeChatMenu" parameterType="com.suyin.weChat.model.db.WeChatMenu">
+		UPDATE wechat_menu
+		SET
+		parentId=#{parentId},
+		nodeName=#{name},
+		nodeType=#{nodeType},
+		nodeKey=#{nodeKey},
+		moduleUrl=#{moduleUrl},
+		description=#{description},
+		updatetime=#{updatetime}
+		WHERE id=#{id}
+	</update>
+</mapper>

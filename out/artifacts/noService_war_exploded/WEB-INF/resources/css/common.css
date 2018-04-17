@@ -1,0 +1,29 @@
+#top{  _width:100%; min-width:800px; height:98px;position:relative; background:url(../images/topbg.jpg);}
+#logo{ padding-left:28px; padding-top:28px; width:345px; position:absolute; left:0px;}
+#topRight{ width:483px; height:100%;background:url(../images/rightbg.jpg) no-repeat;position:absolute; right:0px;}
+.handlink{ cursor: pointer;}
+#topRight ul{ margin-top:13px; margin-left:-10px;}
+#topRight ul li { float:left; color:#e2edff; margin-left:15px; padding-left:12px; background:url(../images/icon.png); background-repeat:no-repeat;}
+#topRight ul li a{ color:#e2edff; text-decoration:none;}
+#topRight ul li a:hover{ color:#e2edff; text-decoration:underline;}
+#topRight ul li a:visited{ color:#e2edff; text-decoration:none;}
+#topRight span{float:left;color:#fff; display:inline-block; margin:30px 0 0 0px;}
+#topRight img{margin: 0 4px 0 10px;vertical-align: middle;}
+.curdate{ position: fixed;right: 60px;top: 50px;color: #fff;}
+.curdate span{ display:block;}
+.curdate select{ width:150px;-webkit-appearance: button;background: none;border: none;outline:none}
+
+.toptitle{position: absolute;
+  top: 31px;
+  left: 300px;
+  font-size: 30;
+  color: #fff;
+  line-height: 30px;
+  font-weight: bold;
+}
+.footer_{width:100%; min-width:800px; height:28px;background:url(../images/topbg.jpg);text-align: center;padding-top: 10px;}
+.input{
+width:300px;
+height:30px;
+border:1px solid #ccc;
+}

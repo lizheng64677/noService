@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.system.mapper.AttachmentMapper">
+	<!-- 添加附件 -->
+	<insert id="addAttachment" parameterType="com.suyin.system.model.Attachment">
+		insert into
+		t_attachment
+		(
+		module,
+		entity,
+		entity_attribute,
+		file_name,
+		file_type,
+		file_size,
+		file_path,
+		display_path,
+		create_time
+		)
+		values
+		(
+		#{module},
+		#{entity},
+		#{entity_attribute},
+		#{file_name},
+		#{file_type},
+		#{file_size},
+		#{file_path},
+		#{display_path},
+		now()
+		)
+	</insert>
+	
+	<insert id="addAttachments" parameterType="com.suyin.system.model.Attachment">
+		insert into
+		t_attachment
+		(
+		module,
+		entity,
+		entity_attribute,
+		file_name,
+		file_type,
+		file_size,
+		file_path,
+		display_path,
+		create_time
+		)
+		<foreach collection="list" item="a" separator="union all">
+			select 
+			#{a.module},
+			#{a.entity},
+			#{a.entity_attribute},
+			#{a.file_name},
+			#{a.file_type},
+			#{a.file_size},
+			#{a.file_path},
+			#{a.display_path},
+			now()
+		</foreach>
+	</insert>
+	
+	<!-- 删除附件 -->
+	<delete id="deleteAttachment" parameterType="com.suyin.system.model.Attachment">
+		delete from t_attachment where 
+		<if test="null!=attachment_id and ''!=attachment_id">
+			attachment_id=#{attachment_id}
+		</if>
+		<if test="null!=entity and ''!=entity">
+			entity=#{entity}
+		</if>
+	</delete>
+	<!-- 查询附件 -->
+	<select id="findAttachment" parameterType="com.suyin.system.model.Attachment" resultType="com.suyin.system.model.Attachment">
+		select * from t_attachment	where
+		<if test="null!=attachment_id and ''!=attachment_id">
+		   AND	attachment_id=#{attachment_id}
+		</if>
+		<if test="null!=entity and ''!=entity">
+			AND entity=#{entity}
+		</if>
+	</select>
+	<!-- 查询附件 -->
+	<select id="findAttachmentByExpId" parameterType="com.suyin.system.model.Attachment" resultType="com.suyin.system.model.Attachment">
+		select * from t_attachment	where  entity=#{entity}
+	</select>
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.participator.mapper.ParticipatorMapper">
+
+	<resultMap type="com.suyin.participator.model.Participator" id="ParticipatorMap">
+	
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="number" property="number"/>
+		<result column="age" property="age"/>
+		<result column="activity_declaration" property="activityDeclaration"/>
+		<result column="introduce" property="introduce"/>
+		<result column="type" property="type"/>
+		<result column="votes_number" property="votesNumber"/>
+		<result column="head_img_url" property="headImgUrl"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateParticipator"  parameterType="com.suyin.participator.model.Participator">
+		<![CDATA[
+		update
+		 t_participator
+		set 
+		name=#{name},
+		number=#{number},
+		age=#{age},
+		activity_declaration=#{activityDeclaration},
+		introduce=#{introduce},
+		type=#{type},
+		head_img_url=#{headImgUrl},
+		update_time=#{updateTime}
+		where id =#{id}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addParticipator" parameterType="com.suyin.participator.model.Participator" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_participator (
+				name,		
+				number,		
+				age,		
+				activity_declaration,		
+				introduce,		
+				type,		
+				votes_number,		
+				head_img_url,		
+				create_time,		
+				update_time		
+		)
+		values(
+				#{name},
+				#{number},
+				#{age},
+				#{activityDeclaration},
+				#{introduce},
+				#{type},
+				#{votesNumber},
+				#{headImgUrl},
+				#{createTime},
+				#{updateTime}
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteParticipator" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_participator
+			  	where id = #{id}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findParticipator" parameterType="com.suyin.participator.model.Participator" resultMap="ParticipatorMap">
+	   <![CDATA[
+		select * from t_participator where 1=1
+		]]>
+	</select>
+	
+		
+	<!-- 查询信息 -->
+	<select id="findParticipatorById" parameterType="com.suyin.participator.model.Participator" resultMap="ParticipatorMap">
+	   <![CDATA[
+		select * from t_participator where id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findParticipatorByPage" parameterType="com.suyin.participator.model.Participator" resultMap="ParticipatorMap">
+		<![CDATA[
+		select  t1.id,
+				t1.name,		
+				t1.number,		
+				t1.age,		
+				t1.activity_declaration,		
+				t1.introduce,		
+				t1.type,		
+				t1.votes_number,		
+				t1.head_img_url,		
+				date_format(t1.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+				date_format(t1.update_time,'%Y-%m-%d %H:%i:%s') as update_time	
+				 from t_participator t1 where 1=1
+		]]>
+		order by t1.create_time DESC			
+	</select>
+	
+</mapper>	

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.system.mapper.PermissionMapper">
+
+	<!-- 查找菜单列表，角色有对应的菜单对象返回state 1,否则0 -->
+	<select id="findPermission" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+		SELECT
+			res.*, CASE
+		WHEN role.role_id=#{roleId} THEN
+			1
+		ELSE
+			0
+		END AS state
+		FROM
+			system_resource res
+		LEFT JOIN resources_role role ON res.id = role.resc_id and role.role_id=#{roleId}
+	</select>
+	
+	<!-- 根据用户角色关联对象id获取对应的权限菜单列表 -->
+	<select id="findMenuByUserRoleId" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+		SELECT
+			res.*
+		FROM
+			system_resource res
+		LEFT JOIN resources_role role ON res.id = role.resc_id 
+		WHERE role.role_id in(select u.role_id from user_role u where u.user_role_id=#{userRoleId})
+	</select>
+	
+	<!-- 插入 -->
+	<insert id="addPermission" parameterType="java.util.List">
+		INSERT resources_role(
+			resc_id,role_id
+		)
+		values
+		<foreach collection="list" item="map" index="index" separator=",">
+	 	(#{map.rescId},#{map.roleId})
+	</foreach>
+	
+	</insert>
+	<!-- 删除 -->
+	<delete id="deletePermission" parameterType="java.lang.String">
+		DELETE FROM  resources_role WHERE role_id =#{id}
+	</delete>
+</mapper>

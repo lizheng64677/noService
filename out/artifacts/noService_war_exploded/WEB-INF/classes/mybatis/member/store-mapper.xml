@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.member.mapper.StoreMapper">
+	<!-- 门店管理 -->
+	<resultMap type="com.suyin.member.model.Store" id="StoreMap">
+	
+		<result column="store_id" property="storeId"/>
+		<result column="store_name" property="storeName"/>
+		<result column="store_tel" property="storeTel"/>
+		<result column="store_address" property="storeAddress"/>
+		<result column="store_address_url" property="storeAddressUrl"/>
+		<result column="store_pic_url" property="storePicUrl"/>
+		<result column="city_id" property="cityId"/> 
+		<result column="provin_id" property="provinId"/> 
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="collect_num" property="collectNum"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateStore"  parameterType="com.suyin.member.model.Store">
+		<![CDATA[
+		update
+		 t_store
+		set 
+		store_name=#{storeName},
+		store_tel=#{storeTel},
+		store_address=#{storeAddress},
+		store_address_url=#{storeAddressUrl},
+		store_pic_url=#{storePicUrl},
+		city_id=#{cityId},
+		provin_id=#{provinId},
+		update_time=now()
+		where store_id =#{storeId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addStore" parameterType="com.suyin.member.model.Store" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_store (
+				store_name,		
+				store_tel,		
+				store_address,		
+				store_address_url,		
+				store_pic_url,		
+				city_id,
+				provin_id,			
+				create_time,		
+				update_time		
+		)
+		values(
+				#{storeName},
+				#{storeTel},
+				#{storeAddress},
+				#{storeAddressUrl},
+				#{storePicUrl},
+				#{cityId},
+				#{provinId},
+				now(),
+				now()
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteStore" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_store
+			  	where store_id =#{storeId}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findStore" parameterType="com.suyin.member.model.Store" resultMap="StoreMap">
+	   <![CDATA[
+		select
+			t.cg_id,
+			t.city_id,
+			t.provin_id,
+			t.store_id,
+			t.store_address,
+			t.store_address_url,
+			t.store_name,
+			t.store_pic_url,
+			t.store_tel,
+			date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time
+		from
+			t_store t
+		where
+			1 = 1
+		]]>
+		<if test="null!=storeId and ''!=storeId">
+		and t.store_id=#{storeId}
+		</if>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findStoreByPage" parameterType="com.suyin.member.model.Store" resultMap="StoreMap">
+		<![CDATA[
+	select
+		t.cg_id,
+		t.city_id,
+		t.provin_id,
+		t.store_id,
+		t.store_address,
+		t.store_address_url,
+		t.store_name,
+		t.store_pic_url,
+		t.store_tel,
+		date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+		date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time
+	from
+		t_store t
+	where
+		1 = 1
+		order by t.create_time desc
+		]]>
+	</select>
+	
+</mapper>	

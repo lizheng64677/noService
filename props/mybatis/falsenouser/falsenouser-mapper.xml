@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.falsedata.mapper.FalseNouserMapper">
+
+	<resultMap type="com.suyin.falsedata.model.FalseNouser" id="FalseNouserMap">
+	
+		<result column="user_id" property="userId"/>
+		<result column="user_phone" property="userPhone"/>
+		<result column="user_state" property="userState"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="head_url" property="headUrl"/>
+		<result column="t_exp_share_num" property="texpShareNum"/>
+		<result column="t_task_easy_num" property="ttaskEasyNum"/>
+		<result column="t_task_help_num" property="ttaskHelpNum"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateFalseNouser"  parameterType="com.suyin.falsedata.model.FalseNouser">
+		<![CDATA[
+		update
+		 t_false_nouser
+		set 
+		user_phone=#{userPhone},
+		user_state=#{userState},
+		update_time=now(),
+		head_url=#{headUrl},
+		t_exp_share_num=#{texpShareNum},
+		t_task_easy_num=#{ttaskEasyNum},
+		t_task_help_num=#{ttaskHelpNum}
+		where user_id =#{userId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+    <insert id="addFalseNouser" parameterType="com.suyin.falsedata.model.FalseNouser" useGeneratedKeys="true" keyColumn="user_id" keyProperty="userId">
+	<![CDATA[
+
+		insert  t_false_nouser (
+				user_phone,			
+				create_time,				
+				head_url,		
+				t_exp_share_num				
+		)
+		values(
+				#{userPhone},
+				now(),
+				#{headUrl},
+				#{texpShareNum}
+		)
+		]]>
+	</insert>
+	
+	<!-- 信息批量插入 -->
+	<insert id="addFalseNouserByBatch" parameterType="hashMap">
+		insert  t_false_nouser (
+				user_phone,			
+				create_time,
+				update_time,
+				t_exp_share_num,
+				t_task_easy_num,
+				t_task_help_num
+		)									
+		values
+		<foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.userPhone},now(),now(),#{item.shareNum},#{item.easyNum},#{item.helpNum})  
+        </foreach>  	
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteFalseNouser" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_false_nouser 	where find_in_set(user_id,#{userId})>0
+		]]>
+	</delete>
+	
+	<!-- 根据id批量删除信息-->
+	<delete id="deleteFalseNouserByBatch" parameterType="java.lang.String">
+		delete from t_false_nouser where 1!=1
+		<foreach collection="ids" item="id" separator="OR">
+			user_id=#{id}
+		</foreach>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findFalseNouser" parameterType="com.suyin.falsedata.model.FalseNouser" resultMap="FalseNouserMap">
+	   <![CDATA[
+	   select
+			t.user_id,
+			t.user_phone,
+			t.user_state,
+			date_format(t.create_time,'%Y-%m-%d %H:%i') as create_time,
+			date_format(t.update_time,'%Y-%m-%d %H:%i') as update_time,
+			t.head_url,
+			t.t_exp_share_num,
+			t.t_task_easy_num,
+			t.t_task_help_num
+		from
+			t_false_nouser t
+		where
+			1 = 1
+		 and 
+		 t.user_id=#{userId}
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findFalseNouserByPage" parameterType="com.suyin.falsedata.model.FalseNouser" resultMap="FalseNouserMap">
+		<![CDATA[
+		select
+			t.user_id,
+			t.user_phone,
+			t.user_state,
+			date_format(t.create_time,'%Y-%m-%d %H:%i') as create_time,
+			date_format(t.update_time,'%Y-%m-%d %H:%i') as update_time,
+			t.head_url,
+			t.t_exp_share_num,
+			t.t_task_easy_num,
+			t.t_task_help_num
+		from
+			t_false_nouser t
+		where
+			1 = 1
+		order by
+			t.user_id desc
+		]]>
+	</select>
+	
+</mapper>	

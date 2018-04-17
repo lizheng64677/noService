@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.system.mapper.MenuMapper">
+
+	<resultMap type="com.suyin.system.model.SystemResource" id="retMap">
+		<result column="id" property="id"/>
+		<result column="parentId" property="parentId"/>
+		<result column="nodeName" property="nodeName"/>
+		<result column="nodeType" property="nodeType"/>
+		<result column="moduleUrl" property="moduleUrl"/>
+		<result column="resourceContent" property="resourceContent"/>
+		<result column="resourceExplain" property="resourceExplain"/>
+	</resultMap>
+	<select id="findMenu" parameterType="com.suyin.system.model.SystemResource" resultMap="retMap">
+		SELECT * FROM system_resource WHERE 1=1
+		<if test="null!=id and ''!=id">
+			and id=#{id}
+		</if>
+		<if test="null!=parentId and ''!=parentId">
+			and parentId=#{parentId}
+		</if>
+	</select>
+	<!-- 插入 -->
+	<insert id="addMenu" parameterType="com.suyin.system.model.SystemResource">
+		INSERT system_resource(
+			parentId,icon,nodeName,nodeType,moduleUrl,resourceContent,resourceExplain,code
+		)
+		values(
+			#{parentId},#{icon},#{nodeName},#{nodeType},#{moduleUrl},#{resourceContent},#{resourceExplain},#{code}
+		)
+	
+	</insert>
+	<!-- 更新 -->
+	<update id="updateMenu"  parameterType="com.suyin.system.model.SystemResource">
+		update system_resource
+		set nodeName=#{nodeName},moduleUrl=#{moduleUrl},
+		nodeType=#{nodeType},resourceContent=#{resourceContent},
+		resourceExplain=#{resourceExplain},code=#{code}
+		where id=#{id}
+	</update>
+	<!-- 删除 -->
+	<delete id="deleteMenu" parameterType="java.lang.String">
+		DELETE FROM  system_resource WHERE id =#{id}
+	</delete>
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD SQL Map Config 3.0//EN"  
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<!--分页组件 -->
+		<typeAlias type="com.suyin.system.model.Page" alias="Page" />
+		<!-- 基础对象类 -->
+		<typeAlias type="com.suyin.system.model.BaseModel" alias="BaseModel" />
+	</typeAliases>
+
+	<plugins>
+		<plugin interceptor="com.suyin.system.util.PagePlugin">
+			<property name="dialect" value="mysql" />
+			<property name="pageSqlId" value=".*ByPage.*" />
+		</plugin>
+	</plugins>
+</configuration>

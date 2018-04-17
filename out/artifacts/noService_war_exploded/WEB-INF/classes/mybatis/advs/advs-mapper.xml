@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.advs.mapper.AdvsMapper">
+
+	
+	
+
+	<resultMap type="com.suyin.advs.model.Advs" id="AdvsMap">
+		<result column="adv_id" property="advId"/>
+		<result column="adv_name" property="advName"/>
+		<result column="pic_url" property="picUrl"/>
+		<result column="link_url" property="linkUrl"/>
+		<result column="pic_index" property="picIndex"/>
+		<result column="description" property="description"/>
+		<result column="type" property="type"/>
+		<result column="module" property="module"/>
+		<result column="entity" property="entity"/>
+		<result column="exp_id" property="expId"/>
+		<result column="client_type" property="clientType"/>	
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+	
+	
+	
+	
+	<!-- 信息插入 -->
+	<insert id="addAdvs" parameterType="com.suyin.advs.model.Advs" useGeneratedKeys="true" keyColumn="adv_id" keyProperty="advId" >
+	<![CDATA[
+		INSERT t_advs (
+				adv_name,
+				pic_url,
+				link_url,
+				pic_index,
+				description,
+				type,
+				module,
+				entity,
+				client_type,
+				exp_id,
+				create_time
+		)
+		values(
+				#{advName},
+				#{picUrl},
+				#{linkUrl},
+				#{picIndex},
+				#{description},
+				#{type},
+				#{module},
+				#{entity},
+				#{clientType},
+				#{expId},
+				now()
+		)
+		]]>
+	</insert>	
+	
+	<!--信息更新 -->
+	<update id="updateAdvs"  parameterType="com.suyin.advs.model.Advs">
+		<![CDATA[
+		update
+		 t_advs
+		set 
+				adv_name=#{advName},
+				pic_url=#{picUrl},
+				link_url=#{linkUrl},
+				pic_index=#{picIndex},
+				description=#{description},
+				type=#{type},
+				client_type=#{clientType},
+				exp_id =#{expId},
+				update_time=now()
+		WHERE adv_id=#{advId}
+		]]>
+	</update>
+
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteAdvs" parameterType="java.lang.String">
+		<![CDATA[
+		DELETE FROM t_advs
+		WHERE find_in_set(adv_id,#{advId})>0
+		]]>
+	</delete>
+	<!-- 根据id批量删除信息-->
+	<delete id="deleteAdvsByBatch" parameterType="java.lang.String">
+		DELETE FROM t_advs WHERE 1!=1
+		<foreach collection="ids" item="id" separator="OR">
+			adv_id=#{id}
+		</foreach>
+	</delete>
+	
+	<select id="findAdvsById" parameterType="com.suyin.advs.model.Advs" resultMap="AdvsMap">
+		SELECT * FROM t_advs WHERE 1=1 AND adv_id=#{advId}
+	</select>
+	
+	<!-- 查询信息列表 -->
+	<select id="findAdvs" parameterType="com.suyin.advs.model.Advs" resultMap="AdvsMap">
+	   <![CDATA[
+		SELECT * FROM t_advs WHERE 1=1
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findAdvsByPage" parameterType="com.suyin.advs.model.Advs" resultMap="AdvsMap">
+		<![CDATA[
+		SELECT * FROM t_advs WHERE 1=1 ORDER BY type, pic_index
+		]]>
+	</select>
+	
+</mapper>	

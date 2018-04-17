@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd	
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task-3.0.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+	<mvc:annotation-driven/>
+	
+	<context:component-scan base-package="com.suyin.*.controller" />	
+	<context:component-scan base-package="com.suyin.*.service.impl"/>
+	
+	<task:scheduler id="scheduler" pool-size="5" />
+	<task:executor id="executor" keep-alive="3600" pool-size="5-10" queue-capacity="300" rejection-policy="CALLER_RUNS" /> 
+	<task:annotation-driven executor="executor" scheduler="scheduler" />
+
+	
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.suyin.system.interceptor.VerificationHandlerInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+    <mvc:resources mapping="/resources/**" location="/WEB-INF/resources/" cache-period="3600" />
+    
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="mediaTypes">
+            <map>
+                <!-- <entry key="atom" value="application/atom+xml" /> -->
+                <entry key="json" value="application/json" />
+                <entry key="html" value="text/html" />
+            </map>
+        </property>
+        <property name="viewResolvers">
+            <list>
+                <bean
+                    class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+                <bean
+                    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="prefix" value="/WEB-INF/views/" />
+                    <property name="suffix" value=".jsp" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- 对静态资源文件的访问   缓存一年 
+	<mvc:resources mapping="/images/**" location="/WEB-INF/resources"  cache-period="3600"/>
+	<mvc:resources mapping="/css/**" location="/WEB-INF/resources" />
+	<mvc:resources mapping="/js/**" location="/WEB-INF/resources" />
+	<mvc:resources mapping="/fonts/**" location="/WEB-INF/fonts" /> 
+	<mvc:resources mapping="/favicon.ico" location="favicon.ico" /> 
+	-->
+	
+	 
+	<!-- 缓存配置(两种) -->  
+    <!-- 启用缓存注解功能(请将其配置在Spring主配置文件中) -->  
+    <cache:annotation-driven cache-manager="cacheManager"/>  
+    <!-- Spring自己的基于java.util.concurrent.ConcurrentHashMap实现的缓存管理器(该功能是从Spring3.1开始提供的) -->  
+    <!--   
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">  
+        <property name="caches">  
+            <set>  
+                <bean name="myCache" class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"/>  
+            </set>  
+        </property>  
+    </bean>  
+     -->  
+    <!-- 若只想使用Spring自身提供的缓存器,则注释掉下面的两个关于Ehcache配置的bean,并启用上面的SimpleCacheManager即可 -->  
+    <!-- Spring提供的基于的Ehcache实现的缓存管理器 -->  
+    <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">  
+        <property name="configLocation" value="classpath:ehcache.xml"/>  
+    </bean>  
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">  
+        <property name="cacheManager" ref="cacheManagerFactory"/>  
+    </bean> 
+    
+    
+	<bean id="exceptionResolver" class="com.suyin.system.resolver.MyExceptionResolver"></bean>
+	<!-- springMVC文件上传 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
+        <!-- 指定所上传文件的总大小不能超过20M。注意maxUploadSize属性的限制不是针对单个文件，而是所有文件的容量之和 --> 
+        <property name="maxUploadSize" value="20000000"/> 
+    </bean>	
+</beans>

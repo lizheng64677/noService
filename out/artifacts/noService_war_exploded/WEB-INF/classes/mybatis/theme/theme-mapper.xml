@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.theme.mapper.ThemeMapper">
+
+	
+	
+
+	<resultMap type="com.suyin.theme.model.Theme" id="ThemeMap">
+		<result column="id" property="id"/>
+		<result column="image" property="image"/>
+		<result column="type" property="type"/>
+		<result column="begin" property="begin"/>
+		<result column="end" property="end"/>
+		<result column="title" property="title"/>
+		<result column="url" property="url"/>
+		<result column="module" property="module"/>
+		<result column="entity" property="entity"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	</resultMap>
+	
+	
+	
+	
+	<!-- 信息插入 -->
+	<insert id="addTheme" parameterType="com.suyin.theme.model.Theme" useGeneratedKeys="true" keyColumn="id" keyProperty="id" >
+	<![CDATA[
+		INSERT t_theme (
+				image,
+				type,
+				begin,
+				end,
+				title,
+				url,
+				module,
+				entity,
+				create_time
+		)
+		values(
+				#{image},
+				#{type},
+				#{begin},
+				#{end},
+				#{title},
+				#{url},
+				#{module},
+				#{entity},
+				now()
+		)
+		]]>
+	</insert>	
+	
+	<!--信息更新 -->
+	<update id="updateTheme"  parameterType="com.suyin.theme.model.Theme">
+		<![CDATA[
+		update
+		 t_theme
+		set 
+				image=#{image},
+				type=#{type},
+				begin=#{begin},
+				end=#{end},
+				title=#{title},
+				url=#{url},
+				update_time=now()
+		WHERE id=#{id}
+		]]>
+	</update>
+
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteTheme" parameterType="java.lang.String">
+		<![CDATA[
+		DELETE FROM t_theme
+		WHERE find_in_set(id,#{id})>0
+		]]>
+	</delete>
+	<!-- 根据id批量删除信息-->
+	<delete id="deleteThemeByBatch" parameterType="java.lang.String">
+		DELETE FROM t_theme WHERE 1!=1
+		<foreach collection="ids" item="id" separator="OR">
+			id=#{id}
+		</foreach>
+	</delete>
+	
+	<select id="findThemeById" parameterType="com.suyin.theme.model.Theme" resultMap="ThemeMap">
+		SELECT * FROM t_theme WHERE 1=1 AND id=#{id}
+	</select>
+	
+	<!-- 查询信息列表 -->
+	<select id="findTheme" parameterType="com.suyin.theme.model.Theme" resultMap="ThemeMap">
+	   <![CDATA[
+		SELECT * FROM t_theme WHERE 1=1
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findThemeByPage" parameterType="com.suyin.theme.model.Theme" resultMap="ThemeMap">
+		<![CDATA[
+		SELECT * FROM t_theme WHERE 1=1
+		]]>
+	</select>
+	
+</mapper>	

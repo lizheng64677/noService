@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.expzhuan.mapper.ExpTaskOrderMapper">
+
+	
+	
+
+	<resultMap type="com.suyin.expzhuan.model.ExpTaskOrder" id="ExpTaskOrderMap">
+		<result column="order_id" property="orderId"/>
+		<result column="user_id" property="userId"/>
+		<result column="userPhone" property="userPhone"/>
+		<result column="title" property="task.title"/>
+		<result column="expUserGold" property="task.expUserGold"/>
+		<result column="showType" property="task.showType"/>
+		<result column="exp_id" property="expId"/>
+		<result column="regtype" property="regtype"/>
+		<result column="module_type" property="moduleType"/>
+		<result column="show_type" property="showType"/>
+		<result column="status" property="status"/>
+		<result column="total_gold" property="totalGold"/>
+		<result column="browse_count" property="browseCount"/>
+		<result column="image_url" property="imageUrl"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="userPhone1" property="userPhone1"/>
+	</resultMap>
+	
+	<!-- 全民赚订单导出  gyx -->
+	<select id="findNouserCoinTeller" parameterType="com.suyin.expzhuan.model.ExpTask" resultType="hashmap">
+   		select 
+		u.user_phone as userPhone,
+		et.title, 
+		eto.show_type,
+		date_format(eto.create_time,'%Y-%m-%d') create_time,
+		date_format(eto.update_time,'%Y-%m-%d') update_time,
+		eto.status
+		from t_exp_task_order eto
+		inner join t_nouser u on eto.user_id=u.user_id
+		inner join t_exp_task et on eto.exp_id=et.exp_id
+		where 1=1 and et.exp_type=1 
+		<if test="status!=null and status!=-1">
+			and eto.status=#{status}
+		</if>
+		<if test="expId!=null and expId!=-1">
+			and eto.exp_id=#{expId}
+		</if>
+		<if test="showType!=null and showType!=-1">
+			and eto.show_type=#{showType}
+		</if>			
+	</select>
+	
+	
+	<!--更新订单状态 -->
+	<update id="updateExpTaskOrderStatus"  parameterType="hashmap">
+		<![CDATA[
+		update t_exp_task_order
+		set status=#{status}
+		where find_in_set(order_id,#{ids})>0
+		]]>
+	</update>
+	<!-- 给用户加金币 -->
+	<update id="updateUserCoins" parameterType="hashmap">
+	<![CDATA[
+		update t_nouser_static_prototype nsp 
+		inner join t_exp_task_order eto on nsp.user_id=eto.user_id
+		inner join t_exp_task et on eto.exp_id=et.exp_id
+		set nsp.gold_coin=nsp.gold_coin+et.exp_user_gold
+		where eto.order_id=#{orderId} and et.exp_type=1
+	]]>
+<!-- 		where FIND_IN_SET(eto.order_id,#{ids})>0 and et.exp_type=1   先用循环顶着 -->
+	</update>
+	<!-- 更新订单金币数 -->
+	<update id="updateOrderCoin" parameterType="hashmap">
+		update t_exp_task_order eto
+		inner join t_exp_task et on eto.exp_id=et.exp_id
+		set eto.total_gold=et.exp_user_gold
+		where FIND_IN_SET(eto.order_id,#{ids})>0 and et.exp_type=1
+	</update> 
+	
+	<!-- 找到所有全民赚的活动 -->
+	<select id="findAllExpTaskA" resultType="hashmap">
+		select cast(exp_id as char) as expId,title from t_exp_task where exp_type=1
+	</select>
+	
+	<insert id="addUserCoinLog" parameterType="hashmap">
+		insert into t_nouser_coin_log(
+			user_id,
+			content,
+			gold_coin,
+			direction,
+			create_time
+			)
+		select 
+		eto.user_id,
+		CONCAT('你参加【',et.title,'】','获得了',et.exp_user_gold,'个金币'),
+		et.exp_user_gold,
+		'1',
+		now() 
+		from t_exp_task_order eto inner join t_exp_task et on eto.exp_id=et.exp_id
+		where FIND_IN_SET(eto.order_id,#{ids})>0 and et.exp_type=1
+	</insert>
+	
+	<insert id="addUserMessage" parameterType="hashmap">
+		insert into t_nouser_message(user_id,content,create_time)
+		<if test="status=='2'.toString()">
+			select eto.user_id, CONCAT('你参加的【',et.title,'】','通过了验证'), now() 
+			from t_exp_task_order eto inner join t_exp_task et on eto.exp_id=et.exp_id
+			where FIND_IN_SET(eto.order_id,#{ids})>0 and et.exp_type=1
+		</if>
+		<if test="status=='3'.toString()">
+			select eto.user_id, CONCAT('你参加的【',et.title,'】','被拒绝了'), now() 
+			from t_exp_task_order eto inner join t_exp_task et on eto.exp_id=et.exp_id
+			where FIND_IN_SET(eto.order_id,#{ids})>0 and et.exp_type=1			
+		</if>
+	</insert>
+	
+	<select id="findExpAppById" parameterType="com.suyin.expzhuan.model.ExpTaskOrder" resultType="hashmap">
+			select eto.user_phone as userPhone, eto.image_url as imageUrl
+			 from t_exp_task_order eto
+			inner join t_nouser u on eto.user_id=u.user_id
+			inner join t_exp_task et on eto.exp_id=et.exp_id
+			where 1=1 and et.exp_type=1 and eto.order_id=#{orderId}
+			
+	</select>
+	<select id="findExpFormById" parameterType="com.suyin.expzhuan.model.ExpTaskOrder" resultType="hashmap">
+		<![CDATA[
+			select etd1.dictionary_name as question,etd2.dictionary_name as answer
+			from t_exp_task et
+			inner join t_exp_form_answer efa on et.exp_id=efa.exp_id
+			inner join t_exp_task_order eto on et.exp_id=eto.exp_id
+			inner join t_exp_task_dictionary etd1 on efa.parent_dictionary_id=etd1.dictionary_id
+			inner join t_exp_task_dictionary etd2 on efa.dictionary_id=etd2.dictionary_id
+			where eto.order_id=#{orderId} and efa.parent_dictionary_id<>0
+			union all
+			select etd1.dictionary_name as question, efa.text_value as answer
+			from t_exp_task et
+			inner join t_exp_form_answer efa on et.exp_id=efa.exp_id
+			inner join t_exp_task_order eto on et.exp_id=eto.exp_id
+			inner join t_exp_task_dictionary etd1 on efa.dictionary_id=etd1.dictionary_id
+			where eto.order_id=#{orderId} and efa.parent_dictionary_id=0
+		]]>
+	</select>
+	
+	
+	<!-- 分页查询信息 -->
+	<select id="findExpTaskOrderByPage" parameterType="com.suyin.expzhuan.model.ExpTaskOrder" resultMap="ExpTaskOrderMap">
+		select u.user_id as userId,u.user_phone as userPhone,
+		eto.image_url ,et.title,et.exp_user_gold as expUserGold, eto.show_type,
+		eto.create_time,eto.update_time,eto.status,eto.order_id,
+		eto.user_phone as userPhone1
+		 from t_exp_task_order eto
+		inner join t_nouser u on eto.user_id=u.user_id
+		inner join t_exp_task et on eto.exp_id=et.exp_id
+		where 1=1 and et.exp_type=1 
+		<if test="status!=null">
+			and eto.status=#{status}
+		</if>
+		<if test="expId!=null">
+			and eto.exp_id=#{expId}
+		</if>
+		<if test="showType!=null">
+			and eto.show_type=#{showType}
+		</if>
+		order by eto.create_time desc
+	</select>
+	
+</mapper>	

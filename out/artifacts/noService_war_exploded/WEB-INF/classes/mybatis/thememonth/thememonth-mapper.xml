@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.thememonth.mapper.ThemeMonthMapper">
+
+	<resultMap type="com.suyin.thememonth.model.ThemeMonth" id="ThemeMonthMap">
+	
+		<result column="theme_id" property="themeId"/>
+		<result column="theme_title" property="themeTitle"/>
+		<result column="theme_logo" property="themeLogo"/>
+		<result column="theme_pic" property="themePic"/>
+		<result column="bottom_pic" property="bottomPic"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="color" property="color"/>
+		<result column="months" property="months"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateThemeMonth"  parameterType="com.suyin.thememonth.model.ThemeMonth">
+		<![CDATA[
+		update
+		 t_theme_month
+		set 
+		theme_title=#{themeTitle},
+		theme_logo=#{themeLogo},
+		theme_pic=#{themePic},
+		bottom_pic=#{bottomPic},
+		update_time=now(),
+		color=#{color},
+		months=#{months}
+		where theme_id =#{themeId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addThemeMonth" parameterType="com.suyin.thememonth.model.ThemeMonth" useGeneratedKeys="true" keyProperty="themeId">
+	<![CDATA[
+
+		insert  t_theme_month (
+				theme_title,		
+				theme_logo,		
+				theme_pic,		
+				bottom_pic,		
+				create_time,		
+				update_time,		
+				color,
+				months
+		)
+		values(
+				#{themeTitle},
+				#{themeLogo},
+				#{themePic},
+				#{bottomPic},
+				now(),
+				now(),
+				#{color},
+				#{months}
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteThemeMonth" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_theme_month
+			  	where theme_id =#{themeId}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findThemeMonth" parameterType="com.suyin.thememonth.model.ThemeMonth" resultMap="ThemeMonthMap">
+	   <![CDATA[
+		select * from t_theme_month where 1=1 and theme_id=#{themeId}
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findThemeMonthByPage" parameterType="com.suyin.thememonth.model.ThemeMonth" resultMap="ThemeMonthMap">
+		<![CDATA[
+		select
+			t.theme_id,
+			t.theme_title,
+			t.theme_logo,
+			t.theme_pic,
+			t.bottom_pic,
+			date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time,
+			t.color,
+			t.months
+		from
+			t_theme_month t
+		where
+			1 = 1
+		]]>
+	</select>
+	
+</mapper>	

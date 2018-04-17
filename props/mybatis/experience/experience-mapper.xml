@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.experience.mapper.ExperienceMapper">
+
+	<resultMap type="com.suyin.experience.model.Experience" id="ExperienceMap">
+	
+		<result column="exp_id" property="expId"/>
+		<result column="member_id" property="memberId"/>
+		<result column="title" property="title"/>
+		<result column="type" property="type"/>
+		<result column="exp_type" property="expType"/>
+		<result column="is_begin" property="isBegin"/>
+		<result column="probability" property="probability"/>
+		<result column="begin_time" property="beginTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="unit_day" property="unitDay"/>
+		<result column="show_type" property="showType"/>
+		<result column="add_order_num" property="addOrderNum"/>
+		<result column="seq_num" property="seqNum"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="info" property="info"/>
+		<result column="provin_id" property="provinId"/>
+		<result column="city_id" property="cityId"/>
+		<result column="exp_img_url" property="expImgUrl"/>
+		<result column="is_label" property="isLabel"/>
+		<result column="label" property="label"/>
+		<result column="client_type" property="clientType"/>
+		
+	</resultMap>
+	
+	<!-- 分页查询信息 -->
+	<select id="findExperienceByPage" parameterType="com.suyin.experience.model.Experience" resultMap="ExperienceMap">
+		<![CDATA[
+		select
+			t.exp_id,
+			t.member_id,
+			t.title,
+			t.type,
+			t.is_begin,
+			t.probability,
+			date_format(t.begin_time,'%Y-%m-%d %H:%i:%s') as begin_time,
+			date_format(t.end_time,'%Y-%m-%d %H:%i:%s') as end_time,
+			t.unit_day,
+			t.show_type,
+			t.add_order_num,
+			ifnull(t.seq_num,'0') as seq_num,
+			t.create_time,
+			t.update_time,
+			t.provin_id,
+			t.city_id,
+			t.exp_type,
+			t.info,
+			t.exp_img_url
+		from
+			t_experience t
+		where
+			t.exp_type = #{expType}
+		order by
+			t.create_time desc
+		]]>
+	</select>
+	
+		<!--信息更新 -->
+	<update id="updateExperience"  parameterType="com.suyin.experience.model.Experience">
+		<![CDATA[
+		update
+		 t_experience
+		set 
+		member_id=#{memberId},
+		title=#{title},
+		type=#{type},
+		probability=#{probability},
+		begin_time=#{beginTime},
+		end_time=#{endTime},
+		unit_day=#{unitDay},
+		show_type=#{showType},		
+		update_time=now(),
+		info=#{info},
+		provin_id=#{provinId},
+		city_id=#{cityId},
+		is_label=#{isLabel},
+		label=#{label},
+		client_type=#{clientType},
+		exp_img_url=#{expImgUrl},
+		installments=#{installments}
+		where exp_id =#{expId}
+		]]>
+	</update>
+	<update id="updateExpIsBegin"  parameterType="com.suyin.experience.model.Experience">
+		<![CDATA[
+		update
+		 t_experience
+		set 
+		is_begin=#{isBegin}
+		where exp_id =#{expId}
+		]]>
+	</update>
+	<update id="updataSeqNum" parameterType="hashmap">
+	<![CDATA[
+		update t_experience t set t.seq_num=#{seqNum} where  t.exp_id=#{expId}	
+	]]>
+	</update>
+	
+	<!-- 增加时间段 -->
+	<insert id="addExperienceDetailTime" parameterType="java.util.HashMap">
+	<![CDATA[ 
+	insert t_exp_time (
+	exp_id,
+	begin_time,
+	end_time,
+	create_time,
+	update_time
+	)
+	values
+		(
+		#{expId},
+		#{beginTime},
+		#{endTime},
+		now(),
+		now())
+	]]>
+	</insert>
+	<!-- 信息插入 -->
+	<insert id="addExperience" parameterType="com.suyin.experience.model.Experience" useGeneratedKeys="true" keyProperty="expId">
+	<![CDATA[
+
+		insert  t_experience (
+				member_id,		
+				title,		
+				type,
+				exp_type,		
+				probability,		
+				begin_time,		
+				end_time,		
+				unit_day,		
+				show_type,			
+				create_time,		
+				update_time,		
+				info,
+				provin_id,
+				city_id,
+				exp_img_url,
+				is_label,
+				label,
+				client_type,
+				installments
+		)
+		values(
+				1,
+				#{title},
+				#{type},
+				#{expType},
+				#{probability},
+				#{beginTime},
+				#{endTime},
+				#{unitDay},
+				#{showType},
+				now(),
+				now(),
+				#{info},
+				#{provinId},
+				#{cityId},
+				#{expImgUrl},
+				#{isLabel},
+				#{label},
+				#{clientType},
+				#{installments}
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteExperience" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_experience
+			  	where exp_id =#{expId}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findExperience" parameterType="com.suyin.experience.model.Experience" resultMap="ExperienceMap">
+	   <![CDATA[
+		select  * from t_experience  t  where t.exp_type=#{expType} and t.exp_id=#{expId}
+		]]>
+	</select>
+	
+	
+	
+</mapper>	

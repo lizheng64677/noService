@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.activity.mapper.ActivityMapper">
+
+	<resultMap type="com.suyin.activity.model.Activity" id="ActivityMap">
+	
+		<result column="id" property="id"/>
+		<result column="title" property="title"/>
+		<result column="begin_time" property="beginTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="voting_rules" property="votingRules"/>
+		<result column="content" property="content"/>
+		<result column="participant_number" property="participantNumber"/>
+		<result column="visit_times" property="visitTimes"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateActivity"  parameterType="com.suyin.activity.model.Activity">
+		<![CDATA[
+		update
+		 t_activity
+		set 
+		title=#{title},
+		begin_time=#{beginTime},
+		end_time=#{endTime},
+		update_time=#{updateTime},
+		voting_rules=#{votingRules},
+		content=#{content},
+		participant_number=#{participantNumber},
+		visit_times=#{visitTimes}
+		where id =#{id}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addActivity" parameterType="com.suyin.activity.model.Activity" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_activity (
+				title,		
+				begin_time,		
+				end_time,		
+				create_time,		
+				update_time,		
+				voting_rules,		
+				content,		
+				participant_number,		
+				visit_times		
+		)
+		values(
+				#{title},
+				#{beginTime},
+				#{endTime},
+				now(),
+				now(),
+				#{votingRules},
+				#{content},
+				#{participantNumber},
+				#{visitTimes}
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteActivity" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_activity
+			  	where id = #{id}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findActivity" parameterType="com.suyin.activity.model.Activity" resultMap="ActivityMap">
+	   <![CDATA[
+		select  id,
+				title,		
+				begin_time,		
+				end_time,		
+				date_format(t_activity.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			    date_format(t_activity.update_time,'%Y-%m-%d %H:%i:%s') as update_time,	
+				voting_rules,		
+				content,		
+				participant_number,		
+				visit_times	  from t_activity where 1=1
+		]]>
+	</select>
+	
+		
+	<!-- 查询信息列表 -->
+	<select id="findActivityById" parameterType="com.suyin.activity.model.Activity" resultMap="ActivityMap">
+	   <![CDATA[
+		select  id,
+				title,		
+				begin_time,		
+				end_time,		
+				date_format(t_activity.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			    date_format(t_activity.update_time,'%Y-%m-%d %H:%i:%s') as update_time,	
+				voting_rules,		
+				content,		
+				participant_number,		
+				visit_times	  
+		from 
+				t_activity 
+		where 
+				t_activity.id=#{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findActivityByPage" parameterType="com.suyin.activity.model.Activity" resultMap="ActivityMap">
+		<![CDATA[
+		select  id,
+				title,		
+				date_format(t_activity.begin_time,'%Y-%m-%d %H:%i:%s') as begin_time,
+			    date_format(t_activity.end_time,'%Y-%m-%d %H:%i:%s') as end_time,		
+				date_format(t_activity.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			    date_format(t_activity.update_time,'%Y-%m-%d %H:%i:%s') as update_time,	
+				voting_rules,		
+				content,		
+				participant_number,		
+				visit_times	  from t_activity where 1=1
+		]]>
+	</select>
+	
+</mapper>	

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.simple.mapper.TreeMapper">
+
+	<!-- easyUI 异步树分页 -->
+	<select id="findEasyUITreeSynByTreeIdByPage" parameterType="com.suyin.simple.model.EasyUITree"
+		resultType="com.suyin.simple.model.EasyUITree">
+		SELECT id,name,name as test,upid as parentId FROM t_city 	WHERE 1=1
+				AND  upid=#{parentId}
+	</select>
+	
+	
+	<!-- 检查当前节点是否有子集 -->
+	<select id="findEasyUITreeIsChildren" resultType="java.lang.Integer" parameterType="java.lang.String" >
+		SELECT COUNT(0) FROM t_city WHERE upid=#{treeId}
+	</select>
+	
+	
+	<!-- easyUI 异步树 -->
+	<select id="findEasyUITreeSynByTreeId" parameterType="com.suyin.simple.model.EasyUITree"
+		resultType="com.suyin.simple.model.EasyUITree">
+		SELECT id,name,name as test,upid as parentId FROM t_city 	WHERE 1=1
+				AND  upid=#{parentId}
+	</select>
+	
+	
+	<!-- 查询所有用户 -->
+	<select id="findUser" resultType="java.util.HashMap">
+		select sd_sy_user.user_id,sd_sy_user.point,sd_sy_user.tel from sd_sy_user
+	</select>
+	
+	
+</mapper>

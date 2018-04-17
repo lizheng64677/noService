@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.expzhuan.mapper.ExpDictionaryMapper">
+	
+	
+	<resultMap type="com.suyin.expzhuan.model.ExpDictionary" id="ExpDictionaryMap">
+	
+		<result column="dictionary_id" property="dictionaryId"/>
+		<result column="parentId" property="parentId"/>
+		<result column="dictionary_name" property="dictionaryName"/>
+		<result column="dictionary_value" property="dictionaryValue"/>
+		<result column="dictionary_type" property="dictionaryType"/>
+		<result column="module_type" property="moduleType"/>
+		<result column="dictionary_explain" property="dictionaryExplain"/>
+		<result column="dictionary_code" property="dictionaryCode"/>
+		<result column="id" property="id"/>
+		<result column="exp_id" property="expId"/>
+		<association property="sonTrees" column="id"  select="findEasyUITreeIsChildren" ></association>
+	
+	</resultMap>
+	<!-- 检查当前节点是否有子集 -->
+	<select id="findEasyUITreeIsChildren" resultType="java.lang.Integer" parameterType="java.lang.String" >
+	<![CDATA[
+		select  count(0) from t_exp_task_dictionary t where t.parentId=#{id}	
+	]]>
+	</select>
+	
+	<!-- 添加 -->
+	<insert id="addExpDictionary" parameterType="com.suyin.expzhuan.model.ExpDictionary">
+	<![CDATA[
+		insert into
+		t_exp_task_dictionary
+		(
+		parentId,
+		dictionary_name,
+		dictionary_value,
+		dictionary_type,
+		module_type,
+		dictionary_explain,
+		exp_id,
+		dictionary_code
+		)
+		values
+		(
+		#{parentId},
+		#{dictionaryName},
+		#{dictionaryValue},
+		#{dictionaryType},
+		#{moduleType},
+		#{dictionaryExplain},
+		#{expId},
+		#{dictionaryCode}
+		)
+		]]>
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="deleteExpDictionary"  parameterType="java.lang.String" >
+		<![CDATA[
+		delete from t_exp_task_dictionary where dictionary_id=#{id}
+		]]>
+	</delete>
+	<!-- 根据活动删除 -->
+	<delete id="deleteExpDictionaryWhereByExpId"  parameterType="java.lang.String" >
+		<![CDATA[
+		delete from t_exp_task_dictionary where exp_id=#{id}
+		]]>
+	</delete>
+	
+	<!-- 联合删除 -->
+	<delete id="deleteExpUnionByExpId" parameterType="com.suyin.expzhuan.model.ExpDictionary">
+	<![CDATA[
+		delete 
+		 t_exp_task_dictionary,
+		 t_exp_task_prototype
+		from
+			t_exp_task_dictionary 
+		join t_exp_task_prototype  on t_exp_task_prototype.exp_id=t_exp_task_dictionary.exp_id	
+		where t_exp_task_dictionary.exp_id=#{expId}
+		and t_exp_task_dictionary.module_type=#{moduleType}
+		and t_exp_task_prototype.module_type=#{moduleType}
+	]]>
+	</delete>
+	
+	<!-- 修改 -->
+	<update id="updateExpDictionary" parameterType="com.suyin.expzhuan.model.ExpDictionary">
+		<![CDATA[
+		update t_exp_task_dictionary	set
+		parentId=#{parentId},
+		dictionary_name=#{dictionaryName},
+		dictionary_value=#{dictionaryValue},
+		dictionary_type=#{dictionaryType},
+		module_type=#{moduleType},
+		dictionary_explain=#{dictionaryExplain},
+		exp_id=#{expId},
+		dictionary_code=#{dictionaryCode}
+		where 
+		dictionary_id=#{dictionaryId}
+		]]>
+	</update>
+	
+	<!-- 分页查询 -->
+	<select id="findExpDictionaryByPage" parameterType="com.suyin.expzhuan.model.ExpDictionary" resultMap="ExpDictionaryMap">
+		<![CDATA[
+		select
+		t.dictionary_name as name,
+		t.dictionary_name as text,
+		t.dictionary_id as id,
+		t.parentId,
+		t.dictionary_value,
+		t.dictionary_type,
+		t.module_type,
+		t.dictionary_explain,
+		t.dictionary_code
+		from t_exp_task_dictionary t
+	 	where 1=1
+		and	t.parentId=0
+		and t.exp_id=#{expId}
+		]]>
+		<if test="null!=dictionaryName and ''!=dictionaryName">
+				and t.dictionary_name like '%${dictionaryName}%'
+		</if>
+		<if test="null!=dictionaryCode and ''!=dictionaryCode">
+				and t.dictionary_code like '%${dictionaryCode}%'
+		</if>
+		<if test="null!=dictionaryId and ''!=dictionaryId ">
+		   		and	t.dictionary_id=#{dictionaryId}
+		</if>
+		order by t.dictionary_id	asc
+	</select>
+	
+	
+	<!-- 继续查询 -->
+	<select id="findExpDictionary" parameterType="com.suyin.expzhuan.model.ExpDictionary" resultMap="ExpDictionaryMap">
+		<![CDATA[
+		select
+			t.dictionary_name as name,
+			t.dictionary_name as text,
+			t.dictionary_name,
+			t.dictionary_id as id,
+			t.parentId,
+			t.dictionary_value,
+			t.dictionary_type,
+			t.module_type,
+			t.dictionary_explain,
+			t.dictionary_code
+			from t_exp_task_dictionary t
+	 	where 1=1
+		]]>
+		<if test="null!=parentId and ''!=parentId ">
+		   		and	t.parentId=#{parentId}
+		</if>
+		<if test="null!=dictionaryId and ''!=dictionaryId ">
+		   		and	t.dictionary_id=#{dictionaryId}
+		</if>
+		order by t.dictionary_id	asc
+	</select>
+</mapper>

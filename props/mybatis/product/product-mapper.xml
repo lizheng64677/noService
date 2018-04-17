@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.product.mapper.ProductMapper">
+
+	<resultMap type="com.suyin.product.model.Product" id="ProductMap">
+	
+		<result column="pro_id" property="proId"/>
+		<result column="member_id" property="memberId"/>
+		<result column="pro_name" property="proName"/>
+		<result column="price" property="price"/>
+		<result column="title" property="title"/>
+		<result column="pro_img" property="proImg"/>
+		<result column="unit" property="unit"/>
+		<result column="envi_score" property="enviScore"/>
+		<result column="serve_score" property="serveScore"/>
+		<result column="qcd_score" property="qcdScore"/>
+		<result column="seq_no" property="seqNo"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="pro_info" property="proInfo"/>
+		<result column="activity_info" property="activityInfo"/>
+		<result column="use_info" property="useInfo"/>
+		<result column="busname" property="busname"/>
+		
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateProduct"  parameterType="com.suyin.product.model.Product">
+		<![CDATA[
+		update
+		 t_product
+		set 
+		member_id=#{memberId},
+		pro_name=#{proName},
+		price=#{price},
+		title=#{title},
+		pro_img=#{proImg},
+		unit=#{unit},
+		update_time=now(),
+		pro_info=#{proInfo},
+		activity_info=#{activityInfo},
+		use_info=#{useInfo}
+		where pro_id =#{proId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addProduct" parameterType="com.suyin.product.model.Product" useGeneratedKeys="true" keyProperty="proId">
+	<![CDATA[
+
+		insert  t_product (
+				member_id,		
+				pro_name,		
+				price,		
+				title,		
+				pro_img,		
+				unit,		
+				create_time,		
+				update_time,		
+				pro_info,		
+				activity_info,		
+				use_info	
+		)
+		values(
+				#{memberId},
+				#{proName},
+				#{price},
+				#{title},
+				#{proImg},
+				#{unit},
+				now(),
+				now(),
+				#{proInfo},
+				#{activityInfo},
+				#{useInfo}
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteProduct" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_product
+			  	where pro_id =#{proId}
+		]]>
+	</delete>
+	
+	<!-- 根据条件查询附件 -->
+	<select id="findProAttachmentByEntityId"  parameterType="com.suyin.system.model.Attachment" resultType="com.suyin.system.model.Attachment">
+	<![CDATA[
+			select * from t_attachment	where  entity=#{entity} and entity_attribute=#{entity_attribute}
+	]]>
+	
+	</select>
+	
+	<!-- 根据商家id查询，该商家有多少产品 -->
+	<select id="findProductByMemberId" parameterType="com.suyin.product.model.Product" resultMap="ProductMap">
+	<![CDATA[
+	   select
+			pro.pro_id,
+			pro.member_id,
+			pro.pro_name,
+			pro.price,
+			pro.title,
+			pro.pro_img,
+			pro.unit,
+			pro.envi_score,
+			pro.serve_score,
+			pro.qcd_score,
+			pro.seq_no,
+			date_format(pro.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			date_format(pro.update_time,'%Y-%m-%d %H:%i:%s') as update_time,
+			pro.pro_info,
+			pro.activity_info,
+			pro.use_info
+		from
+			t_product pro
+		where
+			pro.member_id=#{memberId}
+		]]>
+	</select>
+	
+	<!-- 查询信息列表 -->
+	<select id="findProduct" parameterType="com.suyin.product.model.Product" resultMap="ProductMap">
+	   <![CDATA[
+		select
+			pro.pro_id,
+			pro.member_id,
+			pro.pro_name,
+			pro.price,
+			pro.title,
+			pro.pro_img,
+			pro.unit,
+			pro.envi_score,
+			pro.serve_score,
+			pro.qcd_score,
+			pro.seq_no,
+			date_format(pro.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			date_format(pro.update_time,'%Y-%m-%d %H:%i:%s') as update_time,
+			pro.pro_info,
+			pro.activity_info,
+			pro.use_info
+		from
+			t_product pro
+		where
+			pro.pro_id=#{proId}
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findProductByPage" parameterType="com.suyin.product.model.Product" resultMap="ProductMap">
+		<![CDATA[
+	select
+		pro.pro_id,
+		tm.busname,
+		pro.pro_name,
+		pro.price,
+		pro.title,
+		pro.pro_img,
+		pro.unit,
+		pro.envi_score,
+		pro.serve_score,
+		pro.qcd_score,
+		pro.seq_no,
+		date_format(pro.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+		date_format(pro.update_time,'%Y-%m-%d %H:%i:%s') as update_time,
+		pro.pro_info,
+		pro.activity_info,
+		pro.use_info
+	from
+		t_product pro join  t_member tm on tm.member_id=pro.member_id
+	where
+		1 = 1
+		]]>
+		order by pro.create_time desc
+	</select>
+	
+</mapper>	

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.about.mapper.AboutMapper">
+
+	<resultMap type="com.suyin.about.model.About" id="AboutMap">
+		<result column="about_id" property="aboutId" />
+		<result column="content" property="content" />
+		<result column="type" property="type" />
+		<result column="module" property="module" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+
+	<!--信息更新 -->
+	<update id="updateAbout" parameterType="com.suyin.about.model.About">
+	<![CDATA[
+	update
+	 t_about                           
+		set
+			content =#{content},
+			type=#{type},
+			module=#{module},
+			update_time=now()
+		where
+			about_id=#{aboutId}
+	
+	]]>
+	</update>
+
+	<!-- 信息插入 -->
+	<insert id="addAbout" parameterType="com.suyin.about.model.About"
+		useGeneratedKeys="true" keyColumn="about_id" keyProperty="aboutId">
+	<![CDATA[
+
+		insert  t_about (			
+				content,		
+				type,		
+				module,		
+				create_time	
+		)
+		values(
+				#{content},
+				#{type},
+				#{module},
+				now()
+		)
+		]]>
+	</insert>
+
+	<!-- 根据id删除信息 -->
+	<delete id="deleteAbout" parameterType="java.lang.String">
+	<![CDATA[
+		DELETE FROM t_about
+		WHERE find_in_set(about_id,#{aboutId})>0
+		]]>
+	</delete>
+ <!--  	根据id批量删除信息  --> 
+<!-- 	<delete id="deleteAboutByBatch" parameterType="java.lang.String"> -->
+<!-- 		DELETE FROM t_about WHERE 1!=1 -->
+<!-- 		<foreach collection="ids" item="id" separator="OR"> -->
+<!-- 			#{id} -->
+<!-- 		</foreach> -->
+<!-- 	</delete> -->
+	
+    <!-- 根据id查询信息 -->
+	<select id="findAboutById" parameterType="com.suyin.about.model.About"
+		resultMap="AboutMap">
+		select * from t_about where 1=1 and about_id=#{aboutId}
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="findAboutByPage" parameterType="com.suyin.about.model.About"
+		resultMap="AboutMap">
+	
+		select 
+			*
+		from 
+			t_about 
+		where
+			1=1	
+    <if test="type!=null">
+	    and type=#{type}
+	</if>
+	</select>
+	
+	<!-- 根据 type 查询 -->
+	<select  id="findAboutByType" parameterType="com.suyin.about.model.About" resultMap="AboutMap">
+	<![CDATA[
+	select
+	    *
+	from
+	    t_about
+	where
+	    type=#{type}
+	]]>
+	
+	</select>
+</mapper>	

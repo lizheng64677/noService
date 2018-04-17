@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.city.mapper.CityMapper">
+
+	<resultMap type="com.suyin.city.model.City" id="CityMap">
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="level" property="level"/>
+		<result column="upid" property="upid"/>
+		<result column="list" property="list"/>
+		<result column="hotCity" property="hotCity"/>
+		<result column="ctname" property="ctname"/>
+	</resultMap>
+	
+	<!-- 更新制作城市JSON数据 -->
+	<update id="updateCityInfoName" parameterType="hashmap">
+	<![CDATA[
+	update t_city t set t.jpname=#{jpname},t.qpname=#{qpname} where t.id=#{id}
+	]]>
+	</update>
+	
+	<!-- 查询所有的城市 JSON格式用到-->
+	<select id="findUpdateCityInfo" parameterType="hashmap" resultType="hashmap">
+	<![CDATA[
+	select
+		t.id,
+		t.`name`,
+		t.`level`,
+		t.upid
+	from
+		t_city
+		t where t.jpname is null
+	]]>
+	
+	</select>
+		<!--信息更新 -->
+	<update id="updateCity"  parameterType="com.suyin.city.model.City">
+		<![CDATA[
+		update
+		 t_city
+		set 
+		name=#{name},
+		level=#{level},
+		upid=#{upid},
+		list=#{list}
+		where id =#{id}
+		]]>
+	</update>
+	
+	<select id="findForCityListInfo" resultType="hashmap">
+		select
+			td.id,
+			td.`name`,
+			td.`level`,
+			td.upid,
+			td.jpname,
+			td.qpname
+		from
+			(
+				select
+					d.id,
+					d.`name`,
+					d.`level`,
+					d.upid,
+					d.jpname,
+					d.qpname
+				from
+					t_city d
+				where
+					d.id in (536, 537, 535, 538)
+				union all
+					select
+						tc.id,
+						tc.`name`,
+						tc.`level`,
+						tc.upid,
+						tc.jpname,
+						tc.qpname
+					from
+						t_city tc
+					where
+						tc.`level` = 2
+					and tc.upid not in (2, 9, 10, 22)
+					and tc.upid not in (32, 33, 34, 35, 36)
+			) td
+	</select>
+	<!-- 信息插入 -->
+	<insert id="addCity" parameterType="com.suyin.city.model.City" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_city (
+				name,		
+				level,		
+				upid,		
+				list		
+		)
+		values(
+				#{name},
+				#{level},
+				#{upid},
+				#{list}
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteCity" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_city 	where id =#{id}
+		]]>
+	</delete>
+	
+	<!-- 	城市查询 -->
+	<select id="findHotCityByPage" parameterType="com.suyin.city.model.City" resultMap="CityMap">
+		select
+			td.id,
+			td.`name`,
+			td.`level`,
+			td.upid,
+			td.hotCity
+		from
+			(
+				select
+					d.id,
+					d.`name`,
+					d.`level`,
+					d.upid,
+					d.hotCity
+				from
+					t_city d
+				where
+					d.id in (536, 537, 535, 538)
+				union all
+					select
+						tc.id,
+						tc.`name`,
+						tc.`level`,
+						tc.upid,
+						tc.hotCity
+					from
+						t_city tc
+					where
+						tc.`level` = 2
+					and tc.upid not in (2, 9, 10, 22)
+					and tc.upid not in (32, 33, 34, 35, 36)
+			) td
+			where 1=1
+			<if test="null!=id and ''!=id">
+				and td.id=#{id}
+		</if>
+		<if test="null!=name and ''!=name">
+	 			and td.name like concat(concat ('%',#{name}),'%')
+		</if>
+		<if test="null!=hotCity and ''!=hotCity">
+			td.hotCity=#{hotCity}
+		</if>
+	</select>
+	
+	<select id="updateCityByHot" parameterType="com.suyin.city.model.City" >
+		UPDATE 
+			t_city 
+		SET
+			hotCity=#{hotCity}
+		WHERE 
+			id=#{id}
+	</select>
+	
+	<!-- 通过upid查询所对应的id的name -->
+<!-- 	<select id="findHotCityName" parameterType="com.suyin.city.model.City" resultMap="CityMap" > -->
+<!-- 		select -->
+<!-- 			name -->
+<!-- 		from -->
+<!-- 			t_city  -->
+<!-- 		<if test="null!=upid and ''!=upid"> -->
+<!-- 			AND upid=#{id} -->
+<!-- 		</if> -->
+<!-- 	</select> -->
+	
+<!-- 	<select id="findHotCityUpidName" parameterType="java.lang.String" resultMap="java.lang.Integer"> -->
+<!-- 		select count(0) from 	t_city  where upid=#{id} -->
+<!-- 	</select> -->
+	
+	<!-- 查询信息列表 -->
+	<select id="findCity" parameterType="com.suyin.city.model.City" resultMap="CityMap">
+		 select
+			tc.id,
+			tc.upid,
+			tc.level,
+			tc.name
+		from
+			t_city tc
+		where  
+			tc.upid=#{upid}
+		</select>
+		
+	<!-- 树结构信息列表查询 -->
+	<select id="findCityTreeByPage" parameterType="com.suyin.city.model.City" resultMap="CityMap">
+		 SELECT 
+		 	id,
+		 	name,
+		 	level,
+		 	upid as parentId,
+		 	list
+		 FROM 
+		 	 t_city 
+		 where 
+			upid=#{parentId}
+	</select>
+	
+	<!-- 更具父级点查询是否有字节点 -->
+	<select id="findEsayUICityChiledren" parameterType="java.lang.String" resultType="java.lang.Integer">
+	        select count(0) from 	t_city  where upid=#{id}
+	        
+	</select>
+	
+	<!--根据省查市 -->
+	<select id="findCityTreeByUpid" parameterType="com.suyin.city.model.City" resultMap="CityMap">
+		 SELECT 
+			 id,
+			 name,
+			 level,
+			 upid as parentId,
+			 list
+		 FROM 
+		 	 t_city 
+		 where 
+			upid=#{parentId}
+	</select>	
+	
+	
+	
+	<select id="findCityByPage" parameterType="com.suyin.city.model.City" resultMap="CityMap">
+		select
+			td.id,
+			td.`name`,
+			td.`level`,
+			td.upid,
+			ifnull(td.hotCity,'1') as hotCity,
+			ifnull(ts.`name`,'直辖市') as ctname
+		from
+			(
+				select
+					d.id,
+					d.`name`,
+					d.`level`,
+					d.upid,
+					d.hotCity
+				from
+					t_city d
+				where
+					d.id in (536, 537, 535, 538)
+				union all
+					select
+						tc.id,
+						tc.`name`,
+						tc.`level`,
+						tc.upid,
+						tc.hotCity
+					from
+						t_city tc
+					where
+						tc.`level` = 2
+					and tc.upid not in (2, 9, 10, 22)
+					and tc.upid not in (32, 33, 34, 35, 36)
+			) td
+			left join t_city ts on td.upid=ts.id
+			where 1=1
+		<if test="null!=name and ''!=name">
+	 			and td.name like concat(concat ('%',#{name}),'%')
+		</if>
+
+	</select>
+	
+	<select id="findForCityListInfoa" resultType="hashmap" parameterType="hashmap">
+		select
+			td.id,
+			td.`name`,
+			td.`level`,
+			td.upid,
+			td.jpname,
+			td.qpname
+		from
+			(
+				select
+					d.id,
+					d.`name`,
+					d.`level`,
+					d.upid,
+					d.jpname,
+					d.qpname
+				from
+					t_city d
+				where
+					d.id in (536, 537, 535, 538)
+				union all
+					select
+						tc.id,
+						tc.`name`,
+						tc.`level`,
+						tc.upid,
+						tc.jpname,
+						tc.qpname
+					from
+						t_city tc
+					where
+						tc.`level` = 2
+					and tc.upid not in (2, 9, 10, 22)
+					and tc.upid not in (32, 33, 34, 35, 36)
+			) td
+			where td.jpname like concat(concat ('',#{name}),'%')
+	</select>
+</mapper>	

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.system.mapper.RoleMapper">
+
+	<resultMap type="com.suyin.system.model.SystemRole" id="retMap">
+		<result column="id" property="id"/>
+		<result column="parentId" property="parentId"/>
+		<result column="roleName" property="roleName"/>
+		<result column="roleType" property="roleType"/>
+		<result column="roleDescription" property="roleDescription"/>
+		<result column="code" property="code"/>
+		<result column="applicationId" property="applicationId"/>
+	</resultMap>
+	<select id="findRole" parameterType="com.suyin.system.model.SystemRole" resultMap="retMap">
+		SELECT * FROM system_role WHERE 1=1
+		<if test="null!=id and ''!=id">
+			and id=#{id}
+		</if>
+		<if test="null!=parentId and ''!=parentId">
+			and parentId=#{parentId}
+		</if>
+	</select>
+	<!-- 查询角色列表,用户已绑定的state为0 -->
+	<select id="findRoleForUser" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+		SELECT
+			role.*, IFNULL(u.user_id,0) state
+		FROM
+			system_role role
+		LEFT JOIN user_role u ON role.id = u.role_id and u.user_id=#{userId}
+	</select>
+	
+	
+	<!-- 查询用户对应的角色列表 -->
+	<select id="findRoleByUserId" parameterType="java.lang.Integer" resultType="java.util.HashMap">
+		SELECT
+			r.*, u.user_role_id,u.is_default
+		FROM
+			user_role u
+		LEFT JOIN system_role r ON u.role_id = r.id
+		WHERE
+			u.user_id = #{userId}
+	</select>
+	
+	<!-- 插入 -->
+	<insert id="addRole" parameterType="com.suyin.system.model.SystemRole">
+		<![CDATA[
+		INSERT system_role(
+			parentId,roleName,roleType,roleDescription,code
+		)
+		values(
+			#{parentId},#{roleName},#{roleType},#{roleDescription},#{code}
+		)
+		]]>
+	</insert>
+	<!-- 更新 -->
+	<update id="updateRole"  parameterType="com.suyin.system.model.SystemRole">
+		update system_role
+		set parentId=#{parentId},roleName=#{roleName},
+		roleType=#{roleType},roleDescription=#{roleDescription},
+		code=#{code}
+		where id=#{id}
+	</update>
+	<!-- 删除 -->
+	<delete id="deleteRole" parameterType="java.lang.Integer">
+		DELETE FROM  system_role WHERE id in
+		<foreach collection="array" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+</mapper>

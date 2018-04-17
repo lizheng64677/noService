@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.experience.mapper.ExpDetailMapper">
+
+	<resultMap type="com.suyin.experience.model.ExpDetail" id="ExpDetailMap">
+	
+		<result column="exp_detail_id" property="expDetailId"/>
+		<result column="member_id" property="memberId"/>
+		<result column="exp_id" property="expId"/>
+		<result column="pro_id" property="proId"/>
+		<result column="exp_num" property="expNum"/>
+		<result column="pro_num" property="proNum"/>
+		<result column="integral" property="integral"/>
+		<result column="validity" property="validity"/>
+		<result column="add_day" property="addDay"/>
+		<result column="seq_no" property="seqNo"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="member_name" property="busname"/>
+		<result column="pro_name" property="proname"/>
+	</resultMap>
+	
+	<resultMap type="com.suyin.experience.model.ExpTime" id="ExpTimeInfo">
+		<result column="member_id" property="memberId"/>
+		<result column="user_id" property="userId"/>
+		<result column="detail_id" property="detailId"/>
+		<result column="exp_id" property="expId"/>
+		<result column="share_num" property="shareNum"/>
+		<result column="share_id" property="shareId"/>
+		<result column="iphone" property="iphone"/>
+		<result column="username" property="userName"/>	
+		<result column="create_time" property="createTime"/>
+		<result column="voucher_status" property="voucherStatus"/>
+	</resultMap>
+	<resultMap type="com.suyin.experience.model.ExpTime" id="ExpTimeMap">
+		<result column="order_id" property="orderId"/>
+		<result column="user_id" property="userId"/>
+		<result column="exp_id" property="expId"/>
+		<result column="share_num" property="shareNum"/>
+		<result column="exp_type" property="expType"/>
+		<result column="pop_status" property="popStatus"/>
+		<result column="prize_status" property="prizeStatus"/>	
+		<result column="share_time_id" property="timeId"/>
+		<result column="create_time" property="createTime"/>
+		<result column="title" property="title"/>
+		<result column="begin_time" property="beginTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="user_phone" property="userPhone"/>
+	</resultMap>
+	<!-- 查询分享人信息 -->
+	<select id="findOrderShareTaskInfo" resultType="hashmap" parameterType="hashmap">
+	<![CDATA[
+		select 
+				wexs.share_num,
+				wexs.detail_id,
+				wexs.user_id,
+				wexs.exp_type,
+				wexs.exp_id,
+				wexs.user_phone
+		from (
+			select
+				exs.share_num,
+				exs.detail_id,
+				exs.user_id,
+				exs.exp_type,
+				exs.exp_id,
+				d.user_phone
+			from
+				t_exp_share exs
+			 join t_nouser d on d.user_id=exs.user_id
+			where 
+			exs.exp_time_id=#{timeId}
+			and 
+			exs.exp_id=#{expId}
+			order by exs.share_num desc
+		
+		) wexs  limit #{proNum} 
+
+	]]>
+	</select>
+	
+	<!-- 查询可以参与活动的假用户信息 -->
+	<select id="queryForUserListByPage" parameterType="com.suyin.experience.model.ExpTime" resultType="hashmap" >
+		SELECT 
+			user_id ,user_phone 
+		FROM 
+			t_false_nouser  
+		WHERE user_id NOT IN (SELECT user_id FROM t_false_exp_order  where exp_id=#{expId}  and pop_status in(0,1)
+		) 	
+	</select>
+	<!-- 查询可以参与活动的假用户信息 -->
+	<select id="queryUserPartListByPage" parameterType="com.suyin.experience.model.ExpTime" resultMap="ExpTimeMap" >
+		SELECT order_id,a.user_id,d.user_phone,a.exp_id,b.title,c.begin_time,c.end_time,a.exp_type,
+			pop_status,prize_status,a.share_time_id,share_num,a.create_time
+		FROM 
+		t_false_exp_order a 
+		INNER JOIN t_experience b ON a.exp_id=b.exp_id
+		INNER JOIN t_exp_time c ON a.share_time_id=c.exp_time_id
+		inner join t_false_nouser d on a.user_id=d.user_id
+	
+		where a.exp_id=#{expId} and a.share_time_id=#{timeId}
+	</select>
+	<!-- 查询单条订单信息 -->
+	<select id="queryOneOrder" parameterType="com.suyin.experience.model.ExpTime" resultMap="ExpTimeMap" >
+		SELECT order_id,a.user_id,a.exp_id,b.title,c.begin_time,c.end_time,a.exp_type,
+			pop_status,prize_status,a.share_time_id,share_num,a.create_time
+		FROM 
+		t_false_exp_order a 
+		INNER JOIN t_experience b ON a.exp_id=b.exp_id
+		INNER JOIN t_exp_time c ON a.share_time_id=c.exp_time_id
+	
+		where  order_id=#{orderId}
+	</select>
+	
+	<!-- 修改订单信息 -->
+	<update id="updateOrder" parameterType="com.suyin.experience.model.ExpTime">
+		update t_false_exp_order set share_num=#{shareNum},pop_status=#{popStatus},prize_status=#{prizeStatus}
+		where order_id=#{orderId}
+	</update>
+	
+	<!-- 批量新增用户参与活动 -->
+	<insert id="userPart" parameterType="java.util.List">
+		INSERT INTO t_false_exp_order(user_id,exp_id,exp_type,pop_status
+		,prize_status,share_time_id,share_num,create_time,update_time)VALUES
+		 <foreach collection="list" item="item" index="index" separator="," >  
+        	(#{item.userId},#{item.expId},#{item.expType},'0','0',#{item.timeId},'1',now(),now())  
+    	</foreach>  
+	</insert>
+	
+	
+	<!-- 查询符合条件的时间段数据 -->
+	<select id="findForExpInfo" parameterType="hashmap" resultType="hashmap">
+	<![CDATA[
+	  select
+			case 
+				when now()>t.begin_time and now()>t.end_time  then '1' 
+				else '0'
+			end as status,
+		 t.exp_id,
+		 t.exp_num,
+		 t.exp_time_id,
+		 t.is_voucher,
+		 t.begin_time,
+		 t.end_time
+		from
+			t_exp_time t
+		join  t_experience expe on expe.exp_id=t.exp_id
+		
+		where t.is_voucher=0
+		and 
+	  (now()>t.begin_time and now()>t.end_time)
+		and expe.exp_type=1 
+		and type=5
+	]]>	
+	</select>
+	<!--发券完毕后更新该时间段是否已发券的状态 ，避免下次来还要继续查询，加快响应速度-->
+	<update id="udpateExpTimeVoucherStatus" parameterType="java.lang.String">
+	<![CDATA[
+		update t_exp_time t set t.is_voucher=1 where t.exp_time_id=#{timeId}
+	]]>
+	</update>
+	<!--没有发券的用户 给他们个失败状态 -->
+	<update id="udpateUserLoserVoucherStatus" parameterType="hashmap">
+		<![CDATA[
+		update
+			t_exp_order a 
+		set 
+			 a.`status`=2,
+			 a.voucher_status=2
+		where
+			a.voucher_status=0
+		and 
+		a.exp_id in (select t.exp_id from t_exp_time t where t.exp_time_id=#{timeId} and a.create_time BETWEEN t.begin_time AND t.end_time)
+		
+		]]>
+	</update>
+	<!-- 更新订单表中的发券状态 -->
+	<update id="updateUserOrderVoucherStatus" parameterType="java.lang.String">
+	<![CDATA[
+		update t_exp_order t set t.voucher_status=1, t.`status`=1 where t.order_id=#{orderId}
+	]]>
+	</update>
+	<!--运维后台人气式发券保存-->
+	<insert id="addExpVoucher" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="vouId">
+	<![CDATA[
+
+		insert  t_exp_voucher (
+				vou_code,		
+				order_id,		
+				user_id,		
+				validity,		
+				create_time,		
+				update_time
+		)
+		values(
+				#{vouCode},
+				#{orderId},
+				#{userId},
+				#{validity},
+				now(),
+				now()
+		)
+		]]>
+	</insert>
+	<!-- 查询当前时间段内查询的活动的实际用户 -->
+	<select id="findVoucherDetialInfo" parameterType="java.util.HashMap" resultType="hashmap">
+	<![CDATA[
+	select
+		t.order_id,
+		t.member_id,
+		t.user_id,
+		t.detail_id,
+		t.exp_id,
+		t.exp_type,
+		t.`status`,
+		t.is_discuss,
+		t.voucher_status,
+		n.user_phone
+	from
+		t_exp_order t
+	join t_nouser n on n.user_id=t.user_id
+	where
+		t.user_id =#{userId}
+		and 
+		t.create_time BETWEEN (select s.begin_time from t_exp_time s where s.exp_time_id=#{timeId})
+		and 
+		(select s.end_time from t_exp_time s where s.exp_time_id=#{timeId})
+		and 
+		t.exp_id=#{expId}
+		and
+		t.exp_type=#{expType}
+	]]>
+	</select>
+	<!-- 根据活动id查询活动详情的基本信息用于短信发送内容的填充 -->
+	<select id="findExpPopDetialInfo" parameterType="java.util.HashMap" resultType="hashmap">
+	<![CDATA[
+	select
+		pr.pro_name,
+		pr.price,
+		pr.title,
+		ifnull(d.add_day,0) as add_day,
+		d.validity,
+		d.exp_detail_id,
+		d.pro_num,	
+		m.busname,
+		m.address
+	from
+		t_exp_detail d
+	join t_product pr on pr.pro_id = d.pro_id
+	join t_member m on m.member_id = pr.member_id
+	where
+		d.exp_id =#{expId}
+	
+	]]>
+	</select>
+	<!-- 查询发券用户信息列表 -->
+	<select id="findExpVoucherByPage" parameterType="com.suyin.experience.model.ExpTime" resultMap="ExpTimeInfo">
+	 <![CDATA[	 
+		select
+			a.member_id,
+			a.user_id,
+			a.detail_id,
+			a.exp_id,
+			a.voucher_status,
+			date_format(a.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			b.share_num,
+			b.share_id,
+			c.user_phone as iphone,
+			ifnull(d.ali_user_name,'该用户未设置姓名及账户') as username
+		from
+			t_exp_order a
+		join t_exp_share b on b.user_id = a.user_id and a.exp_id=b.exp_id
+		join t_nouser c on c.user_id=b.user_id
+		join t_nouser_static_prototype d on d.user_id=c.user_id
+		where
+			a.exp_id in (select t.exp_id from t_exp_time t where t.exp_time_id=#{timeId} and a.create_time BETWEEN t.begin_time AND t.end_time)
+			order by  b.share_num desc,b.user_id asc
+	 ]]>
+	</select>
+	<!-- 查询运维人员所选择的时间段是否在当前合法条件内 -->
+	<select id="findForIsExpTimeStatus" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+<!-- 	and now()>t.end_time  -->
+	<![CDATA[
+		select
+			case 
+				when now()>t.begin_time  then '1' 
+				else '0'
+			end as status
+		From
+			t_exp_time t
+		where
+			t.exp_time_id = #{expTimeId} 
+	]]>
+	</select>
+	<!-- 根据活动id查询对应时间段 -->
+	<select id="findForExpTime" parameterType="java.util.HashMap" resultType="java.util.HashMap">
+		<![CDATA[
+		select
+			t.exp_id,
+			t.exp_num,
+			t.exp_time_id,
+			date_format(t.begin_time,'%Y-%m-%d %H:%i:%s') as begin_time,
+			date_format(t.end_time,'%Y-%m-%d %H:%i:%s') as end_time
+		from
+			t_exp_time t
+		where
+			t.exp_id =#{expId}
+				
+		]]>
+		<if test="null!=expTimeId and ''!=expTimeId">
+			and t.exp_time_id=#{expTimeId}
+		</if>
+	</select>
+	
+	
+	<!-- 以上是运维后台手动发放人气式，券的操作 -->
+	
+	
+	
+	
+	
+	
+	
+		<!--信息更新 -->
+	<update id="updateExpDetail"  parameterType="com.suyin.experience.model.ExpDetail">
+		<![CDATA[
+		update
+		 t_exp_detail
+		set 
+		member_id=#{memberId},
+		pro_id=#{proId},
+		pro_num=#{proNum},
+		integral=#{integral},
+		validity=#{validity},
+		add_day=#{addDay},
+		update_time=now()
+		where exp_detail_id =#{expDetailId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addExpDetail" parameterType="com.suyin.experience.model.ExpDetail" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_exp_detail (
+				member_id,		
+				exp_id,		
+				pro_id,			
+				pro_num,		
+				integral,		
+				validity,		
+				add_day,			
+				create_time,		
+				update_time		
+		)
+		values(
+				#{memberId},
+				#{expId},
+				#{proId},
+				#{proNum},
+				#{integral},
+				#{validity},
+				#{addDay},
+				now(),
+				now()
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteExpDetail" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_exp_detail
+			  	where exp_detail_id =#{expDetailId}
+		]]>
+	</delete>
+	
+		<delete id="deleteExpDetailByExpId" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_exp_detail
+			  	where exp_id =#{expId}
+		]]>
+	</delete>
+	<!-- 查询信息列表 -->
+	<select id="findExpDetailByExpId" parameterType="com.suyin.experience.model.ExpDetail" resultMap="ExpDetailMap">
+	   <![CDATA[
+		select
+			t.exp_detail_id,
+			t.member_id,
+			t.exp_id,
+			t.pro_id,
+			t.exp_num,
+			t.pro_num,
+			t.integral,
+			date_format(t.validity,'%Y-%m-%d') as validity,
+			t.add_day,
+			t.seq_no,
+			date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time
+		
+		from
+			t_exp_detail t
+		where 
+		t.exp_id =#{expId}
+		]]>
+	</select>
+	<!-- 查询信息列表 -->
+	<select id="findExpDetail" parameterType="com.suyin.experience.model.ExpDetail" resultMap="ExpDetailMap">
+	   <![CDATA[
+		select
+		t.exp_detail_id,
+		t.member_id,
+		t.exp_id,
+		t.pro_id,
+		t.exp_num,
+		t.pro_num,
+		t.integral,
+		date_format(t.validity,'%Y-%m-%d') as validity,
+		t.add_day,
+		t.seq_no,
+		date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+		date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time
+	
+	from
+		t_exp_detail t
+	where 
+	t.exp_detail_id =#{expDetailId}
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findExpDetailByPage" parameterType="com.suyin.experience.model.ExpDetail" resultMap="ExpDetailMap">
+		<![CDATA[
+		select
+			t.exp_detail_id,
+			tm.busname as member_name,
+			tp.pro_name as pro_name,
+			t.exp_num,
+			t.pro_num,
+			t.integral,
+			date_format(t.validity,'%Y-%m-%d') as validity,
+			t.add_day,
+			t.seq_no,
+			date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time
+	
+		from
+			t_exp_detail t
+			join t_product tp on tp.pro_id=t.pro_id
+			join t_member tm on t.member_id=tm.member_id
+		where
+			t.exp_id=#{expId}
+		]]>
+		order by t.create_time desc
+	</select>
+	
+</mapper>	

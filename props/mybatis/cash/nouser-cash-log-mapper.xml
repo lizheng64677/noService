@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.cash.mapper.NouserCashLogMapper">
+
+	
+	
+
+	<resultMap type="com.suyin.cash.model.NouserCashTeller" id="NouserCashLogMap">
+		<result column="log_id" property="logId"/>
+		<result column="user_id" property="userId"/>
+		<result column="money" property="money"/>
+		<result column="status" property="status"/>
+		<result column="create_time" property="createTime"/>
+	</resultMap>
+	
+	<!--信息更新 -->
+	<update id="updateNouserCashLogStatus"  parameterType="hashmap">
+		<![CDATA[
+		update
+		 t_nouser_cash_teller
+		set 
+				status=#{status},
+				update_time=now()
+		where find_in_set(log_id,#{ids})>0
+		]]>
+	</update>
+	<!-- 更改操作log记录的信息 -->
+	<update id="updataNouserCashLogoInfo" parameterType="hashmap">
+	<![CDATA[
+	 update
+		 t_nouser_cash_log t
+		set 
+				t.direction=#{direction},
+				t.content=#{content},
+				t.update_time=now(),
+				t.status=#{log_status}
+		where find_in_set(t.teller_id,#{ids})>0
+	]]>
+	</update>
+	
+	<update id="updateNouserCash" parameterType="hashmap">
+		<if test="status=='1'.toString()">
+			update  t_nouser_static_prototype nsp inner join 
+			(
+			select user_id ,sum(money) as money from t_nouser_cash_teller ncl where find_in_set(ncl.log_id,#{ids})>0 group by user_id
+			) ncl on nsp.user_id=ncl.user_id
+			set nsp.frozen_money=(nsp.frozen_money-ncl.money)
+		</if>
+		<if test="status=='2'.toString()">
+			update  t_nouser_static_prototype nsp inner join 
+			(
+			select user_id ,sum(money) as money from t_nouser_cash_teller ncl where find_in_set(ncl.log_id,#{ids})>0 group by user_id
+			) ncl on nsp.user_id=ncl.user_id
+			set nsp.frozen_money=(nsp.frozen_money-ncl.money),
+			nsp.money=(nsp.money+ncl.money)
+		</if>
+	</update>
+	
+	<!-- 根据用户id修改支付宝账号 -->
+	<update id="updateNum" parameterType="java.util.Map" >
+		update t_nouser_static_prototype set ali_pay=#{aliNum}   where user_id=#{userId}
+	</update>
+	<!-- 根据用户id修改支付宝账号 -->
+	<update id="updateNumLog" parameterType="java.util.Map" >
+		update t_nouser_cash_teller set ali_pay=#{aliNum}   where user_id=#{userId}
+	</update>
+	
+	
+	<!-- 分页查询信息 -->
+	<select id="findNouserCashLogByPage" parameterType="com.suyin.cash.model.NouserCashTeller" resultType="java.util.HashMap">
+		select 
+			replace(format(ncl.log_id,0),',','') as logId,
+			n.user_phone as userPhone,
+			ncl.user_id userId,
+			replace(format(ncl.money,2),',','') as money,
+		case 
+			when ncl.status=0 then '新建' 
+			when ncl.status=1 then '同意' 
+			when ncl.status=2 then '拒绝' 
+			when ncl.status=3 then '支付宝已转' 
+			when ncl.status=4 then '支付宝转账失败' 
+		end as  paystatus,
+			ncl.status,
+			date_format(ncl.create_time,'%Y-%m-%d %T') as createTime,
+			date_format(ncl.update_time,'%Y-%m-%d %T') as updateTime,
+			ncl.ali_pay as ali,
+			ncl.name
+		from t_nouser_cash_teller ncl inner join t_nouser n on ncl.user_id=n.user_id
+		inner join t_nouser_static_prototype nsp on nsp.user_id=n.user_id
+		where 1=1
+		<if test="status!=null">
+			and ncl.status=#{status} 
+		</if>
+		order by ncl.create_time desc
+	</select>
+	<select id="findNouserCashLogList" parameterType="com.suyin.cash.model.NouserCashTeller" resultType="hashmap">
+		select 
+			replace(format(ncl.log_id,0),',','') as logId,
+			n.user_phone as userPhone,
+			replace(format(ncl.money,2),',','') as money,
+			date_format(ncl.create_time,'%Y-%m-%d %T') as createTime,
+			ncl.ali_pay as ali,
+			ncl.name,
+			ncl.status,
+		case 
+			when ncl.status=0 then '新建' 
+			when ncl.status=1 then '同意' 
+			when ncl.status=2 then '拒绝' 
+			when ncl.status=3 then '支付宝已转' 
+			when ncl.status=4 then '支付宝转账失败' 
+		end as  paystatus
+		from t_nouser_cash_teller ncl inner join t_nouser n on ncl.user_id=n.user_id
+		inner join t_nouser_static_prototype nsp on nsp.user_id=n.user_id
+		where 1=1
+		<if test="status!=null">
+			and ncl.status=#{status}
+		</if>
+		order by ncl.create_time desc
+	</select>
+	<select id="cashTellerRecordList"  parameterType="com.suyin.cash.model.NouserCashTeller" resultType="java.util.HashMap">
+		select  DISTINCT date_format((select max(update_time)  from t_nouser_cash_teller where user_id=t.user_id),'%Y-%m-%d %H:%i:%s') as updateTime,(
+		select sum(money)  from t_nouser_cash_teller where user_id=t.user_id)  as money,(
+		select sum(1) from t_nouser_cash_teller where  user_id=t.user_id)as count ,b.user_id,a.ali_user_name as userName,t.user_phone as userPhone from t_nouser_cash_teller b
+		join t_nouser t on t.user_id = b.user_id
+		join t_nouser_static_prototype a on t.user_id = a.user_id
+		where 
+		b.`status`=1
+		<if test="userPhone!=null">
+		and
+		t.user_phone=#{userPhone} 
+		</if>
+	</select>
+	<select id="queryCoinCashLogByPage"  parameterType="com.suyin.cash.model.CoinCashLog" resultType="com.suyin.cash.model.CoinCashLog">
+		select content, money, direction from t_nouser_cash_log where user_id = #{userId} order by create_time desc
+	</select>		
+	
+</mapper>	

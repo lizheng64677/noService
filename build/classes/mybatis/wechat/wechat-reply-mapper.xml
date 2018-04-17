@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.weChat.mapper.WeChatReplyMapper">
+
+	<insert id="addTextAndImageMessage" parameterType="com.suyin.weChat.model.db.TextAndImageMessage">
+		INSERT INTO wechat_image_text_message
+		(
+		title,
+		keywords,
+		messageType,
+		pic_url,
+		url,
+		reply_is_use,
+		description
+		)
+		VALUES
+		(
+		#{title},
+		#{keywords},
+		#{messageType},
+		#{pic_url},
+		#{url},
+		#{reply_is_use},
+		#{description}
+		)
+	</insert>
+
+	<delete id="deleteTextAndImageMessage" parameterType="com.suyin.weChat.model.db.TextAndImageMessage">
+		DELETE FROM wechat_image_text_message WHERE message_id IN ${removeIds}
+	</delete>
+
+	<update id="updateTextAndImageMessage"  parameterType="com.suyin.weChat.model.db.TextAndImageMessage">
+		UPDATE 	wechat_image_text_message SET
+		title=#{title},
+		keywords=#{keywords},
+		messageType=#{messageType},
+		pic_url=#{pic_url},
+		url=#{url},
+		description=#{description}
+		WHERE message_id=#{messageId}
+	</update>
+	
+	
+	<select id="findTextAndImageMessageByPage" parameterType="com.suyin.weChat.model.db.TextAndImageMessage" resultType="com.suyin.weChat.model.db.TextAndImageMessage">
+		SELECT *,message_id as messageId FROM wechat_image_text_message
+		WHERE 1=1 
+		<if test="null!=messageId and ''!=messageId">
+			AND message_id=#{messageId}
+		</if>
+	</select>
+	
+	
+	<select id="findTextAndImageMessageByKeywordsOrIsReply" parameterType="com.suyin.weChat.model.db.TextAndImageMessage" resultType="com.suyin.weChat.model.db.TextAndImageMessage">
+		SELECT *,message_id as messageId FROM wechat_image_text_message
+		WHERE 1=1 
+		<if test="null!=reply_is_use">
+			AND reply_is_use=#{reply_is_use}
+		</if>
+		<if test="null!=keywords and ''!=keywords">
+			AND keywords = #{keywords}
+		</if>
+
+	</select>
+	
+	<select id="findImagesReply" parameterType="com.suyin.weChat.model.db.TextAndImageMessage" resultType="com.suyin.weChat.model.db.TextAndImageMessage">
+		SELECT *,message_id as messageId FROM wechat_image_text_message
+		WHERE messageType=1
+<!-- 		 and reply_is_use=0 -->
+		<if test="null!=reply_is_use">
+			AND reply_is_use=#{reply_is_use}
+		</if>
+		<if test="null!=keywords and ''!=keywords">
+			AND keywords = #{keywords}
+		</if>
+	</select>
+	
+	
+	<select id="updateTextAndImageMessageByIsReply" parameterType="com.suyin.weChat.model.db.TextAndImageMessage">
+		UPDATE 	wechat_image_text_message SET
+		reply_is_use=#{reply_is_use}
+		<if test="null!=messageId and ''!=messageId">
+			WHERE message_id=#{messageId}
+		</if>
+	</select>
+</mapper>	

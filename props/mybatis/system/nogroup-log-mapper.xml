@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.system.mapper.NoGroupSystemLogMapper">
+
+	<resultMap type="com.suyin.system.model.BaseLogModel" id="NoLogsMap">
+	
+		<result column="t_id" property="id"/>
+		<result column="t_userid" property="userId"/>
+		<result column="t_mode_name" property="modelName"/>
+		<result column="t_model_number" property="modelNumber"/>
+		<result column="t_logtype" property="logType"/>
+		<result column="t_clicent_type" property="clicentType"/>
+		<result column="t_create_time" property="createTime"/>
+		<result column="t_update_time" property="updateTime"/>
+		<result column="t_pv" property="pv"/>
+		<result column="t_uv" property="uv"/>
+	
+	</resultMap>
+	<!-- 活动日志后台查询start -->
+	<select id="initExpAllDataUv" resultType="hashmap" parameterType="com.suyin.system.model.BaseExpLogModel">
+	select 
+		sum(case t.t_clicent_type when '0' then t.t_uv else 0 end ) as 'wx',
+		sum(case t.t_clicent_type when '2' then t.t_uv else 0 end ) as 'andriod',
+		sum(case t.t_clicent_type when '1' then t.t_uv else 0 end ) as 'ios'
+	from t_exp_logs  t
+	where 
+	t.t_create_time BETWEEN date_sub(DATE_FORMAT(now(),'%Y-%m-%d'),interval 1 day)  and DATE_FORMAT(now(),'%Y-%m-%d')
+	and 
+	t.t_exp_type=#{expType}
+	</select>
+	
+	<select id="initExpAllData" resultType="hashmap" parameterType="com.suyin.system.model.BaseExpLogModel">
+	select 
+		sum(case t.t_clicent_type when '0' then t.t_pv else 0 end ) as 'wx',
+		sum(case t.t_clicent_type when '2' then t.t_pv else 0 end ) as 'andriod',
+		sum(case t.t_clicent_type when '1' then t.t_pv else 0 end ) as 'ios'
+	from t_exp_logs  t
+	where 
+	t.t_create_time BETWEEN date_sub(DATE_FORMAT(now(),'%Y-%m-%d'),interval 1 day)  and DATE_FORMAT(now(),'%Y-%m-%d')
+	and 
+	t.t_exp_type=#{expType}
+	</select>
+	<!-- 查询赚金币的puv -->
+	<select id="findExpZhuanCharsInfo" resultType="hashmap" parameterType="com.suyin.system.model.BaseExpLogModel">
+	<![CDATA[
+		select 
+				fs.t_pv,
+				fs.t_uv,
+				fs.t_exp_id,
+				fs.t_clicent_type,
+				fs.title
+		from(
+			select
+				a.t_pv,
+				a.t_uv,
+				a.t_exp_id,
+				a.t_clicent_type,
+				b.title				
+			from
+				t_exp_logs a
+			join t_exp_task b on a.t_exp_id =b.exp_id
+		
+			where 
+			a.t_create_time BETWEEN date_sub(DATE_FORMAT(now(),'%Y-%m-%d'),interval 1 day)  and DATE_FORMAT(now(),'%Y-%m-%d')
+			and 
+			a.t_clicent_type=#{clicentType}
+			and
+			a.t_exp_type=#{expType}		
+			order by a.t_pv desc
+		) fs limit 15	
+		]]>
+	</select>
+	<!-- 查询图表 -->
+	<select id="findExpCharsInfo" resultType="hashmap" parameterType="com.suyin.system.model.BaseExpLogModel">
+	select 
+			fs.t_pv,
+			fs.t_uv,
+			fs.t_detail_id,
+			fs.t_exp_id,
+			fs.t_clicent_type,
+			fs.title,
+			fs.pro_name
+	from(
+		select
+			a.t_pv,
+			a.t_uv,
+			a.t_detail_id,
+			a.t_exp_id,
+			a.t_clicent_type,
+			b.title,
+			d.pro_name
+		from
+			t_exp_logs a
+		join t_experience b on a.t_exp_id = b.exp_id
+		join t_exp_detail c on c.exp_id=b.exp_id
+		join t_product d on d.pro_id=c.pro_id
+	
+		where 
+		a.t_create_time BETWEEN date_sub(DATE_FORMAT(now(),'%Y-%m-%d'),interval 1 day)  and DATE_FORMAT(now(),'%Y-%m-%d')
+		and 
+		a.t_clicent_type=#{clicentType}
+		and
+		a.t_exp_type=#{expType}		
+		order by a.t_pv desc
+	) fs limit 15	
+	</select>
+	<!-- 活动日志后台查询stop -->
+	
+	<!-- 活动日志记录start -->
+	
+	<!-- 查询是否记录昨天日志 -->
+	<select id="findNoGroupExpInfo" resultType="int">	
+		select count(1) from t_exp_logs t where t.t_create_time BETWEEN date_sub(DATE_FORMAT(now(),'%Y-%m-%d'),interval 1 day)  and DATE_FORMAT(now(),'%Y-%m-%d')
+	</select>
+	
+	<select id="inSertExpDbLogs" parameterType="list" >
+		insert into 
+				t_exp_logs 
+		    (
+				t_pv,
+				t_uv,
+				t_exp_id,
+				t_detail_id,
+				t_userid,
+				t_clicent_type,
+				t_create_time,
+				t_update_time,
+				t_exp_type
+		    )values
+			<foreach collection="list" item="item" index="index"  separator=",">
+		  	 (#{item.pv},#{item.uv},#{item.expId},#{item.detaiId},#{item.userId},#{item.clicentType},date_sub(now(),interval 1 day),now(),#{item.expType})
+			</foreach>
+	</select>
+	<!-- 活动日志记录stop -->
+	<!-- 查询系统操作日志记录 -->
+	<select id="findExpSystemLogByPage" resultMap="NoLogsMap" parameterType="com.suyin.system.model.BaseLogModel">
+	<![CDATA[
+		select
+			t.t_id,
+			t.t_userid,
+			t.t_model_number,
+			t.t_mode_name,
+			t.t_logtype,
+			t.t_clicent_type,
+			t.t_uv,
+			t.t_pv,
+			t.t_create_time,
+			t.t_update_time
+		from
+			t_no_logs t
+		where
+			1=1
+	]]>	
+	<if test="null!=clicentType">
+		and t.t_clicent_type=#{clicentType}
+	</if>
+	<if test="null!=begTime">
+	 	and  t.t_create_time > #{begTime}
+	</if>
+	<if test="null!=endTime">
+	<![CDATA[
+	 	and  t.t_create_time < #{endTime}
+	 	]]>
+	</if>
+	</select>
+	
+	<select id="findExpSystemLogMapInfo"  resultType="hashmap" parameterType="com.suyin.system.model.BaseLogModel">
+	<![CDATA[
+		select
+			t.t_id,
+			t.t_userid,
+			t.t_model_number,
+			t.t_mode_name,
+			t.t_logtype,
+			t.t_clicent_type,
+			t.t_uv,
+			t.t_pv,
+			t.t_create_time,
+			t.t_update_time
+		from
+			t_no_logs t
+		where
+			1=1
+	]]>	
+	<if test="null!=clicentType">
+		and t.t_clicent_type=#{clicentType}
+	</if>
+	<if test="null!=begTime">
+	 	and  t.t_create_time > #{begTime}
+	</if>
+	<if test="null!=endTime">
+	<![CDATA[
+	 	and  t.t_create_time < #{endTime}
+	 	]]>
+	</if>
+	</select>
+	<!-- 查询各终端数据  图表展示-->
+	<select id="initData" resultType="hashmap" parameterType="com.suyin.system.model.BaseLogModel">
+		<![CDATA[
+		select
+			t.t_id,
+			t.t_userid,
+			t.t_model_number,
+			t.t_mode_name,
+			t.t_logtype,
+			t.t_clicent_type,
+			t.t_uv,
+			t.t_pv,
+			t.t_create_time,
+			t.t_update_time
+		from
+			t_no_logs t
+		where
+			t.t_create_time BETWEEN date_sub(DATE_FORMAT(now(),'%Y-%m-%d'),interval 1 day)  and DATE_FORMAT(now(),'%Y-%m-%d')
+			and
+			t.t_clicent_type = #{clicentType}
+			order by t_logtype asc
+		]]>	
+	</select>
+
+	<!-- 查询全端数据  图表展示-->
+	<select id="initAllData" resultType="hashmap" parameterType="com.suyin.system.model.BaseLogModel">
+	<![CDATA[	
+	select 
+		sum(case t.t_clicent_type when '0' then t.t_pv else 0 end ) as 'wx',
+		sum(case t.t_clicent_type when '2' then t.t_pv else 0 end ) as 'andriod',
+		sum(case t.t_clicent_type when '1' then t.t_pv else 0 end ) as 'ios'
+	from t_no_logs  t
+	where 
+	t.t_create_time BETWEEN date_sub(DATE_FORMAT(now(),'%Y-%m-%d'),interval 1 day)  and DATE_FORMAT(now(),'%Y-%m-%d')
+	]]>	
+	</select>
+	<!-- 查询全端数据  图表展示-->
+	<select id="initAllDataUv" resultType="hashmap" parameterType="com.suyin.system.model.BaseLogModel">
+	<![CDATA[	
+	select 
+		sum(case t.t_clicent_type when '0' then t.t_uv else 0 end ) as 'wx',
+		sum(case t.t_clicent_type when '2' then t.t_uv else 0 end ) as 'andriod',
+		sum(case t.t_clicent_type when '1' then t.t_uv else 0 end ) as 'ios'
+	from t_no_logs  t
+	where 
+	t.t_create_time BETWEEN date_sub(DATE_FORMAT(now(),'%Y-%m-%d'),interval 1 day)  and DATE_FORMAT(now(),'%Y-%m-%d')
+	]]>	
+	</select>
+	<!-- NO团日志记录 -->
+	<insert id="insertMsmfLog">
+	insert into 
+			t_no_logs 
+	    (
+	        t_userid,
+	        t_mode_name,
+	        t_model_number,
+	        t_logtype,
+	        t_clicent_type,
+	        t_create_time,
+	        t_udate_time
+	    )
+		select
+		    #{userId},
+	        #{modelName},
+	        #{modelNumber},
+	        #{logType},
+	        #{clicentType}
+		    now(),
+		    now()
+	     from dual where not exists
+         (
+            select * from t_no_logs where opt_type = #{logType} 
+            and   DATE_FORMAT(t_create_time,'%Y-%m-%d') = DATE_FORMAT(now(),'%Y-%m-%d')
+         )
+	</insert>
+	<!-- inService工程 日志文件入库 -->
+	<select id="inSertDbLogs" parameterType="List">
+		insert into 
+			t_no_logs 
+	    (
+	        t_userid,
+	        t_mode_name,
+	        t_model_number,
+	        t_logtype,
+	        t_clicent_type,
+	        t_pv,
+	        t_uv,
+	        t_create_time,
+	        t_update_time
+	    )values
+		<foreach collection="list" item="item" index="index"  separator=",">
+	  	 (#{item.userId},#{item.modelName},#{item.modelNumber},#{item.logType},#{item.clicentType},#{item.pv},#{item.uv},date_sub(now(),interval 1 day),now())
+		</foreach>
+	</select>
+	<!-- 查询是否记录昨天日志 -->
+	<select id="findNoGroupInfo" resultType="int">	
+		select count(1) from t_no_logs t where t.t_create_time BETWEEN date_sub(DATE_FORMAT(now(),'%Y-%m-%d'),interval 1 day)  and DATE_FORMAT(now(),'%Y-%m-%d')
+	</select>
+	
+	<!-- 资金统计 -->
+	<select id="findCapitalCountByPage" parameterType="java.util.Map" resultType="com.suyin.system.model.CapitalCount">
+		<![CDATA[
+			SELECT 
+			    COUNT(user_id)  userCount,
+			    (SELECT SUM(gold_coin) FROM t_nouser_coin_log where ${conditons1}) goldCount,            
+			    (SELECT SUM(gold_coin) FROM t_nouser_coin_log WHERE ${conditons} AND content='签到成功' ) goldSignCount,    
+			    (SELECT SUM(gold_coin) FROM t_nouser_coin_log WHERE ${conditons} AND content='注册') registerGoldCount,   
+			    (SELECT SUM(gold_coin) FROM t_nouser_coin_log WHERE ${conditons} AND content='完善资料' ) dataGoldCount,   
+			    (SELECT SUM(gold_coin) FROM t_nouser_coin_log WHERE ${conditons} AND content LIKE '你参加%' ) qisongTaskGoldCount,
+			    (SELECT SUM(gold_coin) FROM t_nouser_coin_log WHERE ${conditons} AND (content LIKE '参加了%' OR content LIKE '朋友点击%')) qmTaskGoldCount,
+			    (SELECT SUM(gold_coin) FROM t_nouser_coin_log WHERE ${conditons1} and content='提取金币') walletGoldCount,    
+			    (SELECT COUNT(DISTINCT user_id) FROM t_nouser_coin_log WHERE ${conditons} AND content='提取金币' ) walletUserCount,   
+			    (select sum(money)from t_nouser_coin_teller   WHERE ${conditons} ) waletMoneyCount ,  
+			    (SELECT SUM(money) FROM  t_nouser_cash_teller WHERE ${conditons}) applyMoneyCount,      
+			    (SELECT COUNT(DISTINCT user_id)    FROM  t_nouser_cash_teller WHERE ${conditons}) applyUserCount,   
+			    (select sum(money)from t_nouser_coin_teller  where ${conditons1} and status=1) moneyCount    
+			FROM t_nouser  where ${conditons1}
+		]]>
+	
+	</select>
+	
+	
+</mapper>

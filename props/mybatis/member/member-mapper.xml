@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.member.mapper.MemberMapper">
+	<!-- 商家管理 -->
+	<resultMap type="com.suyin.member.model.Member" id="MemberMap">
+	
+		<result column="member_id" property="memberId"/>
+		<result column="busname" property="busname"/>
+		<result column="title" property="title"/>
+		<result column="username" property="username"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="pwd" property="pwd"/>
+		<result column="address" property="address"/>
+		<result column="address_url" property="addressUrl"/>
+		<result column="wide_pic" property="widePic"/>
+		<result column="pic_url" property="picUrl"/>
+		<result column="bg_pic_url" property="bgPicUrl"/>
+		<result column="attention_url" property="attentionUrl"/>
+		<result column="telephone" property="telephone"/>
+		<result column="email" property="email"/>
+		<result column="qq" property="qq"/>
+		<result column="city_id" property="cityId"/>
+		<result column="provin_id" property="provinId"/>
+		<result column="station_id" property="stationId"/>
+		<result column="region_id" property="regionId"/>
+		<result column="cg_id" property="cgId"/>
+		<result column="f_code" property="fcode"/>
+		<result column="praise_num" property="praiseNum"/>
+		<result column="collect_num" property="collectNum"/>
+		<result column="discuss_num" property="discussNum"/>
+		<result column="com_score" property="comScore"/>
+		<result column="envi_score" property="enviScore"/>
+		<result column="serve_score" property="serveScore"/>
+		<result column="qcd_score" property="qcdScore"/>
+		<result column="code" property="code"/>
+		<result column="is_self" property="isSelf"/>
+		<result column="is_chain" property="isChain"/>
+		<result column="seq_no" property="seqNo"/>
+		<result column="create_time" property="createTime"/>
+		<result column="point" property="point"/>
+		<result column="lng" property="lng"/>
+		<result column="lat" property="lat"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="logo_pic_url" property="logoPicUrl"/>
+		<result column="description" property="description"/>
+		<result column="is_attention" property="isAttention"/>
+		<result column="android_url" property="androidUrl"/>
+		<result column="iphone_url" property="iphoneUrl"/>
+	
+	</resultMap>
+	<!-- 判断该用户名是否已经存在 -->
+	<select id="isUserName" parameterType="hashmap" resultType="hashmap">
+		<![CDATA[		
+		select
+			t.busname,
+			t.is_attention,
+			t.is_chain,
+			t.is_self,
+			t.parent_id,
+			t.username
+		from
+			t_member t
+		where 
+		  t.username=#{userName}
+		]]>
+	</select>
+		<!--信息更新 -->
+	<update id="updateMember"  parameterType="com.suyin.member.model.Member">
+		<![CDATA[
+		update
+		 t_member
+		set 
+		busname=#{busname},
+		title=#{title},
+		username=#{username},
+		parent_id=#{parentId},
+		pwd=#{pwd},
+		address=#{address},
+		address_url=#{addressUrl},
+		wide_pic=#{widePic},
+		pic_url=#{picUrl},
+		bg_pic_url=#{bgPicUrl},
+		attention_url=#{attentionUrl},
+		telephone=#{telephone},
+		email=#{email},
+		qq=#{qq},
+		city_id=#{cityId},
+		provin_id=#{provinId},
+		station_id=#{stationId},
+		region_id=#{regionId},
+		cg_id=#{cgId},
+		code=#{code},
+		is_self=#{isSelf},
+		is_chain=#{isChain},
+		lng=#{lng},
+		lat=#{lat},
+		update_time=now(),
+		logo_pic_url=#{logoPicUrl},
+		description=#{description},
+		is_attention=#{isAttention},
+		android_url=#{androidUrl},
+		iphone_url=#{iphoneUrl}
+		where member_id =#{memberId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addMember" parameterType="com.suyin.member.model.Member" useGeneratedKeys="true" keyProperty="memberId">
+
+		insert  t_member (
+				busname,		
+				title,		
+				username,		
+				pwd,		
+				address,		
+				address_url,		
+				wide_pic,		
+				pic_url,		
+				bg_pic_url,		
+				attention_url,		
+				telephone,		
+				email,		
+				qq,		
+				city_id,
+				provin_id,	
+				region_id,
+				cg_id,			
+				code,		
+				is_self,		
+				is_chain,			
+				create_time,			
+				lng,		
+				lat,		
+				update_time,		
+				logo_pic_url,		
+				description,		
+				is_attention,		
+				android_url,		
+				iphone_url,
+				parent_id
+		)
+		values(
+				#{busname},
+				#{title},
+				#{username},
+				#{pwd},
+				#{address},
+				1,
+				#{widePic},
+				#{picUrl},
+				#{bgPicUrl},
+				#{attentionUrl},
+				#{telephone},
+				#{email},
+				#{qq},
+				#{cityId},
+				#{provinId},
+				#{regionId},
+				#{cgId},
+				#{code},
+				#{isSelf},
+				#{isChain},
+				now(),
+				#{lng},
+				#{lat},
+				now(),
+				#{logoPicUrl},
+				#{description},
+				#{isAttention},
+				#{androidUrl},
+				#{iphoneUrl},
+				#{parentId}
+		)
+
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteMember" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_member
+			  	where member_id =#{memberId}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findMember" parameterType="com.suyin.member.model.Member" resultMap="MemberMap">
+	   <![CDATA[
+		select * from t_member t WHERE 1=1
+		]]>
+		<if test="null!=memberId and ''!=memberId">
+			and  t.member_id=#{memberId}
+		</if>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findMemberByPage" parameterType="com.suyin.member.model.Member" resultMap="MemberMap">
+		<![CDATA[
+	select
+		t.member_id,
+		t.address,
+		t.address_url,
+		t.logo_pic_url,
+		t.busname,
+		t.username,
+		t.is_chain,
+		t.is_self,
+		t.title,
+		date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+		date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time
+	from
+		t_member t
+	where
+		1 = 1
+		]]>
+	<choose>
+		<when test="null!=memberId and ''!=memberId">
+		and t.parent_id=#{memberId}
+		</when>
+		<otherwise>
+		and t.parent_id=0
+		</otherwise>
+	</choose>		
+	order by t.create_time desc
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findMemberByMapPage" parameterType="com.suyin.member.model.Member" resultType="hashmap">
+		<![CDATA[
+	select
+		t.member_id as id,
+		t.busname as text,
+		t.parent_id as ParentId 
+	from
+		t_member t
+	where
+		1 = 1
+		]]>
+	<choose>
+		<when test="null!=memberId and ''!=memberId">
+		and t.parent_id=#{memberId}
+		</when>
+		<otherwise>
+		and t.parent_id=0
+		</otherwise>
+	</choose>		
+	order by t.create_time desc
+	</select>
+</mapper>	

@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.experience.mapper.ExpCharsMapper">
+
+	<resultMap type="com.suyin.experience.model.ExpChars" id="ExpCharsMap">
+	
+		<result column="t_exp_id" property="expId"/>
+		<result column="t_pv" property="pv"/>
+		<result column="t_uv" property="uv"/>
+		<result column="t_clicent_type" property="clicentType"/>
+		<result column="t_exp_type" property="expType"/>
+		<result column="validity" property="validity"/>
+		<result column="add_day" property="addDay"/>
+		<result column="pro_num" property="proNum"/>
+		<result column="exp_num" property="expNum"/>
+		<result column="price" property="price"/>
+		<result column="pro_name" property="proName"/>
+		<result column="title" property="title"/>
+		<result column="probability" property="probability"/>
+		<result column="begin_time" property="bengTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="rnum" property="rnum"/>
+		<result column="xqs" property="xqs"/>
+		<result column="popnum" property="popNum"/>
+				
+	</resultMap>
+	
+	<resultMap type="com.suyin.experience.model.ExpChars" id="ExpZhuanCharsMap">
+	
+		<result column="exp_id" property="expId"/>
+		<result column="t_pv" property="pv"/>
+		<result column="t_uv" property="uv"/>
+		<result column="exp_type" property="expType"/>
+		<result column="t_clicent_type" property="clicentType"/>
+		<result column="exp_user_gold" property="userGold"/>
+		<result column="title" property="title"/>
+		<result column="begin_time" property="bengTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="tjnum" property="tjNum"/>
+		<result column="shnum" property="shNum"/>
+		<result column="ordernum" property="orderNum"/>
+		<result column="zs" property="zs"/>
+		<result column="qj" property="qj"/>
+				
+	</resultMap>
+	<select id="findQzhuanCharsByPage" parameterType="com.suyin.experience.model.ExpChars" resultMap="ExpZhuanCharsMap">
+	<![CDATA[
+	select	
+		task.title,
+		task.exp_type,
+		tlog.t_clicent_type,
+		CONCAT(task.exp_gold_min,'~',task.exp_gold_max)  as qj,	
+		date_format(task.begin_time,'%Y-%m-%d %H:%i') as begin_time,
+		date_format(task.end_time,'%Y-%m-%d %H:%i') as end_time,
+		tlog.t_pv,
+		tlog.t_uv,
+		(select count(1) from t_exp_task_order t where t.module_type=0 and t.exp_id=task.exp_id) as ordernum,
+		ifnull((select sum(t.total_gold) from t_exp_task_order t where t.module_type=0 and t.exp_id=task.exp_id),0) as zs,
+		task.exp_id
+	from
+		t_exp_task task 
+		join t_exp_logs tlog on tlog.t_exp_id=task.exp_id
+	 where 
+		task.exp_type=0
+		
+	]]>
+	<if test="null!=clicentType">
+		and 
+		tlog.t_clicent_type=#{clicentType}
+	</if>
+	<if test="null!=bengTime">
+	and 
+	tlog.t_create_time > #{bengTime}
+	</if>
+	<if test="null!=endTime">
+	<![CDATA[
+	and 
+	tlog.t_create_time < #{endTime}
+	]]>
+	</if>
+	order by task.end_time desc
+	</select>
+	<select id="findQzhuanCharsMapInfo" parameterType="com.suyin.experience.model.ExpChars" resultType="java.util.HashMap">
+	<![CDATA[
+	select	
+		task.title,
+		task.exp_type,
+		tlog.t_clicent_type,
+		task.exp_gold_min,
+		task.exp_gold_max,	
+		date_format(task.begin_time,'%Y-%m-%d %H:%i') as begin_time,
+		date_format(task.end_time,'%Y-%m-%d %H:%i') as end_time,
+		tlog.t_pv,
+		tlog.t_uv,
+		(select count(1) from t_exp_task_order t where t.module_type=0 and t.exp_id=task.exp_id) as ordernum,
+		ifnull((select sum(t.total_gold) from t_exp_task_order t where t.module_type=0 and t.exp_id=task.exp_id),0) as zs,
+		task.exp_id
+	from
+		t_exp_task task 
+		join t_exp_logs tlog on tlog.t_exp_id=task.exp_id
+	 where 
+		task.exp_type=#{expType}
+		
+	]]>
+	<if test="null!=clicentType">
+	and 
+	tlog.t_clicent_type=#{clicentType}
+	</if>
+	<if test="null!=bengTime">
+	and 
+	tlog.t_create_time > #{bengTime}
+	</if>
+	<if test="null!=endTime">
+	<![CDATA[
+	and 
+	tlog.t_create_time < #{endTime}
+	]]>
+	</if>
+	order by task.end_time desc		
+	</select>
+	<!-- 查询轻松赚 -->
+	<select id="findZhuanCharsByPage" parameterType="com.suyin.experience.model.ExpChars" resultMap="ExpZhuanCharsMap">
+	<![CDATA[
+		select	
+			task.title,
+			task.exp_type,
+			tlog.t_clicent_type,
+			@usergold:=task.exp_user_gold as exp_user_gold,
+			date_format(task.begin_time,'%Y-%m-%d %H:%i') as begin_time,
+			date_format(task.end_time,'%Y-%m-%d %H:%i') as end_time,
+			tlog.t_pv,
+			tlog.t_uv,
+		  (task.user_total-task.user_join) as ordernum,
+			(select count(1) from t_exp_task_order e where e.module_type=1 and e.`status`=1 and e.exp_id=task.exp_id) as tjnum,
+			@num:=(select count(1) from t_exp_task_order e where e.module_type=1 and e.`status`=2 and e.exp_id=task.exp_id) as shnum,
+			(@num*@usergold) as zs,
+			task.exp_id
+		from
+			t_exp_task task 
+			join t_exp_logs tlog on tlog.t_exp_id=task.exp_id
+		 where 
+			task.exp_type=1
+	]]>
+	<if test="null!=clicentType">
+		and 
+		tlog.t_clicent_type=#{clicentType}
+	</if>
+	<if test="null!=bengTime">
+	and 
+	tlog.t_create_time > #{bengTime}
+	</if>
+	<if test="null!=endTime">
+	<![CDATA[
+	and 
+	tlog.t_create_time < #{endTime}
+	]]>
+	</if>
+	order by task.end_time desc
+	</select>
+	<select id="findZhuanCharsMapInfo" parameterType="com.suyin.experience.model.ExpChars" resultType="hashmap">
+	<![CDATA[
+		select	
+			task.title,
+			task.exp_type,
+			tlog.t_clicent_type,
+			@usergold:=task.exp_user_gold as exp_user_gold,
+			date_format(task.begin_time,'%Y-%m-%d %H:%i') as begin_time,
+			date_format(task.end_time,'%Y-%m-%d %H:%i') as end_time,
+			tlog.t_pv,
+			tlog.t_uv,
+		  (task.user_total-task.user_join) as ordernum,
+			(select count(1) from t_exp_task_order e where e.module_type=1 and e.`status`=1 and e.exp_id=task.exp_id) as tjnum,
+			@num:=(select count(1) from t_exp_task_order e where e.module_type=1 and e.`status`=2 and e.exp_id=task.exp_id) as shnum,
+			(@num*@usergold) as zs,
+			task.exp_id
+		from
+			t_exp_task task 
+			join t_exp_logs tlog on tlog.t_exp_id=task.exp_id
+		 where 
+			task.exp_type=1
+	]]>
+	<if test="null!=clicentType">
+		and 
+		tlog.t_clicent_type=#{clicentType}
+	</if>
+	<if test="null!=bengTime">
+	and 
+	tlog.t_create_time > #{bengTime}
+	</if>
+	<if test="null!=endTime">
+	<![CDATA[
+	and 
+	tlog.t_create_time < #{endTime}
+	]]>
+	</if>
+	order by task.end_time desc
+	</select>
+	
+	<!-- 人气数据查询 -->
+	<select id="findPopCharsListByPage" parameterType="com.suyin.experience.model.ExpChars" resultMap="ExpCharsMap">
+	<![CDATA[
+		select
+			log.t_exp_id,
+			ifnull((select  sum(t.share_num) from t_exp_share t where t.exp_type=1 and  t.exp_id=log.t_exp_id),0) as popnum,
+			log.t_pv,
+			log.t_uv,
+			log.t_clicent_type,
+			log.t_exp_type,
+			ifnull(de.validity,-1) as validity,
+			ifnull(de.add_day,-1) as add_day,
+			de.pro_num,
+			pr.price,
+			pr.pro_name,
+			ex.title,
+			date_format(ex.begin_time,'%Y-%m-%d %H:%i') as begin_time,
+			date_format(ex.end_time,'%Y-%m-%d %H:%i') as end_time,			
+			(select count(1) from t_exp_order where exp_id=log.t_exp_id and regtype=log.t_clicent_type) as rnum,
+			(select count(1) from(select exb.vou_id,tor.exp_id from t_exp_order tor  join t_exp_voucher exb on tor.order_id=exb.order_id  and exb.vou_stauts=1) as qtable where  qtable.exp_id=log.t_exp_id )as xqs
+		from
+		t_experience ex
+		join t_exp_logs log on log.t_exp_id = ex.exp_id
+		join t_exp_detail de on de.exp_id=ex.exp_id
+		join t_product pr on pr.pro_id=de.pro_id
+		where ex.exp_type=1
+		]]>
+		<if test="null!=clicentType">
+		and 
+		log.t_clicent_type=#{clicentType}
+		</if>
+		<if test="null!=bengTime">
+		and 
+		log.t_create_time > #{bengTime}
+		</if>
+		<if test="null!=endTime">
+		<![CDATA[
+		and 
+		log.t_create_time < #{endTime}
+		]]>
+		</if>
+		order by ex.end_time desc
+	</select>
+	<select id="findPopCharsMapList" parameterType="com.suyin.experience.model.ExpChars" resultType="hashmap">
+	<![CDATA[
+		select
+			log.t_exp_id,
+			ifnull((select  sum(t.share_num) from t_exp_share t where t.exp_type=1 and  t.exp_id=log.t_exp_id),0) as popnum,
+			log.t_pv,
+			log.t_uv,
+			log.t_clicent_type,
+			log.t_exp_type,
+			de.validity,
+			de.add_day,
+			de.pro_num,
+			pr.price,
+			pr.pro_name,
+			ex.title,
+			date_format(ex.begin_time,'%Y-%m-%d %H:%i') as begin_time,
+			date_format(ex.end_time,'%Y-%m-%d %H:%i') as end_time,			
+			(select count(1) from t_exp_order where exp_id=log.t_exp_id and regtype=log.t_clicent_type) as rnum,
+			(select count(1) from(select exb.vou_id,tor.exp_id from t_exp_order tor  join t_exp_voucher exb on tor.order_id=exb.order_id  and exb.vou_stauts=1) as qtable where  qtable.exp_id=log.t_exp_id )as xqs
+		from
+		t_experience ex
+		join t_exp_logs log on log.t_exp_id = ex.exp_id
+		join t_exp_detail de on de.exp_id=ex.exp_id
+		join t_product pr on pr.pro_id=de.pro_id
+		where ex.exp_type=#{expType}
+		]]>
+		<if test="null!=clicentType">
+		and 
+		log.t_clicent_type=#{clicentType}
+		</if>
+		<if test="null!=bengTime">
+		and 
+		log.t_create_time > #{bengTime}
+		</if>
+		<if test="null!=endTime">
+		<![CDATA[
+		and 
+		log.t_create_time < #{endTime}
+		]]>
+		</if>
+		order by ex.end_time desc
+	</select>
+	<!-- 抽奖数据查询 -->
+	<select id="findPrizeCharsByPage" parameterType="com.suyin.experience.model.ExpChars" resultMap="ExpCharsMap">
+	<![CDATA[
+		select
+			log.t_exp_id,
+			log.t_pv,
+			log.t_uv,
+			log.t_clicent_type,
+			log.t_exp_type,
+			ifnull(de.validity,-1) as validity,
+			ifnull(de.add_day,-1) as add_day,
+			de.pro_num,
+		 	(de.pro_num-de.exp_num) as exp_num,
+			pr.price,
+			pr.pro_name,
+			ex.title,
+			ex.probability,
+			date_format(ex.begin_time,'%Y-%m-%d %H:%i') as begin_time,
+			date_format(ex.end_time,'%Y-%m-%d %H:%i') as end_time,		
+			(select count(1) from t_exp_order where exp_id=log.t_exp_id and regtype=log.t_clicent_type) as rnum,
+			(select count(1) from(select exb.vou_id,tor.exp_id from t_exp_order tor  join t_exp_voucher exb on tor.order_id=exb.order_id  and exb.vou_stauts=1) as qtable where  qtable.exp_id=log.t_exp_id )as xqs
+		from
+		t_experience ex
+		join t_exp_logs log on log.t_exp_id = ex.exp_id
+		join t_exp_detail de on de.exp_id=ex.exp_id
+		join t_product pr on pr.pro_id=de.pro_id
+		where ex.exp_type=0
+		]]>
+		<if test="null!=clicentType">
+		and 
+		log.t_clicent_type=#{clicentType}
+		</if>
+		<if test="null!=bengTime">
+		and 
+		log.t_create_time > #{bengTime}
+		</if>
+		<if test="null!=endTime">
+		<![CDATA[
+		and 
+		log.t_create_time < #{endTime}
+		]]>
+		</if>
+		order by ex.end_time desc
+	</select>
+	
+	<!-- 数据导出 -->
+	<select id="findPrizeCharsMapInfo" parameterType="com.suyin.experience.model.ExpChars" resultType="hashmap">
+	<![CDATA[
+		select
+			log.t_exp_id,
+			log.t_pv,
+			log.t_uv,
+			log.t_clicent_type,
+			log.t_exp_type,
+			de.validity,
+			de.add_day,
+			de.pro_num,
+		 	(de.pro_num-de.exp_num) as exp_num,
+			pr.price,
+			pr.pro_name,
+			ex.title,
+			ex.probability,
+			date_format(ex.begin_time,'%Y-%m-%d %H:%i') as begin_time,
+			date_format(ex.end_time,'%Y-%m-%d %H:%i') as end_time,		
+			(select count(1) from t_exp_order where exp_id=log.t_exp_id and regtype=log.t_clicent_type) as rnum,
+			(select count(1) from(select exb.vou_id,tor.exp_id from t_exp_order tor  join t_exp_voucher exb on tor.order_id=exb.order_id  and exb.vou_stauts=1) as qtable where  qtable.exp_id=log.t_exp_id )as xqs
+		from
+		t_experience ex
+		join t_exp_logs log on log.t_exp_id = ex.exp_id
+		join t_exp_detail de on de.exp_id=ex.exp_id
+		join t_product pr on pr.pro_id=de.pro_id
+		where ex.exp_type=#{expType}
+		]]>
+		<if test="null!=clicentType">
+		and 
+		log.t_clicent_type=#{clicentType}
+		</if>
+		<if test="null!=bengTime">
+		and 
+		log.t_create_time > #{bengTime}
+		</if>
+		<if test="null!=endTime">
+		<![CDATA[
+		and 
+		log.t_create_time < #{endTime}
+		]]>
+		</if>
+		order by ex.end_time desc
+	</select>
+</mapper>	

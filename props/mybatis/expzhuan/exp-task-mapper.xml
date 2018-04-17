@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.expzhuan.mapper.ExpTaskMapper">
+
+	<resultMap type="com.suyin.expzhuan.model.ExpTask" id="ExpTaskMap">
+	
+		<result column="exp_id" property="expId"/>
+		<result column="exp_type" property="expType"/>
+		<result column="member_id" property="memberId"/>
+		<result column="title" property="title"/>
+		<result column="is_begin" property="isBegin"/>
+		<result column="exp_count_gold" property="expCountGold"/>
+		<result column="exp_remain_gold" property="expRemainGold"/>
+		<result column="user_browse_gold" property="userBrowseGold"/>
+		<result column="user_max_gold" property="userMaxGold"/>
+		<result column="exp_gold_max" property="expGoldMax"/>
+		<result column="exp_user_gold" property="expUserGold"/>
+		<result column="exp_gold_min" property="expGoldMin"/>
+		<result column="exp_info" property="expInfo"/>
+		<result column="provin_id" property="provinId"/>
+		<result column="city_id" property="cityId"/>
+		<result column="begin_time" property="beginTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="user_share_gold" property="userShareGold"/>
+		<result column="exp_app_url" property="expAppUrl"/>
+		<result column="user_total" property="userTotal"/>
+		<result column="show_type" property="showType"/>
+		<result column="member_name" property="memberName"/>
+		<result column="member_info" property="memberInfo"/>
+		<result column="share_title" property="shareTitle"/>
+		<result column="share_url" property="shareUrl"/>
+		<result column="share_img_url" property="shareImgUrl"/>
+		<result column="exp_img_url" property="expImgUrl"/>
+		<result column="seq_num" property="seqNum"/>
+		<result column="app_info" property="appInfo"/>
+		<result column="down_img_url" property="dowImgUrl"/>
+		<result column="up_img_url" property="upImgUrl"/>
+		<result column="tips" property="tips"/>
+		<result column="is_label" property="isLabel"/>
+		<result column="label" property="label"/>
+		<result column="client_type" property="clientType"/>
+		<result column="is_down" property="isDown"/>
+	</resultMap>
+	<!-- 更新全民赚app下载 图片示例及app介绍信息等 -->
+	<update id="updateExpAppImagesInfo" parameterType="com.suyin.expzhuan.model.ExpTask">
+		<![CDATA[
+		update
+		 t_exp_task t
+		set 
+		t.app_info=#{appInfo},
+		t.down_img_url=#{dowImgUrl},
+		t.up_img_url=#{upImgUrl}
+		where 
+		t.exp_id =#{expId}
+		and 
+		t.exp_type=#{expType}
+		]]>
+	</update>
+	<!-- 更新活动状态 -->
+	<update id="updateExpIsBegin"  parameterType="com.suyin.expzhuan.model.ExpTask">
+		<![CDATA[
+		update
+		 t_exp_task
+		set 
+		is_begin=#{isBegin}
+		where exp_id =#{expId}
+		]]>
+	</update>
+	<!-- 活动置顶 -->
+	<update id="updataSeqNum" parameterType="hashmap">
+		<![CDATA[
+		update t_exp_task t set t.seq_num=#{seqNum}  where t.exp_id=#{expId}
+		]]>
+	</update>
+		<!--信息更新 -->
+	<update id="updateExpZhuan"  parameterType="com.suyin.expzhuan.model.ExpTask">
+		<![CDATA[
+		update
+		 t_exp_task
+		set 
+		exp_type=#{expType},
+		show_type=#{showType},
+		member_name=#{memberName},
+		member_info=#{memberInfo},
+		title=#{title},
+		exp_count_gold=#{expCountGold},
+		exp_remain_gold=#{expRemainGold},
+		user_browse_gold=#{userBrowseGold},
+		user_max_gold=#{userMaxGold},
+		exp_gold_max=#{expGoldMax},
+		exp_user_gold=#{expUserGold},
+		exp_gold_min=#{expGoldMin},
+		exp_info=#{expInfo},
+		provin_id=#{provinId},
+		city_id=#{cityId},
+		begin_time=#{beginTime},
+		end_time=#{endTime},
+		user_share_gold=#{userShareGold},
+		exp_app_url=#{expAppUrl},
+		user_total=#{userTotal},
+		share_title=#{shareTitle},
+		share_url=#{shareUrl},
+		share_img_url=#{shareImgUrl},
+		exp_img_url=#{expImgUrl},
+		update_time=now(),
+		tips=#{tips},
+		is_label=#{isLabel},
+		label=#{label},
+		client_type=#{clientType},
+		is_download=#{isDown}
+		where exp_id =#{expId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addExpZhuan" parameterType="com.suyin.expzhuan.model.ExpTask" useGeneratedKeys="true" keyProperty="expId">
+	<![CDATA[
+
+		insert  t_exp_task (
+				exp_type,		
+				title,			
+				exp_count_gold,	
+				exp_remain_gold,	
+				user_browse_gold,		
+				user_max_gold,		
+				exp_gold_max,		
+				exp_user_gold,		
+				exp_gold_min,		
+				exp_info,	
+				provin_id,		
+				city_id,		
+				begin_time,		
+				end_time,		
+				create_time,		
+				update_time,
+				user_share_gold,
+				exp_app_url,
+				user_total,
+				show_type,
+				member_name,
+				member_info,
+				share_title,
+				share_url,
+				share_img_url,
+				exp_img_url,
+				tips,
+				is_label,
+				label,
+				client_type,
+				is_download
+		)
+		values(
+				#{expType},
+				#{title},
+				#{expCountGold},
+				#{expRemainGold},
+				#{userBrowseGold},
+				#{userMaxGold},
+				#{expGoldMax},
+				#{expUserGold},
+				#{expGoldMin},
+				#{expInfo},
+				#{provinId},
+				#{cityId},
+				#{beginTime},
+				#{endTime},
+				now(),
+				now(),
+				#{userShareGold},
+				#{expAppUrl},
+				#{userTotal},
+				#{showType},
+				#{memberName},
+				#{memberInfo},
+				#{shareTitle},
+				#{shareUrl},
+				#{shareImgUrl},
+				#{expImgUrl},
+				#{tips},
+				#{isLabel},
+				#{label},
+				#{clientType},
+				#{isDown}
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteExpZhuan" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_exp_task
+			  	where exp_id =#{expId}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findExpZhuan" parameterType="com.suyin.expzhuan.model.ExpTask" resultMap="ExpTaskMap">
+	   <![CDATA[
+		select 
+			t.exp_id,
+			t.exp_type,
+			date_format(t.begin_time,'%Y-%m-%d %H:%i:%s') as begin_time,
+			date_format(t.end_time,'%Y-%m-%d %H:%i:%s') as end_time,
+			t.show_type,
+			t.title,
+			t.is_begin,
+			t.exp_count_gold,
+			t.exp_remain_gold,
+			t.user_join,
+			t.user_total,
+			t.user_browse_gold,
+			t.user_max_gold,
+			t.exp_user_gold,
+			t.exp_gold_max,
+			t.exp_gold_min,
+			t.member_name,
+			t.member_info,
+			t.exp_info,
+			t.provin_id,
+			t.city_id,
+			ifnull(t.seq_num,'0') as seq_num,
+			t.is_download as is_down,
+			t.create_time,
+			t.update_time,
+			t.user_share_gold,
+			t.exp_app_url  ,			
+			t.share_title  ,			
+			t.share_url ,			
+			t.share_img_url  ,			
+			t.is_label  ,			
+			t.label  ,			
+			t.client_type  ,			
+			t.exp_img_url  ,			
+			t.app_info  ,			
+			t.down_img_url  ,			
+			t.up_img_url  ,			
+			t.tips 		
+		
+		 from t_exp_task t where t.exp_type=#{expType} and t.exp_id=#{expId}
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findExpZhuanByPage" parameterType="com.suyin.expzhuan.model.ExpTask" resultMap="ExpTaskMap">
+		<![CDATA[
+		select
+			t.city_id,
+			t.create_time,
+			date_format(t.begin_time,'%Y-%m-%d %H:%i:%s') as begin_time,
+			date_format(t.end_time,'%Y-%m-%d %H:%i:%s') as end_time,
+			t.exp_count_gold,
+			t.exp_remain_gold,
+			t.exp_gold_max,
+			t.exp_gold_min,
+			t.exp_id,
+			t.exp_type,
+			t.exp_user_gold,
+			t.provin_id,
+			t.title,
+			t.update_time,
+			t.user_browse_gold,
+			t.user_max_gold,
+			t.is_begin,
+			t.user_share_gold,
+			t.user_total,
+			t.show_type,
+			t.member_name,
+			ifnull(t.seq_num,'0') as seq_num,
+			t.is_download as is_down			
+			from t_exp_task t
+
+		where t.exp_type=#{expType}
+		]]>
+		order by t.create_time desc
+	</select>
+	
+</mapper>	
