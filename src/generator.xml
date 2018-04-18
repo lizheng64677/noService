@@ -8,7 +8,7 @@
 	</comment>
 	
 	<!-- 文件所在项目包路径名称 根据自己需求定义 -->
-	<entry key="basepackage">com.suyin.actrecord</entry> 
+	<entry key="basepackage">com.suyin.decorate</entry> 
 	
 	<!-- jsp namespace: web/${namespace}/${className}/list.jsp -->
 	<entry key="namespace">views</entry> 
