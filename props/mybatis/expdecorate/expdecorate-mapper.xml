@@ -19,8 +19,18 @@
 		<result column="share_img" property="shareImg"/>
 		<result column="begin_money" property="beginMoney"/>
 		<result column="end_money" property="endMoney"/>
-	
+		<result column="status" property="status"/>
 	</resultMap>
+	<!-- 修改状态 -->	
+	<update id="updateExpStatus"  parameterType="com.suyin.decorate.model.ExpDecorate">
+		<![CDATA[
+		update
+		 t_exp_decorate t
+		set 
+		t.status=#{status}
+		where t.id =#{id}
+		]]>
+	</update>
 		<!--信息更新 -->
 	<update id="updateExpDecorate"  parameterType="com.suyin.decorate.model.ExpDecorate">
 		<![CDATA[
@@ -52,7 +62,8 @@
 				description,		
 				begin_time,		
 				end_time,		
-				create_time,				
+				create_time,
+				update_time,				
 				create_user,		
 				share_title,		
 				share_img,		
@@ -65,7 +76,8 @@
 				#{description},
 				#{beginTime},
 				#{endTime},
-				#{createTime},
+				now(),
+				now(),
 				#{createUser},
 				#{shareTitle},
 				#{shareImg},
@@ -83,17 +95,41 @@
 		]]>
 	</delete>
 	
+	<select id="findExpInfoById" parameterType="java.lang.String" resultMap="ExpDecorateMap">
+	   <![CDATA[
+		select * from t_exp_decorate t where 1=1  and t.id=#{id}
+		]]>
+	</select>
 	<!-- 查询信息列表 -->
 	<select id="findExpDecorate" parameterType="com.suyin.decorate.model.ExpDecorate" resultMap="ExpDecorateMap">
 	   <![CDATA[
-		select * from t_exp_decorate where 1=1
+		select * from t_exp_decorate t where 1=1  and t.id=#{id}
 		]]>
 	</select>
 	
 	<!-- 分页查询信息 -->
 	<select id="findExpDecorateByPage" parameterType="com.suyin.decorate.model.ExpDecorate" resultMap="ExpDecorateMap">
 		<![CDATA[
-		select  * from t_exp_decorate where 1=1
+		SELECT
+			exp.id,
+			exp.status,
+			exp.name,
+			exp.title,
+			exp.description,
+			date_format(exp.begin_time,'%Y-%m-%d %H:%i:%s') as begin_time,
+			date_format(exp.end_time,'%Y-%m-%d %H:%i:%s') as end_time,
+			date_format(exp.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			exp.create_user,
+			exp.share_title,
+			exp.share_img,
+			exp.begin_money,
+			exp.end_money
+		FROM
+			t_exp_decorate exp
+		WHERE
+			1 = 1
+		ORDER BY
+			exp.update_time DESC
 		]]>
 	</select>
 	

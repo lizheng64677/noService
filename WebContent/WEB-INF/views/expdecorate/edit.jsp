@@ -3,19 +3,99 @@
 <%@ include file="../../common_resource.jsp" %>
 <html>
   <head>
+<script type="text/javascript" src=" <c:url value="/resources/js/My97DatePicker/WdatePicker.js"></c:url>"> </script>
+<link rel="stylesheet" charset="utf-8" href="<c:url value='/resources/js/kindeditor/themes/default/default.css'/>" />
+<script src="<c:url value='/resources/js/kindeditor/kindeditor-min.js'/>"></script>
+<script type="text/javascript">
+var editor1="";
+var urlLoad="<c:url value='/file/upload'/>";
+var urlManager="<c:url value='/file/fileManager'/>";
+var type="";
+KindEditor.ready(function(K) {
+	
+	editor1=K.create("#content1",{
+		uploadJson :urlLoad,
+		fileManagerJson :urlManager,
+		filePostName:"imgFile",
+		allowFileManager : false,
+	    extraFileUploadParams : {
+	    	module :"decorate"
+      }
+	});
+	
+	K('#imgButton').click(function() {
+		
+		type=$(this).data("type"); //当前上传图片的类型 
 
+		editor1.loadPlugin('image',function() {
+			editor1.plugin.imageDialog({imageType:type,clickFn : function(url, title, width, height, border, align) {
+				
+					K('#shareImg').val(url);
+					K("#headImg").attr("src",url);
+					editor1.hideDialog();
+				}
+			});
+		});
+	});
+});
+	
+
+</script>
   </head>
   <body >   
-	<div class="easyui-panel" title="编辑"   style="padding:10px;">
+	<div class="easyui-panel" title="修改"   style="padding:10px;">
 		<div style="padding:10px 10px 10px 10px">
 	    <form id="dataForm"  method="post">
 	    	<table cellpadding="3">
 	    		<tr>
-	    			<td>:<input type="hidden" name="" value=""/></td> 
-	    			<td><input    type="text" style="width:300px;height:30px;"  missingMessage="" name="" data-options="required:true" value=""></input></td>
+	    			<td>活动名称:
+	    			<input type="hidden" id="id" name="id" value="${expdecorate.id }"/>
+	    			</td>
+	    			<td><input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写活动名称" name="name"  required="required" validType="isExist" value="${expdecorate.name }"></input></td>
+	    		</tr>
+		    	<tr>
+	    			<td>活动标题:</td>
+	    			<td><input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写活动标题" name="title"  required="required" validType="isExist" value="${expdecorate.title }"></input></td>
 	    		</tr>
 	    		<tr>
-	    			<td colspan="2" align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" style="width:100px;height:30px;" onclick="submitForm()">提交修改</a></td>
+	    		<td>活动时间：</td>
+	    		<td>
+	    		<input type="text" name="beginTime" value="${expdecorate.beginTime }" placeholder="输入活动开始时间" id="beginTime"  class="input" style="width:145px;"/>
+	    		<input type="text" name="endTime"   value="${expdecorate.endTime }" placeholder="输入活动结束时间 "id="endTime"  class="input" style="width:145px;"/>
+	    		</td>
+	    		</tr>
+	    		<tr>
+	    		<td>金额范围：</td>
+	    		<td>
+	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="beginMoney"  required="required" validType="integer" value="${expdecorate.beginMoney }"></input>--
+	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="endMoney"  required="required" validType="integer" value="${expdecorate.endMoney }"></input>
+	    		</td>
+	    		</tr>		   		
+		   	
+	    		<tr>
+	    			<td>分享标题:</td>
+	    			<td>
+	    		<input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写分享标题" name="shareTitle"  required="required" validType="isExist" value="${expdecorate.shareTitle }"></input>
+	    			</td>
+	    		</tr>
+	    		
+	    		<tr>
+			    	<td>分享图片:</td>
+			    	<td>	
+			    		<input type="hidden" name="shareImg" id="shareImg" value="${expdecorate.shareImg}">  
+			    	 	<img alt="" src="${expdecorate.shareImg}" id="headImg" style="width:70px;height:70px">   			
+			    		<input type="button" id="imgButton" class="easyui-linkbutton"  data-type="pro_default" style="width:70px;height:25px;"  value="上传"/>
+			    	</td>
+			    </tr>	    		
+	    		<tr>
+	    		<td>活动规则:</td>
+	    		<td>
+	    		<textarea rows="14" cols="100" id="content1">${expdecorate.description }</textarea>
+	    		<input type="hidden" id=description name="description"/>
+	    		</td>
+	    		</tr>
+	    		<tr>
+	    			<td colspan="2" align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" style="width:100px;height:30px;" onclick="submitForm()">提交保存</a></td>
 	    		</tr>
 	    	</table>
 	    </form>
@@ -24,11 +104,12 @@
 	<script>
 		function submitForm(){
 	
-			url="<c:url value='/expdecorate/update'/>";
+			url="<c:url value='/adminexpdecorate/update'/>";
 			var isValid = $("#dataForm").form('validate');
 			if(!isValid){
 				return false;
 			}
+			$("#description").val(editor1.html());
 			$.ajax({
 				type : 'POST',
 				url : url,
@@ -37,7 +118,7 @@
 				success: function(data) {
                    if(1==data.result){
                 	   $.messager.alert("操作提示", "提交成功！", "info", function () {
-                		   window.location.href="<c:url value='/expdecorate/index'/>";
+                		   window.location.href="<c:url value='/adminexpdecorate/index'/>";
                        });
        
                    }else{
@@ -50,7 +131,23 @@
 		function clearForm(){
 			$('#dataForm').form('reset');
 		}
-		
+		$(function(){
+			
+			//提交
+			$("#submitForm").bind("click",function(){
+				
+				submitForm();
+			});
+			
+			 $("#beginTime").bind("click",function(){
+				 
+				 WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm'});
+			 });
+		 	$("#endTime").bind("click",function(){
+				 
+				 WdatePicker({skin:'whyGreen',dateFmt:'yyyy-MM-dd HH:mm'});
+			 });
+		})
 	</script>
 </body>  
 </html>

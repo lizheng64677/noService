@@ -47,22 +47,26 @@ public class ExpDecorate  implements java.io.Serializable{
      * 活动描述       db_column: description 
      */ 	
 	private java.lang.String description;
+	/**
+	 * 活动状态 0 未开始,1开始 ，2结束
+	 */
+	private java.lang.Integer status;
     /**
      * 活动开始时间       db_column: begin_time 
      */ 	
-	private java.util.Date beginTime;
+	private java.lang.String beginTime;
     /**
      * 活动结束时间       db_column: end_time 
      */ 	
-	private java.util.Date endTime;
+	private java.lang.String endTime;
     /**
      * 活动创建时间       db_column: create_time 
      */ 	
-	private java.util.Date createTime;
+	private java.lang.String createTime;
     /**
      * 活动修改时间       db_column: update_time 
      */ 	
-	private java.util.Date updateTime;
+	private java.lang.String updateTime;
     /**
      * 活动修改人       db_column: upate_user 
      */ 	
@@ -82,14 +86,22 @@ public class ExpDecorate  implements java.io.Serializable{
     /**
      * 随机金额开始数目       db_column: begin_money 
      */ 	
-	private Long beginMoney;
+	private java.lang.String beginMoney;
     /**
      * 随机金额结束数目       db_column: end_money 
      */ 	
-	private Long endMoney;
+	private java.lang.String endMoney;
 	
 	//columns end
 
+
+	public java.lang.Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(java.lang.Integer status) {
+		this.status = status;
+	}
 
 	public ExpDecorate(){
 	}
@@ -135,38 +147,40 @@ public class ExpDecorate  implements java.io.Serializable{
 		this.description = value;
 	}
 	
-	public java.util.Date getBeginTime() {
-		return this.beginTime;
-	}
 	
-	public void setBeginTime(java.util.Date value) {
-		this.beginTime = value;
-	}
 	
-	public java.util.Date getEndTime() {
-		return this.endTime;
+	public java.lang.String getBeginTime() {
+		return beginTime;
 	}
-	
-	public void setEndTime(java.util.Date value) {
-		this.endTime = value;
+
+	public void setBeginTime(java.lang.String beginTime) {
+		this.beginTime = beginTime;
 	}
-	
-	public java.util.Date getCreateTime() {
-		return this.createTime;
+
+	public java.lang.String getEndTime() {
+		return endTime;
 	}
-	
-	public void setCreateTime(java.util.Date value) {
-		this.createTime = value;
+
+	public void setEndTime(java.lang.String endTime) {
+		this.endTime = endTime;
 	}
-	
-	public java.util.Date getUpdateTime() {
-		return this.updateTime;
+
+	public java.lang.String getCreateTime() {
+		return createTime;
 	}
-	
-	public void setUpdateTime(java.util.Date value) {
-		this.updateTime = value;
+
+	public void setCreateTime(java.lang.String createTime) {
+		this.createTime = createTime;
 	}
-	
+
+	public java.lang.String getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(java.lang.String updateTime) {
+		this.updateTime = updateTime;
+	}
+
 	public java.lang.Integer getUpateUser() {
 		return this.upateUser;
 	}
@@ -199,23 +213,25 @@ public class ExpDecorate  implements java.io.Serializable{
 		this.shareImg = value;
 	}
 	
-	public Long getBeginMoney() {
-		return this.beginMoney;
-	}
+
 	
-	public void setBeginMoney(Long value) {
-		this.beginMoney = value;
+    public java.lang.String getBeginMoney() {
+		return beginMoney;
 	}
-	
-	public Long getEndMoney() {
-		return this.endMoney;
+
+	public void setBeginMoney(java.lang.String beginMoney) {
+		this.beginMoney = beginMoney;
 	}
-	
-	public void setEndMoney(Long value) {
-		this.endMoney = value;
+
+	public java.lang.String getEndMoney() {
+		return endMoney;
 	}
-	
-    public Page getPage() {
+
+	public void setEndMoney(java.lang.String endMoney) {
+		this.endMoney = endMoney;
+	}
+
+	public Page getPage() {
         return page;
     }
     public void setPage(Page page) {
@@ -237,6 +253,7 @@ public class ExpDecorate  implements java.io.Serializable{
 			.append("ShareImg",getShareImg())
 			.append("BeginMoney",getBeginMoney())
 			.append("EndMoney",getEndMoney())
+			.append("status",getStatus())
 			.toString();
 	}
 	

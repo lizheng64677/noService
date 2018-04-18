@@ -4,21 +4,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.suyin.decorate.mapper.ExpDecorateMapper;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.suyin.system.util.Md5Util;
 
 import java.util.*;
+
 import com.suyin.decorate.model.*;
 import com.suyin.decorate.service.*;
 
 
 
 @Transactional
-@Service("ExpDecorateService")
+@Service("expDecorateService")
 public class ExpDecorateServiceImpl implements ExpDecorateService{
 
     private final static Logger log=Logger.getLogger(ExpDecorateServiceImpl.class);
@@ -124,4 +128,16 @@ public class ExpDecorateServiceImpl implements ExpDecorateService{
         List<ExpDecorate> list=ExpDecorateMapper.findExpDecorate(entity);
         return list!=null&&!list.isEmpty()?list.get(0):null;
     }
+
+	@Override
+	public Integer updateExpStatus(ExpDecorate entity) {
+		// TODO Auto-generated method stub
+		return ExpDecorateMapper.updateExpStatus(entity);
+	}
+
+	@Override
+	public ExpDecorate findExpInfoById(String id) {
+		// TODO Auto-generated method stub
+		return ExpDecorateMapper.findExpInfoById(id);
+	}
 }

@@ -1,8 +1,7 @@
 package com.suyin.decorate.service;
 
-import java.util.List;
-
 import java.util.*;
+
 import com.suyin.decorate.model.*;
 import com.suyin.decorate.service.*;
 
@@ -10,6 +9,12 @@ import com.suyin.decorate.service.*;
 
 
 public interface ExpDecorateService{
+	/**
+	 * 修改活动状态
+	 * @param entity
+	 * @return
+	 */
+	public Integer updateExpStatus(ExpDecorate entity);
 
     /**
      * 新增信息
@@ -52,4 +57,10 @@ public interface ExpDecorateService{
      * @return
      */
     public ExpDecorate findExpDecorateById(ExpDecorate entity);
+    /**
+     * 根据ID查询
+     * @param id
+     * @return
+     */
+    public ExpDecorate findExpInfoById(String id);
 }

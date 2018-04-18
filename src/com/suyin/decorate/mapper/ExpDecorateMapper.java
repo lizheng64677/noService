@@ -1,9 +1,8 @@
 package com.suyin.decorate.mapper;
 
 
-import java.util.List;
-
 import java.util.*;
+
 import com.suyin.decorate.model.*;
 import com.suyin.decorate.service.*;
 
@@ -11,7 +10,12 @@ import com.suyin.decorate.service.*;
 
 
 public interface ExpDecorateMapper {
-
+	/**
+	 * 修改活动状态
+	 * @param entity
+	 * @return
+	 */
+	public Integer updateExpStatus(ExpDecorate entity);
     /**
      * 新增信息
      */
@@ -40,5 +44,7 @@ public interface ExpDecorateMapper {
      * 查询列表分页  
      */
     public List<ExpDecorate> findExpDecorateByPage(ExpDecorate entity);
+    
+    public ExpDecorate findExpInfoById(String id);
 
 }
