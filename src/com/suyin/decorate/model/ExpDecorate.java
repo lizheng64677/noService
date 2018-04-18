@@ -1,5 +1,7 @@
 package com.suyin.decorate.model;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -91,7 +93,18 @@ public class ExpDecorate  implements java.io.Serializable{
      * 随机金额结束数目       db_column: end_money 
      */ 	
 	private java.lang.String endMoney;
-	
+	/**
+	 * 参与人数
+	 */
+	private java.lang.Integer expUv;
+	/**
+	 * 访问数
+	 */
+	private java.lang.Integer expPv;
+	/**
+	 * 累积金额
+	 */
+	private BigDecimal countPrice;
 	//columns end
 
 
@@ -231,6 +244,30 @@ public class ExpDecorate  implements java.io.Serializable{
 		this.endMoney = endMoney;
 	}
 
+	public java.lang.Integer getExpUv() {
+		return expUv;
+	}
+
+	public void setExpUv(java.lang.Integer expUv) {
+		this.expUv = expUv;
+	}
+
+	public java.lang.Integer getExpPv() {
+		return expPv;
+	}
+
+	public void setExpPv(java.lang.Integer expPv) {
+		this.expPv = expPv;
+	}
+
+	public BigDecimal getCountPrice() {
+		return countPrice;
+	}
+
+	public void setCountPrice(BigDecimal countPrice) {
+		this.countPrice = countPrice;
+	}
+
 	public Page getPage() {
         return page;
     }
@@ -254,9 +291,12 @@ public class ExpDecorate  implements java.io.Serializable{
 			.append("BeginMoney",getBeginMoney())
 			.append("EndMoney",getEndMoney())
 			.append("status",getStatus())
+			.append("expUv",getExpUv())
+			.append("expPv",getExpPv())
+			.append("countPrice",getCountPrice())
 			.toString();
 	}
-	
+
 	public int hashCode() {
 		return new HashCodeBuilder()
 			.append(getId())

@@ -20,6 +20,9 @@
 		<result column="begin_money" property="beginMoney"/>
 		<result column="end_money" property="endMoney"/>
 		<result column="status" property="status"/>
+		<result column="exp_uv" property="expUv"/>
+		<result column="exp_pv" property="expPv"/>
+		<result column="count_price" property="countPrice"/>
 	</resultMap>
 	<!-- 修改状态 -->	
 	<update id="updateExpStatus"  parameterType="com.suyin.decorate.model.ExpDecorate">
@@ -123,7 +126,10 @@
 			exp.share_title,
 			exp.share_img,
 			exp.begin_money,
-			exp.end_money
+			exp.end_money,
+			exp.exp_uv,
+			exp.exp_pv,
+			exp.count_price
 		FROM
 			t_exp_decorate exp
 		WHERE

@@ -35,8 +35,21 @@ $(function() {
 					    { "field": 'shareImg',"title" : '分享图片',width:$(this).width() * 0.2,formatter:function(value,row,index){
 							return "<img src="+value+" style='width:40px;height:40px'>";
 						}},
-					    { "field": 'beginMoney',"title" : '随机金额起',width:$(this).width() * 0.2},
-					    { "field": 'endMoney',"title" : '随机金额止',width:$(this).width() * 0.2},
+					    { "field": 'beginMoney',"title" : '随机金额起',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	return value+" (元)";
+					    }},
+					    { "field": 'endMoney',"title" : '随机金额止',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	return value+" (元)";
+					    }},
+					    { "field": 'expUv',"title" : '参与数',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	return value+"(人)";
+					    }},
+					    { "field": 'expPv',"title" : '访问数',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	return value+"(次)";
+					    }},
+					    { "field": 'countPrice',"title" : '累积金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	return value+" (元)";
+					    }},
 					    { "field": 'status',"title" : '活动状态',width:$(this).width() * 0.2,formatter:function(value,row,index){
 					    	if(value==0){
 					    		return "<span style='color:red'>未启动</span>";
