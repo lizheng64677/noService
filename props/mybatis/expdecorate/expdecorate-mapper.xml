@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.decorate.mapper.ExpDecorateMapper">
+
+	<resultMap type="com.suyin.decorate.model.ExpDecorate" id="ExpDecorateMap">
+	
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="title" property="title"/>
+		<result column="description" property="description"/>
+		<result column="begin_time" property="beginTime"/>
+		<result column="end_time" property="endTime"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="upate_user" property="upateUser"/>
+		<result column="create_user" property="createUser"/>
+		<result column="share_title" property="shareTitle"/>
+		<result column="share_img" property="shareImg"/>
+		<result column="begin_money" property="beginMoney"/>
+		<result column="end_money" property="endMoney"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateExpDecorate"  parameterType="com.suyin.decorate.model.ExpDecorate">
+		<![CDATA[
+		update
+		 t_exp_decorate
+		set 
+		name=#{name},
+		title=#{title},
+		description=#{description},
+		begin_time=#{beginTime},
+		end_time=#{endTime},	
+		update_time=now(),
+		upate_user=#{upateUser},	
+		share_title=#{shareTitle},
+		share_img=#{shareImg},
+		begin_money=#{beginMoney},
+		end_money=#{endMoney}
+		where id =#{id}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addExpDecorate" parameterType="com.suyin.decorate.model.ExpDecorate" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_exp_decorate (
+				name,		
+				title,		
+				description,		
+				begin_time,		
+				end_time,		
+				create_time,				
+				create_user,		
+				share_title,		
+				share_img,		
+				begin_money,		
+				end_money
+		)
+		values(
+				#{name},
+				#{title},
+				#{description},
+				#{beginTime},
+				#{endTime},
+				#{createTime},
+				#{createUser},
+				#{shareTitle},
+				#{shareImg},
+				#{beginMoney},
+				#{endMoney}
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteExpDecorate" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_exp_decorate
+			  	where id =#{id}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findExpDecorate" parameterType="com.suyin.decorate.model.ExpDecorate" resultMap="ExpDecorateMap">
+	   <![CDATA[
+		select * from t_exp_decorate where 1=1
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findExpDecorateByPage" parameterType="com.suyin.decorate.model.ExpDecorate" resultMap="ExpDecorateMap">
+		<![CDATA[
+		select  * from t_exp_decorate where 1=1
+		]]>
+	</select>
+	
+</mapper>	

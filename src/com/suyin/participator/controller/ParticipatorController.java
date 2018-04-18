@@ -20,7 +20,11 @@ import com.suyin.system.model.Page;
 import com.suyin.system.util.Tools;
 
 
-
+/**
+ * 红门之家，最强标兵，最美军嫂，投票活动
+ * @author Administrator
+ *
+ */
 @Controller
 @RequestMapping("/adminparticipator")
 public class ParticipatorController{
