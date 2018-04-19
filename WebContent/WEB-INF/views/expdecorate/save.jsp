@@ -94,7 +94,10 @@ KindEditor.ready(function(K) {
 	    		</td>
 	    		</tr>
 	    		<tr>
-	    			<td colspan="2" align="center"> <a href="javascript:void(0)" class="easyui-linkbutton" style="width:100px;height:30px;" onclick="submitForm()">提交保存</a></td>
+	    			<td colspan="2" align="center">
+	    			 <a href="javascript:void(0)" class="easyui-linkbutton" style="width:100px;height:30px;" onclick="submitForm()">提交保存</a>
+	    			 <a href="javascript:void(0)" class="easyui-linkbutton" style="width:100px;height:30px;" id="jumpBack" >返回</a>	
+	    			 </td>
 	    		</tr>
 	    	</table>
 	    </form>
@@ -133,6 +136,10 @@ KindEditor.ready(function(K) {
 		
 		$(function(){
 			
+			//返回列表
+			$("#jumpBack").click(function(){ 
+				window.location.href="<c:url value='/adminexpdecorate/index'/>";
+			});
 			//提交
 			$("#submitForm").bind("click",function(){
 				
