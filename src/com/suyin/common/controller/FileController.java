@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.suyin.common.FileUploadHelper;
+import com.suyin.common.SystemPropertiesHolder;
 import com.suyin.common.service.ModuleNameService;
 import com.suyin.system.model.Attachment;
 /**
@@ -52,28 +53,27 @@ public class FileController extends FileUploadHelper {
     public @ResponseBody String upload(Attachment attach, @RequestParam("imgFile")MultipartFile[] imgFile,HttpServletRequest request) {
         return super.upload(imgFile, request);
     }
-
+    
+    //文件上传到的路径
     @Override
     protected String getRootPath(HttpServletRequest request) {
-        //test
-    	String url=request.getSession().getServletContext().getRealPath("/WEB-INF/resources/outImages")+"/"+this.getParentPath(request);
-//    	System.out.println(url);
-        return url;
-//        正式
-//        return "D:/hongmen/imgages/resources/outImages/"+this.getParentPath(request);
+    	String rootPath=SystemPropertiesHolder.get("ROOT_PATH");
+        return rootPath+this.getParentPath(request);
     }
+    
+    //存在数据库里的url
     @Override
     protected String getRootUrl(HttpServletRequest request) {
-    	String url=getLocalURL(request)+"/resources/outImages/"+this.getParentPath(request);
+    	String url=getLocalURL(request)+this.getParentPath(request);
     	System.out.println(url);
         return url;
     }
 
     private String getLocalURL(HttpServletRequest request) {
-        //test
-//        return "http://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath();
+      	String localURL=SystemPropertiesHolder.get("LOCAL_PATH");
         //正式
-        return request.getContextPath();
+        //return request.getContextPath();
+      	return localURL;
     }
 
     private String getParentPath(HttpServletRequest request) {

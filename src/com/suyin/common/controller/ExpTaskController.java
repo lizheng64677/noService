@@ -64,7 +64,7 @@ public class ExpTaskController
      *  
      *  24小时制
      */
-    @Scheduled(cron = "0 20 0 * * ?")
+    //@Scheduled(cron = "0 20 0 * * ?")
     public void  userExpPopVouCher(){
 
         Map<String,Object>mapInfo=new HashMap<String, Object>();
@@ -154,7 +154,7 @@ public class ExpTaskController
      * @throws IOException 
      * @see
      */
-    @Scheduled(cron = "0 25 0 * * ?") 
+   // @Scheduled(cron = "0 25 0 * * ?") 
     public void noGroupTaskExpReadLog() throws IOException{
         int LogNum=groupSystemLogService.findNoGroupExpInfo();
         if(LogNum<1){
@@ -261,7 +261,7 @@ public class ExpTaskController
      * @throws IOException 
      * @see
      */
-    @Scheduled(cron = "0 30 0 * * ?")   
+    // @Scheduled(cron = "0 30 0 * * ?")   
     public void noGroupTaskReadLog() throws IOException{
         int LogNum=groupSystemLogService.findNoGroupInfo();
         if(LogNum<1){
