@@ -127,9 +127,9 @@
 			exp.share_img,
 			exp.begin_money,
 			exp.end_money,
-			exp.exp_uv,
-			exp.exp_pv,
-			exp.count_price
+			ifnull(exp.exp_uv,"0") as exp_uv,
+			ifnull(exp.exp_pv,"0") as exp_pv,
+			ifnull(exp.count_price,"0.00") as count_price
 		FROM
 			t_exp_decorate exp
 		WHERE
