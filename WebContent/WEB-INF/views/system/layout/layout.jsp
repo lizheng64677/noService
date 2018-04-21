@@ -109,7 +109,8 @@ function InitLeftMenu() {
 			selectedPanelname =n.menuname;
 
     });
-	$('#nav').accordion('select',selectedPanelname);
+    //从下面打开
+// 	$('#nav').accordion('select',selectedPanelname);
 
 
 
