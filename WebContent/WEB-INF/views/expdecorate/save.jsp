@@ -24,6 +24,16 @@ KindEditor.ready(function(K) {
       }
 	});
 	
+	editor2=K.create("#content2",{
+		uploadJson :urlLoad,
+		fileManagerJson :urlManager,
+		filePostName:"imgFile",
+		allowFileManager : false,
+	    extraFileUploadParams : {
+	    	module :"decorate"
+      }
+	});
+	
 	K('#imgButton').click(function() {
 		
 		type=$(this).data("type"); //当前上传图片的类型 
@@ -34,6 +44,20 @@ KindEditor.ready(function(K) {
 					K('#shareImg').val(url);
 					K("#headImg").attr("src",url);
 					editor1.hideDialog();
+				}
+			});
+		});
+	});	
+	K('#imgButton2').click(function() {
+		
+		type=$(this).data("type"); //当前上传图片的类型 
+		
+		editor2.loadPlugin('image',function() {
+			editor2.plugin.imageDialog({imageType:type,clickFn : function(url, title, width, height, border, align) {
+				
+					K('#activeImg').val(url);
+					K("#headImg2").attr("src",url);
+					editor2.hideDialog();
 				}
 			});
 		});
@@ -85,12 +109,27 @@ KindEditor.ready(function(K) {
 			    	 	<img alt="" src="" id="headImg" style="width:70px;height:70px">    			
 			    		<input type="button" id="imgButton" class="easyui-linkbutton"  data-type="pro_default" style="width:70px;height:25px;"  value="上传"/>
 			    	</td>
+			    </tr>
+			    <tr>
+			    	<td>活动图片:</td>
+			    	<td>	
+			    		<input type="hidden" name="activeImg" id="activeImg"> 
+			    	 	<img alt="" src="" id="headImg" style="width:70px;height:70px">    			
+			    		<input type="button" id="imgButton2" class="easyui-linkbutton"  data-type="pro_default" style="width:70px;height:25px;"  value="上传"/>
+			    	</td>
 			    </tr>	    		
 	    		<tr>
 	    		<td>活动规则:</td>
 	    		<td>
 	    		<textarea rows="14" cols="100" id="content1"></textarea>
 	    		<input type="hidden" id=description name="description"/>
+	    		</td>
+	    		</tr>
+	    		<tr>
+	    		<td>商家介绍:</td>
+	    		<td>
+	    		<textarea rows="14" cols="100" id="content2"></textarea>
+	    		<input type="hidden" id=sellerDescription name="sellerDescription"/>
 	    		</td>
 	    		</tr>
 	    		<tr>
@@ -112,6 +151,7 @@ KindEditor.ready(function(K) {
 				return false;
 			}
 			$("#description").val(editor1.html());
+			$("#sellerDescription").val(editor2.html());
 			$.ajax({
 				type : 'POST',
 				url : url,

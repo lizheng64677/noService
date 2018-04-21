@@ -1,10 +1,9 @@
 package com.suyin.decorate.mapper;
 
 
-import java.util.*;
+import java.util.List;
 
-import com.suyin.decorate.model.*;
-import com.suyin.decorate.service.*;
+import com.suyin.decorate.model.ExpDecorate;
 
 
 

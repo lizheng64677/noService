@@ -17,6 +17,7 @@ public class ExpDecorate  implements java.io.Serializable{
 	public static final String ALIAS_NAME = "活动名称";
 	public static final String ALIAS_TITLE = "活动标题";
 	public static final String ALIAS_DESCRIPTION = "活动描述";
+	public static final String ALIAS_SELLER_DESCRIPTION = "商家介绍";
 	public static final String ALIAS_BEGIN_TIME = "活动开始时间";
 	public static final String ALIAS_END_TIME = "活动结束时间";
 	public static final String ALIAS_CREATE_TIME = "活动创建时间";
@@ -25,6 +26,7 @@ public class ExpDecorate  implements java.io.Serializable{
 	public static final String ALIAS_CREATE_USER = "活动创建人";
 	public static final String ALIAS_SHARE_TITLE = "页面分享标题";
 	public static final String ALIAS_SHARE_IMG = "页面分享图片";
+	public static final String ALIAS_ACTIVE_IMG = "活动图片";
 	public static final String ALIAS_BEGIN_MONEY = "随机金额开始数目";
 	public static final String ALIAS_END_MONEY = "随机金额结束数目";
 
@@ -49,6 +51,16 @@ public class ExpDecorate  implements java.io.Serializable{
      * 活动描述       db_column: description 
      */ 	
 	private java.lang.String description;
+	
+	/**
+	 * 活动图片
+	 */
+	private java.lang.String activeImg;
+	/**
+	 * 商家介绍
+	 */
+	private java.lang.String sellerDescription;
+
 	/**
 	 * 活动状态 0 未开始,1开始 ，2结束
 	 */
@@ -85,6 +97,7 @@ public class ExpDecorate  implements java.io.Serializable{
      * 页面分享图片       db_column: share_img 
      */ 	
 	private java.lang.String shareImg;
+	
     /**
      * 随机金额开始数目       db_column: begin_money 
      */ 	
@@ -280,6 +293,7 @@ public class ExpDecorate  implements java.io.Serializable{
 			.append("Name",getName())
 			.append("Title",getTitle())
 			.append("Description",getDescription())
+			.append("SellerDescription",getSellerDescription())
 			.append("BeginTime",getBeginTime())
 			.append("EndTime",getEndTime())
 			.append("CreateTime",getCreateTime())
@@ -288,6 +302,7 @@ public class ExpDecorate  implements java.io.Serializable{
 			.append("CreateUser",getCreateUser())
 			.append("ShareTitle",getShareTitle())
 			.append("ShareImg",getShareImg())
+			.append("ActiveImg",getActiveImg())
 			.append("BeginMoney",getBeginMoney())
 			.append("EndMoney",getEndMoney())
 			.append("status",getStatus())
@@ -310,6 +325,22 @@ public class ExpDecorate  implements java.io.Serializable{
 		return new EqualsBuilder()
 			.append(getId(),other.getId())
 			.isEquals();
+	}
+
+	public java.lang.String getSellerDescription() {
+		return sellerDescription;
+	}
+
+	public void setSellerDescription(java.lang.String sellerDescription) {
+		this.sellerDescription = sellerDescription;
+	}
+
+	public java.lang.String getActiveImg() {
+		return activeImg;
+	}
+
+	public void setActiveImg(java.lang.String activeImg) {
+		this.activeImg = activeImg;
 	}
 }
 
