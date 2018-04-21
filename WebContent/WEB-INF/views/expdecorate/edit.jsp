@@ -115,19 +115,11 @@ KindEditor.ready(function(K) {
 			    	<td>活动图片:</td>
 			    	<td>	
 			    		<input type="hidden" name="activeImg" id="activeImg" value="${expdecorate.activeImg}"> 
-			    	 	<img alt="" src="" id="headImg2" style="width:70px;height:70px">    			
+			    	 	<img alt="" src="${expdecorate.activeImg}" id="headImg2" style="width:70px;height:70px">    			
 			    		<input type="button" id="imgButton2" class="easyui-linkbutton"  data-type="pro_default" style="width:70px;height:25px;"  value="上传"/>
 			    	</td>
-			    </tr>	 	    		
-	    		<tr>
-	    		<td>活动规则:</td>
-	    		<td>
-	    		<textarea rows="14" cols="100" id="content1">${expdecorate.description }</textarea>
-	    		<input type="hidden" id=description name="description"/>
-	    		</td>
-	    		</tr>
-	    		<tr>
-	    		<td>商家介绍:</td>
+			    </tr>	
+			    <td>商家介绍:</td>
 	    		<td>
 	    		<textarea rows="14" cols="100" id="content2">${expdecorate.sellerDescription }</textarea>
 	    		<input type="hidden" id=sellerDescription name="sellerDescription"/>
@@ -138,7 +130,15 @@ KindEditor.ready(function(K) {
 	    				<a href="javascript:void(0)" class="easyui-linkbutton" style="width:100px;height:30px;" onclick="submitForm()">提交保存</a>
 	    				<a href="javascript:void(0)" class="easyui-linkbutton" style="width:100px;height:30px;" id="jumpBack" >返回</a>	
 	    			</td>
+	    		</tr> 	    		
+	    		<tr>
+	    		<td>活动规则:</td>
+	    		<td>
+	    		<textarea rows="14" cols="100" id="content1">${expdecorate.description }</textarea>
+	    		<input type="hidden" id=description name="description"/>
+	    		</td>
 	    		</tr>
+	    		<tr>
 	    	</table>
 	    </form>
 	    </div>
