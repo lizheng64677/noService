@@ -1,0 +1,123 @@
+package com.suyin.expdecorateorder.service.impl;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.suyin.expdecorateorder.mapper.ExpDecorateOrderMapper;
+import com.suyin.expdecorateorder.model.ExpDecorateOrder;
+import com.suyin.expdecorateorder.service.ExpDecorateOrderService;
+
+
+
+@Transactional
+@Service("ExpDecorateOrderService")
+public class ExpDecorateOrderServiceImpl implements ExpDecorateOrderService{
+
+    private final static Logger log=Logger.getLogger(ExpDecorateOrderServiceImpl.class);
+    
+    @Autowired
+    private ExpDecorateOrderMapper ExpDecorateOrderMapper; 
+
+    /**
+     * 新增信息
+     * @param entity
+     * @return
+     */
+    @Override
+    public Integer addExpDecorateOrder(ExpDecorateOrder entity){
+        Integer result=0;
+        try {
+
+            if(entity==null){
+                return result;
+            }else{
+                result = ExpDecorateOrderMapper.addExpDecorateOrder(entity);
+            }
+
+        } catch (Exception e) {
+
+            new RuntimeException();
+        }
+        return result;
+
+    }
+
+    /**
+     * 修改信息
+     * @param entity
+     * @return
+     */
+    @Override
+    public Integer updateExpDecorateOrder(ExpDecorateOrder entity){
+
+        Integer result=0;
+        try {
+            if(entity==null){
+
+                return result;
+            }else{
+
+                result = ExpDecorateOrderMapper.updateExpDecorateOrder(entity);
+            }
+        } catch (Exception e) {
+            
+            log.error("ExpDecorateOrder信息修改异常"+e.getMessage());
+            new RuntimeException();
+            e.printStackTrace();
+        }
+        return result;
+
+    }
+
+    /**
+     * 删除信息
+     * @param id
+     * @return
+     */
+    @Override
+    public Integer deleteExpDecorateOrder(String id){
+        
+        
+        return ExpDecorateOrderMapper.deleteExpDecorateOrder(id);
+    }
+
+    /**
+     * 查找信息列表
+     * @param entity
+     * @return
+     */
+    @Override
+    public List<ExpDecorateOrder> findExpDecorateOrder(ExpDecorateOrder entity){
+        
+        
+        return ExpDecorateOrderMapper.findExpDecorateOrder(entity);
+    }
+
+    /**
+     * 查找信息列表(分页)
+     * @param entity
+     * @return
+     */
+    @Override
+    public List<ExpDecorateOrder> findExpDecorateOrderByPage(ExpDecorateOrder entity){
+        
+        
+        return ExpDecorateOrderMapper.findExpDecorateOrderByPage(entity);
+    }
+
+    /**
+     * 根据id查询对应的信息
+     * @param entity
+     * @return
+     */
+    @Override
+    public ExpDecorateOrder findExpDecorateOrderById(ExpDecorateOrder entity){
+        
+        List<ExpDecorateOrder> list=ExpDecorateOrderMapper.findExpDecorateOrder(entity);
+        return list!=null&&!list.isEmpty()?list.get(0):null;
+    }
+}
