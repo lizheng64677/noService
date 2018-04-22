@@ -80,8 +80,8 @@
 				t1.withdraw_price,		
 				t1.state,				
 				t1.review_user,
-				date_format(t1.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
-			    date_format(t1.review_time,'%Y-%m-%d %H:%i:%s') as review_time
+				date_format(t1.create_time,'%Y-%m-%d %H:%i:%s') as createTime,
+			    date_format(t1.review_time,'%Y-%m-%d %H:%i:%s') as reviewTime
 			
 		 from t_exp_decorate_order t1 where 1=1
 		]]>
