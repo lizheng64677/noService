@@ -172,10 +172,10 @@ public class ExpDecorateOrderController{
         ModelMap map=new ModelMap();
         try
         {
-            if(Tools.notEmpty(id)){
-                
-                map.put("result",expDecorateOrderService.deleteExpDecorateOrder(id));
-            }  
+        	String[] idArr = id.split(",");
+       	 	for (String ids:idArr) {
+       	 	map.put("result",expDecorateOrderService.deleteExpDecorateOrder(id));
+           }  
         }
         catch (Exception e)
         {

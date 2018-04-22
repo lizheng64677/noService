@@ -74,6 +74,7 @@ function doDelete(){
 		ids.push(rows[i].orderId);
 
 	}
+	debugger;
 	$.messager.confirm('确认', '是否确定要删除!', function(data){
 		if(!data){
 			return;
