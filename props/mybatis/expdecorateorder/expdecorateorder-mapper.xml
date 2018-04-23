@@ -85,19 +85,22 @@
 	</select>
 	
 	<!-- 分页查询信息 -->
-	<select id="findExpDecorateOrderByPage" parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder" resultMap="ExpDecorateOrderMap">
+	<select id="findExpDecorateOrderByPage" parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder" resultType="com.suyin.expdecorateorder.model.DecorateOrderDTO">
 		<![CDATA[
 		select  
 				t1.order_id,	
 				t1.openid,		
 				t1.user_id,		
-				t1.withdraw_price,		
+				t2.nick_name as nickName,		
+				t2.user_phone as userPhone,		
+				t2.user_name as userName,			
+				t1.withdraw_price as withdrawPrice,		
 				t1.state,				
 				t1.review_user,
 				date_format(t1.create_time,'%Y-%m-%d %H:%i:%s') as createTime,
 			    date_format(t1.review_time,'%Y-%m-%d %H:%i:%s') as reviewTime
 			
-		 from t_exp_decorate_order t1 where 1=1
+		 from t_exp_decorate_order t1 ,t_exp_decorate_user t2 where 1=1 and t1.user_id = t2.user_id
 		]]>
 	</select>
 	

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.suyin.expdecorateorder.model.DecorateOrderDTO;
 import com.suyin.expdecorateorder.model.ExpDecorateOrder;
 import com.suyin.expdecorateorder.service.ExpDecorateOrderService;
 import com.suyin.system.model.LoginUser;
@@ -64,7 +65,7 @@ public class ExpDecorateOrderController{
 
             ExpDecorateOrder  entityInfo=new ExpDecorateOrder ();
             entityInfo.setPage(page);
-            List<ExpDecorateOrder > list=expDecorateOrderService.findExpDecorateOrderByPage(entityInfo);
+            List<DecorateOrderDTO > list=expDecorateOrderService.findExpDecorateOrderByPage(entityInfo);
             map.put("rows",list); 
             map.put("total",entityInfo.getPage().getTotalResult()); 
 

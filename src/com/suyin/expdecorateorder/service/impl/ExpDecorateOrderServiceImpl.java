@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.suyin.expdecorateorder.mapper.ExpDecorateOrderMapper;
+import com.suyin.expdecorateorder.model.DecorateOrderDTO;
 import com.suyin.expdecorateorder.model.ExpDecorateOrder;
 import com.suyin.expdecorateorder.service.ExpDecorateOrderService;
 import com.suyin.system.model.LoginUser;
@@ -106,7 +107,7 @@ public class ExpDecorateOrderServiceImpl implements ExpDecorateOrderService{
      * @return
      */
     @Override
-    public List<ExpDecorateOrder> findExpDecorateOrderByPage(ExpDecorateOrder entity){
+    public List<DecorateOrderDTO> findExpDecorateOrderByPage(ExpDecorateOrder entity){
         
         
         return ExpDecorateOrderMapper.findExpDecorateOrderByPage(entity);
