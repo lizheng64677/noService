@@ -107,6 +107,14 @@ public class ExpDecorate  implements java.io.Serializable{
      */ 	
 	private java.lang.String endMoney;
 	/**
+	 * 封顶金额
+	 */
+	private java.lang.String maxMoney;
+	/**
+	 * 开始提取金额
+	 */
+	private java.lang.String tqMoney;
+	/**
 	 * 参与人数
 	 */
 	private java.lang.Integer expUv;
@@ -287,6 +295,23 @@ public class ExpDecorate  implements java.io.Serializable{
     public void setPage(Page page) {
         this.page = page;
     }
+    
+	public java.lang.String getMaxMoney() {
+		return maxMoney;
+	}
+
+	public void setMaxMoney(java.lang.String maxMoney) {
+		this.maxMoney = maxMoney;
+	}
+
+	public java.lang.String getTqMoney() {
+		return tqMoney;
+	}
+
+	public void setTqMoney(java.lang.String tqMoney) {
+		this.tqMoney = tqMoney;
+	}
+
 	public String toString() {
 		return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
 			.append("Id",getId())
