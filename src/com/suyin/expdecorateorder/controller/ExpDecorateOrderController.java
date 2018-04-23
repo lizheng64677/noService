@@ -16,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.suyin.expdecorateorder.model.ExpDecorateOrder;
 import com.suyin.expdecorateorder.service.ExpDecorateOrderService;
+import com.suyin.system.model.LoginUser;
 import com.suyin.system.model.Page;
 import com.suyin.system.util.Tools;
 
@@ -90,7 +91,53 @@ public class ExpDecorateOrderController{
 
         return new ModelAndView("expdecorateorder/save",map);
     }
+    /**
+     * 跳转修改页面 
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/jumpReview")
+    public ModelAndView jumpExpDecorateOrderReview(HttpServletRequest request) {
+        ModelMap map=new ModelMap();
+        try
+        {
+            if(Tools.notEmpty(request.getParameter("id"))){  
+                
+                ExpDecorateOrder entity=new ExpDecorateOrder();
+                entity.setOrderId(Integer.parseInt(request.getParameter("id")));
+                entity=expDecorateOrderService.findExpDecorateOrderById(entity);
+                map.put("expdecorateorder",entity);
 
+            }
+        }
+        catch (Exception e)
+        {
+            log.error("Controller Error ExpDecorateOrderController-> jumpExpDecorateOrderReview  " + e.getMessage());
+        }
+        return new ModelAndView("expdecorateorder/review",map);
+    }
+ 
+    /**
+     * 审批提交
+     * @param entity
+     * @return
+     */
+    @RequestMapping(value = "/review")
+    public @ResponseBody Map<String, Object> reviewExpDecorateOrderById(HttpServletRequest request,ExpDecorateOrder entity) {
+        ModelMap map=new ModelMap();
+        try
+        {     
+    		LoginUser loginUser = (LoginUser) request.getSession().getAttribute("loginUser");
+    		entity.setReviewUser(loginUser.getUserId().toString());
+            map.put("result",expDecorateOrderService.reviewExpDecorateOrderById(entity));
+        }
+        catch (Exception e)
+        {
+            log.error("Controller Error ExpDecorateOrderController-> updateExpDecorateOrderById  " + e.getMessage());
+        }
+        return map;
+    }
+    
     /**
      * 跳转修改页面 
      * @param request

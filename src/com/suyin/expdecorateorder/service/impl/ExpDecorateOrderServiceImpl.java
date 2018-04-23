@@ -1,5 +1,7 @@
 package com.suyin.expdecorateorder.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.suyin.expdecorateorder.mapper.ExpDecorateOrderMapper;
 import com.suyin.expdecorateorder.model.ExpDecorateOrder;
 import com.suyin.expdecorateorder.service.ExpDecorateOrderService;
+import com.suyin.system.model.LoginUser;
 
 
 
@@ -120,4 +123,12 @@ public class ExpDecorateOrderServiceImpl implements ExpDecorateOrderService{
         List<ExpDecorateOrder> list=ExpDecorateOrderMapper.findExpDecorateOrder(entity);
         return list!=null&&!list.isEmpty()?list.get(0):null;
     }
+
+	@Override
+	public Integer reviewExpDecorateOrderById(ExpDecorateOrder entity) {
+		SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date=new Date();
+		entity.setReviewTime(dateFormater.format(date));
+		return this.ExpDecorateOrderMapper.reviewExpDecorateOrderById(entity);
+	}
 }
