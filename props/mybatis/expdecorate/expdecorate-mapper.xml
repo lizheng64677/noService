@@ -21,6 +21,8 @@
 		<result column="active_img" property="activeImg"/>
 		<result column="begin_money" property="beginMoney"/>
 		<result column="end_money" property="endMoney"/>
+		<result column="max_money" property="maxMoney"/>
+		<result column="tq_money" property="tqMoney"/>
 		<result column="status" property="status"/>
 		<result column="exp_uv" property="expUv"/>
 		<result column="exp_pv" property="expPv"/>
@@ -54,7 +56,9 @@
 		share_img=#{shareImg},
 		active_img =#{activeImg},
 		begin_money=#{beginMoney},
-		end_money=#{endMoney}
+		end_money=#{endMoney},
+		max_money=#{maxMoney},
+		tq_money=#{tqMoney}
 		where id =#{id}
 		]]>
 	</update>
@@ -77,7 +81,9 @@
 				share_img,	
 				active_img,	
 				begin_money,		
-				end_money
+				end_money,
+				max_money,		
+				tq_money
 		)
 		values(
 				#{name},
@@ -93,7 +99,9 @@
 				#{shareImg},
 				#{activeImg},
 				#{beginMoney},
-				#{endMoney}
+				#{endMoney},
+				#{maxMoney},
+				#{tqMoney}
 		)
 		]]>
 	</insert>
