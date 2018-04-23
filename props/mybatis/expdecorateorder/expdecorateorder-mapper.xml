@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.expdecorateorder.mapper.ExpDecorateOrderMapper">
+
+	<resultMap type="com.suyin.expdecorateorder.model.ExpDecorateOrder" id="ExpDecorateOrderMap">
+	
+		<result column="order_id" property="orderId"/>
+		<result column="openid" property="openid"/>
+		<result column="user_id" property="userId"/>
+		<result column="withdraw_price" property="withdrawPrice"/>
+		<result column="state" property="state"/>
+		<result column="create_time" property="createTime"/>
+		<result column="review_time" property="reviewTime"/>
+		<result column="review_user" property="reviewUser"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateExpDecorateOrder"  parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder">
+		<![CDATA[
+		update
+		 t_exp_decorate_order
+		set 
+		openid={openid},
+		user_id={userId},
+		withdraw_price={withdrawPrice},
+		state={state},
+		create_time={createTime},
+		review_time={reviewTime},
+		review_user={reviewUser},
+		where order_id ={orderId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addExpDecorateOrder" parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_exp_decorate_order (
+				openid,		
+				user_id,		
+				withdraw_price,		
+				state,		
+				create_time,		
+				review_time,		
+				review_user,		
+		)
+		values(
+				{openid},
+				{userId},
+				{withdrawPrice},
+				{state},
+				{createTime},
+				{reviewTime},
+				{reviewUser},
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteExpDecorateOrder" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_exp_decorate_order
+			  	where order_id = #{orderId}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findExpDecorateOrder" parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder" resultMap="ExpDecorateOrderMap">
+	   <![CDATA[
+		select * from t_exp_decorate_order where 1=1
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findExpDecorateOrderByPage" parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder" resultMap="ExpDecorateOrderMap">
+		<![CDATA[
+		select  
+				t1.order_id,	
+				t1.openid,		
+				t1.user_id,		
+				t1.withdraw_price,		
+				t1.state,				
+				t1.review_user,
+				date_format(t1.create_time,'%Y-%m-%d %H:%i:%s') as createTime,
+			    date_format(t1.review_time,'%Y-%m-%d %H:%i:%s') as reviewTime
+			
+		 from t_exp_decorate_order t1 where 1=1
+		]]>
+	</select>
+	
+</mapper>	
