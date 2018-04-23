@@ -20,6 +20,12 @@ public interface ExpDecorateOrderMapper {
      */
     public Integer updateExpDecorateOrder(ExpDecorateOrder entity);
     /**
+     * 
+     * @param entity
+     * @return
+     */
+    public Integer reviewExpDecorateOrderById(ExpDecorateOrder entity);
+    /**
      * 根据id删除单条信息
      * 
      */

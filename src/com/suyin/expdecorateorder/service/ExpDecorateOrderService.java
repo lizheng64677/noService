@@ -22,6 +22,12 @@ public interface ExpDecorateOrderService{
      * @return
      */
     public Integer updateExpDecorateOrder(ExpDecorateOrder entity);
+    /**
+     * 
+     * @param entity
+     * @return
+     */
+    public Integer reviewExpDecorateOrderById(ExpDecorateOrder entity);
 
     /**
      * 删除信息

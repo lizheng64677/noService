@@ -15,6 +15,18 @@
 		<result column="review_user" property="reviewUser"/>
 	
 	</resultMap>
+		<!--审批更新 -->
+	<update id="reviewExpDecorateOrderById"  parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder">
+		<![CDATA[
+		update
+		 t_exp_decorate_order
+		set 
+		state=#{state},
+		review_time=#{reviewTime},
+		review_user=#{reviewUser}
+		where order_id =#{orderId}
+		]]>
+	</update>
 		<!--信息更新 -->
 	<update id="updateExpDecorateOrder"  parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder">
 		<![CDATA[

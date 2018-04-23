@@ -6,9 +6,8 @@
   </head>
   <body id="search" class="easyui-layout"  >   
 	<div id="tool">
-<!-- 	  		<a href="#" class="easyui-linkbutton" onclick="doAdd();" data-options="iconCls:'icon-add'">添加</a>
-	  		<a href="#" class="easyui-linkbutton" onclick="doUpdate();" data-options="iconCls:'icon-edit'">修改</a> -->
 			<a href="#" class="easyui-linkbutton" onclick="doDelete();" data-options="iconCls:'icon-remove'">删除</a>
+			<a href="#" class="easyui-linkbutton" onclick="reviewOrder();" data-options="iconCls:'icon-remove'">提现审批</a>
 			<a href="#" class="easyui-linkbutton" onclick="doDelete();" data-options="iconCls:'icon-remove'">导出</a>
 	</div>
 	<div id="mydatagrid" fit="true"></div>
@@ -26,7 +25,7 @@ $(function() {
 			{ "field":'orderId',checkbox:true },
 					    { "field": 'openid',"title" : '微信id',width:$(this).width() * 0.2},
 					    { "field": 'userId',"title" : '用户id',width:$(this).width() * 0.2},
-					    { "field": 'withdrawPrice',"title" : '提现金额',width:$(this).width() * 0.2},
+					    { "field": 'withdrawPrice',"title" : '提现金额（元）',width:$(this).width() * 0.2},
 					    { "field": 'state',"title" : '提现状态',width:$(this).width() * 0.2,
 					    	formatter:function(value,row,index){
 						    	if(value==0){
@@ -63,6 +62,14 @@ function doUpdate(){
 	}
 	window.location.href="<c:url value='/expdecorateorder/jumpEdit?id="+rows[0].orderId+"'/>";
 }
+function reviewOrder(){
+	var rows=$("#mydatagrid").datagrid("getSelections");
+	if(rows.length!=1){
+		$.messager.alert("", "请选择一条数据！", true, "warning");
+		return;
+	}
+	window.location.href="<c:url value='/expdecorateorder/jumpReview?id="+rows[0].orderId+"'/>";
+}
 function doDelete(){
 	var rows=$("#mydatagrid").datagrid("getSelections");
 	if(rows.length==0){
@@ -74,7 +81,6 @@ function doDelete(){
 		ids.push(rows[i].orderId);
 
 	}
-	debugger;
 	$.messager.confirm('确认', '是否确定要删除!', function(data){
 		if(!data){
 			return;
