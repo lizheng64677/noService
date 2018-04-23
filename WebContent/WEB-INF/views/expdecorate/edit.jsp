@@ -95,7 +95,20 @@ KindEditor.ready(function(K) {
 	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="endMoney"  required="required" validType="integer" value="${expdecorate.endMoney }"></input>
 	    		</td>
 	    		</tr>		   		
-		   	
+		   		<tr>
+	    		<td>封顶金额：</td>
+	    		<td>
+	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="maxMoney"value="${expdecorate.maxMoney }" required="required" validType="integer" ></input>
+	    		(*)每人得到佣金的上限
+	    		</td>
+	    		</tr>		   		
+		   		<tr>
+	    		<td>提取开始金额：</td>
+	    		<td>
+	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="tqMoney" value="${expdecorate.tqMoney }" required="required" validType="integer" ></input>
+	    		(*)满足或大于该金额时才可以提现
+	    		</td>
+	    		</tr>	
 	    		<tr>
 	    			<td>分享标题:</td>
 	    			<td>

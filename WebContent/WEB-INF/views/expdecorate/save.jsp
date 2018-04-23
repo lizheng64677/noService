@@ -74,11 +74,11 @@ KindEditor.ready(function(K) {
 	    	<table cellpadding="3">
 	    		<tr>
 	    			<td>活动名称:</td>
-	    			<td><input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写活动名称" name="name"  required="required" validType="isExist" value="${participator.name }"></input></td>
+	    			<td><input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写活动名称" name="name"  required="required" validType="isExist" ></input></td>
 	    		</tr>
 		    	<tr>
 	    			<td>活动标题:</td>
-	    			<td><input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写活动标题" name="title"  required="required" validType="isExist" value="${participator.name }"></input></td>
+	    			<td><input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写活动标题" name="title"  required="required" validType="isExist"></input></td>
 	    		</tr>
 	    		<tr>
 	    		<td>活动时间：</td>
@@ -90,15 +90,29 @@ KindEditor.ready(function(K) {
 	    		<tr>
 	    		<td>金额范围：</td>
 	    		<td>
-	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="beginMoney"  required="required" validType="integer" value="${participator.name }"></input>--
-	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="endMoney"  required="required" validType="integer" value="${participator.name }"></input>
+	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="beginMoney"  required="required" validType="integer"></input>--
+	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="endMoney"  required="required" validType="integer" ></input>
+	    		</td>
+	    		</tr>	
+	    		<tr>
+	    		<td>封顶金额：</td>
+	    		<td>
+	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="maxMoney"  required="required" validType="integer" ></input>
+	    		(*)每人得到佣金的上限
 	    		</td>
 	    		</tr>		   		
-		   	
+		   		<tr>
+	    		<td>提取开始金额：</td>
+	    		<td>
+	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="tqMoney"  required="required" validType="integer" ></input>
+	    		(*)满足或大于该金额时才可以提现
+	    		</td>
+	    		</tr>	
+	    		
 	    		<tr>
 	    			<td>分享标题:</td>
 	    			<td>
-	    		<input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写分享标题" name="shareTitle"  required="required" validType="isExist" value="${participator.number }"></input>
+	    		<input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写分享标题" name="shareTitle"  required="required" validType="isExist" ></input>
 	    			</td>
 	    		</tr>
 	    		
