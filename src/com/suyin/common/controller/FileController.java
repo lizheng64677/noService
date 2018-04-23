@@ -58,6 +58,7 @@ public class FileController extends FileUploadHelper {
     @Override
     protected String getRootPath(HttpServletRequest request) {
     	String rootPath=SystemPropertiesHolder.get("ROOT_PATH");
+    	System.out.println(rootPath);
         return rootPath+this.getParentPath(request);
     }
     
