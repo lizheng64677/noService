@@ -2,6 +2,7 @@ package com.suyin.expdecorateorder.service;
 
 import java.util.List;
 
+import com.suyin.expdecorateorder.model.DecorateOrderDTO;
 import com.suyin.expdecorateorder.model.ExpDecorateOrder;
 
 
@@ -48,7 +49,7 @@ public interface ExpDecorateOrderService{
      * @param entity
      * @return
      */
-    public List<ExpDecorateOrder> findExpDecorateOrderByPage(ExpDecorateOrder entity);
+    public List<DecorateOrderDTO> findExpDecorateOrderByPage(ExpDecorateOrder entity);
 
     /**
      * 根据id查询对应的信息

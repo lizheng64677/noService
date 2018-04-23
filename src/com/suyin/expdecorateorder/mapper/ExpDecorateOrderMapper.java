@@ -3,6 +3,7 @@ package com.suyin.expdecorateorder.mapper;
 
 import java.util.List;
 
+import com.suyin.expdecorateorder.model.DecorateOrderDTO;
 import com.suyin.expdecorateorder.model.ExpDecorateOrder;
 
 
@@ -43,6 +44,6 @@ public interface ExpDecorateOrderMapper {
     /**
      * 查询列表分页  
      */
-    public List<ExpDecorateOrder> findExpDecorateOrderByPage(ExpDecorateOrder entity);
+    public List<DecorateOrderDTO> findExpDecorateOrderByPage(ExpDecorateOrder entity);
 
 }
