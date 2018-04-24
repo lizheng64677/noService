@@ -58,15 +58,15 @@ $(function() {
 // 					    { "field": 'countPrice',"title" : '活动累积金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
 // 					    	return value+" (元)";
 // 					    }},
-// 					    { "field": 'status',"title" : '活动状态',width:$(this).width() * 0.2,formatter:function(value,row,index){
-// 					    	if(value==0){
-// 					    		return "<span style='color:red'>未启动</span>";
-// 					    	}else if(value==1){
-// 					    		return "<span style='color:#228B22'>已启动</span>";
-// 					    	}else{
-// 					    		return "未知情况";
-// 					    	}
-// 					    }},
+					    { "field": 'status',"title" : '活动状态',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	if(value==0){
+					    		return "<span style='color:red'>未启动</span>";
+					    	}else if(value==1){
+					    		return "<span style='color:#228B22'>已启动</span>";
+					    	}else{
+					    		return "未知情况";
+					    	}
+					    }},
 // 						{ "field": 'beginTime',"title" : '开始时间',width:$(this).width() * 0.2},
 // 						{ "field": 'endTime',"title" : '结束时间',width:$(this).width() * 0.2},	
 					 
