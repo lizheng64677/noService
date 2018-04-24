@@ -122,8 +122,8 @@ public class ExpDecorateOrderServiceImpl implements ExpDecorateOrderService{
     @Override
     public ExpDecorateOrder findExpDecorateOrderById(ExpDecorateOrder entity){
         
-        List<ExpDecorateOrder> list=ExpDecorateOrderMapper.findExpDecorateOrder(entity);
-        return list!=null&&!list.isEmpty()?list.get(0):null;
+        ExpDecorateOrder expDecorateOrder=ExpDecorateOrderMapper.findExpDecorateOrderByOrderId(entity.getOrderId().toString());
+        return expDecorateOrder;
     }
 
 	@Override

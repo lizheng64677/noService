@@ -27,7 +27,7 @@
 		]]>
 	</update>
 		<!-- 查询信息 -->
-	<select id="findExpDecorateOrderByOrderId" parameterType="java.lang.String" resultMap="ExpDecorateOrderMap">
+	<select id="findExpDecorateOrderByOrderId" parameterType="String" resultMap="ExpDecorateOrderMap">
 	   <![CDATA[
 		select * from t_exp_decorate_order t1 where 1=1 and t1.order_id =#{orderId}
 		]]>
