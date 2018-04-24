@@ -103,7 +103,7 @@ KindEditor.ready(function(K) {
 	    		</td>
 	    		</tr>		   		
 		   		<tr>
-	    		<td>提取开始金额：</td>
+	    		<td>起提金额：</td>
 	    		<td>
 	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="tqMoney" value="${expdecorate.tqMoney }" required="required" validType="integer" ></input>
 	    		(*)满足或大于该金额时才可以提现
