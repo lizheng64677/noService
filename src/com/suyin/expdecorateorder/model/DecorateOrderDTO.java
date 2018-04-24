@@ -1,5 +1,7 @@
 package com.suyin.expdecorateorder.model;
 
+import java.math.BigDecimal;
+
 import com.suyin.system.model.Page;
 
 public class DecorateOrderDTO  implements java.io.Serializable{
@@ -29,7 +31,7 @@ public class DecorateOrderDTO  implements java.io.Serializable{
     /**
      * 提现金额       db_column: withdraw_price 
      */ 	
-	private java.lang.Long withdrawPrice;
+	private BigDecimal withdrawPrice;
     /**
      * 提现状态0,审核中,1审核通过，2审核失败       db_column: state 
      */ 	
@@ -84,14 +86,6 @@ public class DecorateOrderDTO  implements java.io.Serializable{
 	
 	public void setUserId(java.lang.Integer value) {
 		this.userId = value;
-	}
-	
-	public java.lang.Long getWithdrawPrice() {
-		return this.withdrawPrice;
-	}
-	
-	public void setWithdrawPrice(java.lang.Long value) {
-		this.withdrawPrice = value;
 	}
 	
 	public java.lang.Integer getState() {
@@ -157,7 +151,12 @@ public class DecorateOrderDTO  implements java.io.Serializable{
 		this.userName = userName;
 	}
 
-	
+	public BigDecimal getWithdrawPrice() {
+		return withdrawPrice;
+	}
 
+	public void setWithdrawPrice(BigDecimal withdrawPrice) {
+		this.withdrawPrice = withdrawPrice;
+	}
 }
 
