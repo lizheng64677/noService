@@ -96,7 +96,7 @@
 				t2.user_name as userName,			
 				t1.withdraw_price as withdrawPrice,		
 				t1.state,				
-				t1.review_user,
+				t1.review_user as reviewUser,
 				date_format(t1.create_time,'%Y-%m-%d %H:%i:%s') as createTime,
 			    date_format(t1.review_time,'%Y-%m-%d %H:%i:%s') as reviewTime
 			
