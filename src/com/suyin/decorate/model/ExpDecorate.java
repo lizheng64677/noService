@@ -109,11 +109,11 @@ public class ExpDecorate  implements java.io.Serializable{
 	/**
 	 * 封顶金额
 	 */
-	private java.lang.String maxMoney;
+	private BigDecimal maxMoney;
 	/**
 	 * 开始提取金额
 	 */
-	private java.lang.String tqMoney;
+	private BigDecimal tqMoney;
 	/**
 	 * 参与人数
 	 */
@@ -296,19 +296,19 @@ public class ExpDecorate  implements java.io.Serializable{
         this.page = page;
     }
     
-	public java.lang.String getMaxMoney() {
+	public BigDecimal getMaxMoney() {
 		return maxMoney;
 	}
 
-	public void setMaxMoney(java.lang.String maxMoney) {
+	public void setMaxMoney(BigDecimal maxMoney) {
 		this.maxMoney = maxMoney;
 	}
 
-	public java.lang.String getTqMoney() {
+	public BigDecimal getTqMoney() {
 		return tqMoney;
 	}
 
-	public void setTqMoney(java.lang.String tqMoney) {
+	public void setTqMoney(BigDecimal tqMoney) {
 		this.tqMoney = tqMoney;
 	}
 
@@ -333,6 +333,8 @@ public class ExpDecorate  implements java.io.Serializable{
 			.append("status",getStatus())
 			.append("expUv",getExpUv())
 			.append("expPv",getExpPv())
+			.append("maxMoney",getMaxMoney())
+			.append("tqMoney",getTqMoney())
 			.append("countPrice",getCountPrice())
 			.toString();
 	}
@@ -367,5 +369,7 @@ public class ExpDecorate  implements java.io.Serializable{
 	public void setActiveImg(java.lang.String activeImg) {
 		this.activeImg = activeImg;
 	}
+	
+	
 }
 

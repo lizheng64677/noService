@@ -122,7 +122,7 @@ public class ExpDecorateController{
 
 			ExpDecorate  entityInfo=new ExpDecorate ();
 			entityInfo.setPage(page);
-			List<ExpDecorate > list=expDecorateService.findExpDecorateByPage(entityInfo);
+			List<ExpDecorate> list=expDecorateService.findExpDecorateByPage(entityInfo);
 			map.put("rows",list); 
 			map.put("total",entityInfo.getPage().getTotalResult()); 
 
