@@ -10,6 +10,19 @@ import com.suyin.expdecorateorder.model.ExpDecorateOrder;
 
 
 public interface ExpDecorateOrderMapper {
+	
+	/**
+	 * 通过openid修改用户的钱包余额
+	 * @param entity
+	 * @return
+	 */
+	 public Integer updateUserBalancePriceByOpenId(ExpDecorateOrder entity);
+	/**
+	 * 通过订单ID查询订单信息
+	 * @param id
+	 * @return
+	 */
+	 public ExpDecorateOrder findExpDecorateOrderByOrderId(String orderId);
 
     /**
      * 新增信息

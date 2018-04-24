@@ -15,6 +15,23 @@
 		<result column="review_user" property="reviewUser"/>
 	
 	</resultMap>
+	
+	<!--通过openid修改用户的钱包余额 -->
+	<update id="updateUserBalancePriceByOpenId"  parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder">
+		<![CDATA[
+		update
+		 t_exp_decorate_user
+		set 
+		balance_price = balance_price + #{withdrawPrice}
+		where openid =#{openid}
+		]]>
+	</update>
+		<!-- 查询信息 -->
+	<select id="findExpDecorateOrderByOrderId" parameterType="java.lang.String" resultMap="ExpDecorateOrderMap">
+	   <![CDATA[
+		select * from t_exp_decorate_order t1 where 1=1 and t1.order_id =#{orderId}
+		]]>
+	</select>
 		<!--审批更新 -->
 	<update id="reviewExpDecorateOrderById"  parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder">
 		<![CDATA[
@@ -88,7 +105,7 @@
 	<select id="findExpDecorateOrderByPage" parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder" resultType="com.suyin.expdecorateorder.model.DecorateOrderDTO">
 		<![CDATA[
 		select  
-				t1.order_id,	
+				t1.order_id as orderId,	
 				t1.openid,		
 				t1.user_id,		
 				t2.nick_name as nickName,		

@@ -69,7 +69,7 @@ function reviewOrder(){
 	if(rows.length!=1){
 		$.messager.alert("", "请选择一条数据！", true, "warning");
 		return;
-	}
+	} 
 	for(var i=0;i<rows.length;i++){
 		var state = rows[i].state
 		if(state != 0){
