@@ -9,12 +9,11 @@
 	  		<a href="#" class="easyui-linkbutton" onclick="doAdd();" data-options="iconCls:'icon-add'">添加</a>
 	  		<a href="#" class="easyui-linkbutton" onclick="doUpdate();" data-options="iconCls:'icon-edit'">修改</a>
 			<a href="#" class="easyui-linkbutton" onclick="doDelete();" data-options="iconCls:'icon-cancel'">删除</a>
-			<div style="float:right;margin-right:18px;">
-
-			&nbsp;&nbsp;
-			<a href="#" class="easyui-linkbutton" onclick="doStart();" data-options="iconCls:'icon-remove'">启动活动</a> 
-			<a href="#" class="easyui-linkbutton" onclick="doStop();" data-options="iconCls:'icon-remove'">停止活动</a>			
-			</div>
+<!-- 			<div style="float:right;margin-right:18px;"> -->
+<!-- 			&nbsp;&nbsp; -->
+<!-- 			<a href="#" class="easyui-linkbutton" onclick="doStart();" data-options="iconCls:'icon-remove'">启动活动</a>  -->
+<!-- 			<a href="#" class="easyui-linkbutton" onclick="doStop();" data-options="iconCls:'icon-remove'">停止活动</a>			 -->
+<!-- 			</div> -->
 	</div>
 	<div id="mydatagrid" fit="true"></div>
 	
@@ -41,26 +40,35 @@ $(function() {
 					    { "field": 'endMoney',"title" : '随机金额止',width:$(this).width() * 0.2,formatter:function(value,row,index){
 					    	return value+" (元)";
 					    }},
-					    { "field": 'expUv',"title" : '参与数',width:$(this).width() * 0.2,formatter:function(value,row,index){
-					    	return value+"(人)";
-					    }},
-					    { "field": 'expPv',"title" : '访问数',width:$(this).width() * 0.2,formatter:function(value,row,index){
-					    	return value+"(次)";
-					    }},
-					    { "field": 'countPrice',"title" : '累积金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    { "field": 'maxMoney',"title" : '封顶金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
 					    	return value+" (元)";
 					    }},
-					    { "field": 'status',"title" : '活动状态',width:$(this).width() * 0.2,formatter:function(value,row,index){
-					    	if(value==0){
-					    		return "<span style='color:red'>未启动</span>";
-					    	}else if(value==1){
-					    		return "<span style='color:#228B22'>已启动</span>";
-					    	}else{
-					    		return "未知情况";
-					    	}
+					    { "field": 'tqMoney',"title" : '起提金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	return value+" (元)";
 					    }},
-						{ "field": 'beginTime',"title" : '开始时间',width:$(this).width() * 0.2},
-						{ "field": 'endTime',"title" : '结束时间',width:$(this).width() * 0.2},	
+					    { "field": 'createTime',"title" : '创建时间',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	return value;
+					    }},
+// 					    { "field": 'expUv',"title" : '参与数',width:$(this).width() * 0.2,formatter:function(value,row,index){
+// 					    	return value+"(人)";
+// 					    }},
+// 					    { "field": 'expPv',"title" : '访问数',width:$(this).width() * 0.2,formatter:function(value,row,index){
+// 					    	return value+"(次)";
+// 					    }},
+// 					    { "field": 'countPrice',"title" : '活动累积金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
+// 					    	return value+" (元)";
+// 					    }},
+// 					    { "field": 'status',"title" : '活动状态',width:$(this).width() * 0.2,formatter:function(value,row,index){
+// 					    	if(value==0){
+// 					    		return "<span style='color:red'>未启动</span>";
+// 					    	}else if(value==1){
+// 					    		return "<span style='color:#228B22'>已启动</span>";
+// 					    	}else{
+// 					    		return "未知情况";
+// 					    	}
+// 					    }},
+// 						{ "field": 'beginTime',"title" : '开始时间',width:$(this).width() * 0.2},
+// 						{ "field": 'endTime',"title" : '结束时间',width:$(this).width() * 0.2},	
 					 
 		]],
 		toolbar :'#tool',
