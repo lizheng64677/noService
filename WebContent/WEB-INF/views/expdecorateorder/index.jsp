@@ -31,7 +31,7 @@ $(function() {
 					    { "field": 'state',"title" : '提现状态',width:$(this).width() * 0.2,
 					    	formatter:function(value,row,index){
 						    	if(value==0){
-						    		return "<span style='color:red'>审核中</span>";
+						    		return "<span style='color:red'>待审核</span>";
 						    	}else if(value==1){
 						    		return "<span style='color:#228B22'>审核通过</span>";
 						    	}else{
@@ -69,6 +69,13 @@ function reviewOrder(){
 	if(rows.length!=1){
 		$.messager.alert("", "请选择一条数据！", true, "warning");
 		return;
+	}
+	for(var i=0;i<rows.length;i++){
+		var state = rows[i].state
+		if(state != 0){
+			$.messager.alert("", "只能审核待审核状态的订单！", true, "warning");
+			return;
+		}
 	}
 	window.location.href="<c:url value='/expdecorateorder/jumpReview?id="+rows[0].orderId+"'/>";
 }
