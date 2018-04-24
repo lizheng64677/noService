@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
 import com.suyin.expdecorateorder.mapper.ExpDecorateOrderMapper;
 import com.suyin.expdecorateorder.model.DecorateOrderDTO;
 import com.suyin.expdecorateorder.model.ExpDecorateOrder;
@@ -130,6 +131,13 @@ public class ExpDecorateOrderServiceImpl implements ExpDecorateOrderService{
 		SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Date date=new Date();
 		entity.setReviewTime(dateFormater.format(date));
-		return this.ExpDecorateOrderMapper.reviewExpDecorateOrderById(entity);
+		ExpDecorateOrder expDecorateOrder = this.ExpDecorateOrderMapper.findExpDecorateOrderByOrderId(entity.getOrderId().toString());
+		//审核如果不通过将扣掉的钱返回用户钱包
+		if(2 == entity.getState()){
+			this.ExpDecorateOrderMapper.updateUserBalancePriceByOpenId(expDecorateOrder);
+		}	
+		//保存审核信息
+		Integer result = this.ExpDecorateOrderMapper.reviewExpDecorateOrderById(entity);
+		return result;
 	}
 }

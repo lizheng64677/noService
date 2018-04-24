@@ -129,7 +129,7 @@ public class ExpDecorateOrderController{
         try
         {     
     		LoginUser loginUser = (LoginUser) request.getSession().getAttribute("loginUser");
-    		entity.setReviewUser(loginUser.getUserId().toString());
+    		entity.setReviewUser(loginUser.getLoginName());
             map.put("result",expDecorateOrderService.reviewExpDecorateOrderById(entity));
         }
         catch (Exception e)
