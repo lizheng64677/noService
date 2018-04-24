@@ -9,11 +9,11 @@
 	  		<a href="#" class="easyui-linkbutton" onclick="doAdd();" data-options="iconCls:'icon-add'">添加</a>
 	  		<a href="#" class="easyui-linkbutton" onclick="doUpdate();" data-options="iconCls:'icon-edit'">修改</a>
 			<a href="#" class="easyui-linkbutton" onclick="doDelete();" data-options="iconCls:'icon-cancel'">删除</a>
-<!-- 			<div style="float:right;margin-right:18px;"> -->
-<!-- 			&nbsp;&nbsp; -->
-<!-- 			<a href="#" class="easyui-linkbutton" onclick="doStart();" data-options="iconCls:'icon-remove'">启动活动</a>  -->
-<!-- 			<a href="#" class="easyui-linkbutton" onclick="doStop();" data-options="iconCls:'icon-remove'">停止活动</a>			 -->
-<!-- 			</div> -->
+			<div style="float:right;margin-right:18px;">
+			&nbsp;&nbsp;
+			<a href="#" class="easyui-linkbutton" onclick="doStart();" data-options="iconCls:'icon-remove'">启动活动</a> 
+			<a href="#" class="easyui-linkbutton" onclick="doStop();" data-options="iconCls:'icon-remove'">停止活动</a>			
+			</div>
 	</div>
 	<div id="mydatagrid" fit="true"></div>
 	
