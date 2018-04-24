@@ -143,6 +143,8 @@
 			exp.share_img,
 			exp.begin_money,
 			exp.end_money,
+			exp.max_money,
+			exp.tq_money,
 			ifnull(exp.exp_uv,"0") as exp_uv,
 			ifnull(exp.exp_pv,"0") as exp_pv,
 			ifnull(exp.count_price,"0.00") as count_price
