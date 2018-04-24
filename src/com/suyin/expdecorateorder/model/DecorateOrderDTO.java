@@ -27,6 +27,7 @@ public class DecorateOrderDTO  implements java.io.Serializable{
 	private java.lang.Integer userId;
 	private java.lang.String nickName;
 	private java.lang.String userPhone;
+	private java.lang.String alipayNumber;
 	private java.lang.String userName;
     /**
      * 提现金额       db_column: withdraw_price 
@@ -157,6 +158,14 @@ public class DecorateOrderDTO  implements java.io.Serializable{
 
 	public void setWithdrawPrice(BigDecimal withdrawPrice) {
 		this.withdrawPrice = withdrawPrice;
+	}
+
+	public java.lang.String getAlipayNumber() {
+		return alipayNumber;
+	}
+
+	public void setAlipayNumber(java.lang.String alipayNumber) {
+		this.alipayNumber = alipayNumber;
 	}
 }
 

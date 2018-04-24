@@ -8,7 +8,6 @@
 	<div id="tool">
 			<a href="#" class="easyui-linkbutton" onclick="doDelete();" data-options="iconCls:'icon-remove'">删除</a>
 			<a href="#" class="easyui-linkbutton" onclick="reviewOrder();" data-options="iconCls:'icon-remove'">提现审批</a>
-			<a href="#" class="easyui-linkbutton" onclick="doDelete();" data-options="iconCls:'icon-remove'">导出</a>
 	</div>
 	<div id="mydatagrid" fit="true"></div>
 	
@@ -23,10 +22,10 @@ $(function() {
 		pageList : [10,20,50],
 		columns : [[
 			{ "field":'orderId',checkbox:true },
-					    { "field": 'openid',"title" : '微信id',width:$(this).width() * 0.2},	   
 					    { "field": 'userName',"title" : '姓名',width:$(this).width() * 0.2},
 					    { "field": 'nickName',"title" : '昵称',width:$(this).width() * 0.2},
 					    { "field": 'userPhone',"title" : '电话',width:$(this).width() * 0.2},
+					    { "field": 'alipayNumber',"title" : '支付宝账号',width:$(this).width() * 0.2},	   
 					    { "field": 'withdrawPrice',"title" : '提现金额（元）',width:$(this).width() * 0.2},
 					    { "field": 'state',"title" : '提现状态',width:$(this).width() * 0.2,
 					    	formatter:function(value,row,index){

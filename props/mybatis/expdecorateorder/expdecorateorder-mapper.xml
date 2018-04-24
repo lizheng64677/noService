@@ -111,6 +111,7 @@
 				t2.nick_name as nickName,		
 				t2.user_phone as userPhone,		
 				t2.user_name as userName,			
+				t2.alipay_number as alipayNumber,					
 				t1.withdraw_price as withdrawPrice,		
 				t1.state,				
 				t1.review_user as reviewUser,
