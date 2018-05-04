@@ -46,9 +46,11 @@ $(function() {
 					    { "field": 'tqMoney',"title" : '起提金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
 					    	return value+" (元)";
 					    }},
-					    { "field": 'createTime',"title" : '创建时间',width:$(this).width() * 0.2,formatter:function(value,row,index){
-					    	return value;
-					    }},
+						{ "field": 'beginTime',"title" : '开始时间',width:$(this).width() * 0.2},
+						{ "field": 'endTime',"title" : '结束时间',width:$(this).width() * 0.2},	
+// 					    { "field": 'createTime',"title" : '创建时间',width:$(this).width() * 0.2,formatter:function(value,row,index){
+// 					    	return value;
+// 					    }},
 // 					    { "field": 'expUv',"title" : '参与数',width:$(this).width() * 0.2,formatter:function(value,row,index){
 // 					    	return value+"(人)";
 // 					    }},
@@ -67,8 +69,7 @@ $(function() {
 					    		return "未知情况";
 					    	}
 					    }},
-// 						{ "field": 'beginTime',"title" : '开始时间',width:$(this).width() * 0.2},
-// 						{ "field": 'endTime',"title" : '结束时间',width:$(this).width() * 0.2},	
+
 					 
 		]],
 		toolbar :'#tool',
