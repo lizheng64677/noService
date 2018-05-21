@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.uservoucher.mapper.ExpDecorateUserVoucherMapper">
+
+	<resultMap type="com.suyin.uservoucher.model.ExpDecorateUserVoucher" id="ExpDecorateUserVoucherMap">
+	
+		<result column="id" property="id"/>
+		<result column="voucher_id" property="voucherId"/>
+		<result column="vourche_code" property="vourcheCode"/>
+		<result column="state" property="state"/>
+		<result column="openid" property="openid"/>
+		<result column="use_openid" property="useOpenid"/>
+		<result column="create_time" property="createTime"/>
+		<result column="use_time" property="useTime"/>
+		<result column="head_img" property="headImg"/>
+		<result column="nick_name" property="nickName"/>
+		<result column="uhead_img" property="uheadImg"/>		
+		<result column="unick_name" property="unickName"/>
+		<result column="price" property="price"/>
+		<result column="use_price" property="usePrice"/>
+		<result column="name" property="name"/>
+		<result column="type" property="type"/>
+
+
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateExpDecorateUserVoucher"  parameterType="com.suyin.uservoucher.model.ExpDecorateUserVoucher">
+		<![CDATA[
+		update
+		 t_exp_decorate_user_voucher
+		set 
+		state=#{state},
+		use_time=now()
+		where id =#{id}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addExpDecorateUserVoucher" parameterType="com.suyin.uservoucher.model.ExpDecorateUserVoucher" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_exp_decorate_user_voucher (
+				voucher_id,		
+				vourche_code,		
+				state,		
+				openid,		
+				use_openid,		
+				create_time,		
+				use_time,		
+		)
+		values(
+				{voucherId},
+				{vourcheCode},
+				{state},
+				{openid},
+				{useOpenid},
+				{createTime},
+				{useTime},
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteExpDecorateUserVoucher" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_exp_decorate_user_voucher
+			  	where id ={id}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findExpDecorateUserVoucher" parameterType="com.suyin.uservoucher.model.ExpDecorateUserVoucher" resultMap="ExpDecorateUserVoucherMap">
+	   <![CDATA[
+		SELECT
+				t.id,
+				t.order_id,
+				t.voucher_id,
+				t.vourche_code,
+				t.state,
+				t.openid,
+				t.use_openid,
+				u.head_img,
+				u.nick_name,
+				useuse.head_img as uhead_img,
+				useuse.nick_name as unick_name,
+				voucher.price,
+				voucher.use_price,
+				voucher.`name`,
+				voucher.type,
+				date_format(t.create_time,'%Y-%m-%d %H:%i:%s')  as create_time,
+				date_format(t.use_time,'%Y-%m-%d %H:%i:%s')  as use_time
+			FROM
+				t_exp_decorate_user_voucher  t
+			LEFT JOIN
+				t_exp_decorate_voucher voucher
+			ON 
+				voucher.id=t.voucher_id
+			LEFT JOIN
+				t_exp_decorate_user u 
+			ON 
+				u.openid=t.openid
+			LEFT JOIN 
+				t_exp_decorate_user useuse 
+			ON
+				useuse.openid=t.use_openid
+			WHERE
+				1 = 1
+		]]>
+		<if test="null!=id and ''!=id">
+			AND
+			t.id=#{id}
+		</if>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findExpDecorateUserVoucherByPage" parameterType="com.suyin.uservoucher.model.ExpDecorateUserVoucher" resultMap="ExpDecorateUserVoucherMap">
+		<![CDATA[
+			SELECT
+				t.id,
+				t.order_id,
+				t.voucher_id,
+				t.vourche_code,
+				t.state,
+				t.openid,
+				t.use_openid,
+				u.head_img,
+				u.nick_name,
+				useuse.head_img as uhead_img,
+				useuse.nick_name as unick_name,
+				voucher.price,
+				voucher.use_price,
+				voucher.`name`,
+				voucher.type,
+				date_format(t.create_time,'%Y-%m-%d %H:%i:%s')  as create_time,
+				date_format(t.use_time,'%Y-%m-%d %H:%i:%s')  as use_time
+			FROM
+				t_exp_decorate_user_voucher  t
+			LEFT JOIN
+				t_exp_decorate_voucher voucher
+			ON 
+				voucher.id=t.voucher_id
+			LEFT JOIN
+				t_exp_decorate_user u 
+			ON 
+				u.openid=t.openid
+			LEFT JOIN 
+				t_exp_decorate_user useuse 
+			ON
+				useuse.openid=t.use_openid
+			WHERE
+				1 = 1
+		]]>
+		<if test="null!=type and ''!=type">
+			AND
+			t.state=#{type}
+		</if>
+	</select>
+	
+</mapper>	
