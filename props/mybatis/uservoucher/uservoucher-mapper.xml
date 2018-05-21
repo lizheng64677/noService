@@ -156,6 +156,10 @@
 			AND
 			t.state=#{type}
 		</if>
+		<if test="null!=vourcheCode and ''!=vourcheCode">
+			AND 
+			t.vourche_code like '%${vourcheCode}%'
+		</if>
 	</select>
 	
 </mapper>	

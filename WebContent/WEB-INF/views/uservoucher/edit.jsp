@@ -68,6 +68,11 @@
 			if(!isValid){
 				return false;
 			}
+			var state=$("#state").val();
+			if("-1"==state){
+				$.messager.alert("提示", "请选择处理事项", true, "warning");
+				return;
+			}
 			$.messager.confirm('确认', '是否确定修改券状态!', function(data){
 				if(!data){
 					return;

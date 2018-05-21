@@ -8,12 +8,13 @@
 		<div id="tool">
 		<!-- 0:未使用，1:已使用，2已过期作废   -->
 			 券状态:
-			<select id="type" class="input">
+			<select id="type" class="input" style="width:120px">
 			<option value="-1">---请选择---</option>
 			<option value="0">---未使用---</option>
 			<option value="1">---已使用---</option>
 			<option value="2">---已作废---</option>
 			</select>
+			券号:<input type="text" class="input " name="voucherCode" id="voucherCode" style="width:180px"/>
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="serchGrid();" data-options="iconCls:'icon-search'">查询</a>
 			<div style="float:right;padding-right:18px;">
 			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="doUpdate();" data-options="iconCls:'icon-remove'">消券处理</a> 
@@ -86,14 +87,14 @@ $(function() {
 });
 
 function serchGrid(){
-	var queryParams = {type:$("#type").val()};
+	var queryParams = {type:$("#type").val(),vourcheCode:$("#voucherCode").val()};
 	$('#mydatagrid').datagrid("load",queryParams); 
 }
 
 function doUpdate(){
 	var rows=$("#mydatagrid").datagrid("getSelections");
 	if(rows.length!=1){
-		$.messager.alert("", "请选择一条数据！", true, "warning");
+		$.messager.alert("提示", "请选择一条数据！", true, "warning");
 		return;
 	}
 	window.location.href="<c:url value='/expdecorateuservoucher/jumpEdit?id="+rows[0].id+"'/>";

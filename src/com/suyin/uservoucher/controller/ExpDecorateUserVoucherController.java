@@ -70,6 +70,8 @@ public class ExpDecorateUserVoucherController{
         String pag = request.getParameter("page");
         String showCount = request.getParameter("rows");
         String type = request.getParameter("type");
+        String vourcheCode = request.getParameter("vourcheCode");
+
         Page page = new Page();
         try
         {      
@@ -82,6 +84,9 @@ public class ExpDecorateUserVoucherController{
             if(null!=type  &&!"-1".equals(type)){
             entityInfo.setType(type);	
             }
+            if(null!=vourcheCode  &&!"-1".equals(vourcheCode)){
+                entityInfo.setVourcheCode(vourcheCode);	
+                }
             entityInfo.setPage(page);
             List<ExpDecorateUserVoucher > list=expDecorateUserVoucherService.findExpDecorateUserVoucherByPage(entityInfo);
             map.put("rows",list); 
