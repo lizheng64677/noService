@@ -18,7 +18,8 @@
 		<result column="update_time" property="updateTime"/>
 		<result column="content" property="content"/>
 		<result column="vouche_url" property="voucheUrl"/>
-	
+		<result column="rem_num" property="remNum"/>
+		<result column="num" property="num"/>
 	</resultMap>
 		<!--信息更新 -->
 	<update id="updateExpDecorateVoucher"  parameterType="com.suyin.decoratevoucher.model.ExpDecorateVoucher">
@@ -35,7 +36,8 @@
 		validity_day=#{validityDay},
 		update_time=now(),
 		vouche_url=#{voucheUrl},
-		content=#{content}
+		content=#{content},
+		num=#{num}
 		where id =#{id}
 		]]>
 	</update>
@@ -56,7 +58,8 @@
 				create_time,		
 				update_time,
 				vouche_url,		
-				content		
+				content,
+				num
 		)
 		values(
 				#{name},
@@ -70,7 +73,8 @@
 				now(),
 				now(),
 				#{voucheUrl},
-				#{content}
+				#{content},
+				#{num}
 		)
 		]]>
 	</insert>
@@ -98,7 +102,9 @@
 				date_format(t.create_time,'%Y-%m-%d %H:%i:%s')  as create_time,
 				date_format(t.update_time,'%Y-%m-%d %H:%i:%s')  as update_time,
 				t.vouche_url,
-				t.content
+				t.content,
+				t.num,
+				t.rem_num
 			from 
 				t_exp_decorate_voucher t
 			where
@@ -129,12 +135,17 @@
 				date_format(t.create_time,'%Y-%m-%d %H:%i:%s')  as create_time,
 				date_format(t.update_time,'%Y-%m-%d %H:%i:%s')  as update_time,
 				t.vouche_url,
-				t.content
+				t.content,
+				t.num,
+				t.rem_num
 			FROM
 				t_exp_decorate_voucher t
 			WHERE
 				1 = 1
 		]]>
+		 ORDER BY 
+		 		t.create_time 
+		 DESC		
 	</select>
 	
 </mapper>	
