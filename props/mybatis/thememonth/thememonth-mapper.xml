@@ -14,6 +14,8 @@
 		<result column="update_time" property="updateTime"/>
 		<result column="color" property="color"/>
 		<result column="months" property="months"/>
+		<result column="voucher_id" property="voucherId"/>
+		<result column="is_voucher" property="isVoucher"/>
 	
 	</resultMap>
 		<!--信息更新 -->
@@ -28,7 +30,9 @@
 		bottom_pic=#{bottomPic},
 		update_time=now(),
 		color=#{color},
-		months=#{months}
+		months=#{months},
+		is_voucher=#{isVoucher},
+		voucher_id=#{voucherId}
 		where theme_id =#{themeId}
 		]]>
 	</update>
@@ -45,7 +49,9 @@
 				create_time,		
 				update_time,		
 				color,
-				months
+				months,
+			    is_voucher,
+		        voucher_id
 		)
 		values(
 				#{themeTitle},
@@ -55,7 +61,9 @@
 				now(),
 				now(),
 				#{color},
-				#{months}
+				#{months},
+				#{isVoucher},
+				#{voucherId}
 		)
 		]]>
 	</insert>
@@ -87,7 +95,9 @@
 			date_format(t.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
 			date_format(t.update_time,'%Y-%m-%d %H:%i:%s') as update_time,
 			t.color,
-			t.months
+			t.months,
+			t.is_voucher,
+		    t.voucher_id
 		from
 			t_theme_month t
 		where

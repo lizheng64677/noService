@@ -61,6 +61,23 @@ public class ExpDecorateVoucherController{
         return new ModelAndView("expdecoratevoucher/index");
     }
 
+    
+    /**
+     * 根据类型查询
+     * @param request
+     * @return
+     */
+    @RequestMapping("/findExpDecorateVoucherByIdList")
+    public @ResponseBody List<ExpDecorateVoucher > findExpDecorateVoucherByIdList(HttpServletRequest request){
+    	String type=request.getParameter("type");
+    	ExpDecorateVoucher entity=new ExpDecorateVoucher();
+    	if(null!=type &&!"".equals(type)){
+    		entity.setType(Integer.parseInt(type));
+    	}
+    	List<ExpDecorateVoucher > list=expDecorateVoucherService.findExpDecorateVoucher(entity);
+    	return list;
+    }
+    
 
     /**
      * 读取列表
@@ -83,7 +100,7 @@ public class ExpDecorateVoucherController{
             }
 
             ExpDecorateVoucher  entityInfo=new ExpDecorateVoucher ();
-            entityInfo.setPage(page);
+            entityInfo.setPage(page);           
             List<ExpDecorateVoucher > list=expDecorateVoucherService.findExpDecorateVoucherByPage(entityInfo);
             map.put("rows",list); 
             map.put("total",entityInfo.getPage().getTotalResult()); 

@@ -58,6 +58,42 @@ KindEditor.ready(function(K) {
 				});
 			});
 		});
+		
+		
+		$("#isVoucher").bind("change",function(){
+			var thisvalue=$(this).val();
+			if(1==thisvalue){
+				$("#voucherTr").show();
+				setVoucher(1)
+			}else{
+				$("#voucherTr").hide();
+			}
+			
+		});
+		var isvou=$("#isVoucher").val();
+		if(isvou==1){
+			$("#voucherTr").show();
+			setVoucher(1)
+
+		}
+		function setVoucher(type){
+			var url="<c:url value='/expdecoratevoucher/findExpDecorateVoucherByIdList'/>";
+			var vouId=$("#voucherIdEdit").val();
+			$.post(url,{type:type},function(data){
+					$("#voucherId").empty();
+					var html='';
+					$(data).each(function(i,val){
+						if(vouId==val.id){
+							html+="<option value="+val.id+" selected='selected'>"+val.name+"</option>";
+						}else{
+							html+="<option value="+val.id+">"+val.name+"</option>";
+						}
+					});
+					$("#voucherId").html(html);
+
+				},"json");
+
+			}
 });
 	
 
@@ -83,6 +119,25 @@ KindEditor.ready(function(K) {
 	    			<td>主题月份:</td>
 	    			<td><input    class="easyui-validatebox input" type="text" style="width:300px;height:30px;"  missingMessage="请输入主题月份" name="months" id="month" data-options="required:true" value="${thememonth.months }"></input></td>
 	    		</tr>
+	    		<tr>
+	    			<td>是否开放体验券:</td>
+	    			<td>
+	    				<select  class="input" name="isVoucher" id="isVoucher">
+	    					<option value="0" <c:if test="${thememonth.isVoucher == 0}"> selected='selected'</c:if>>否</option>
+	    					<option value="1" <c:if test="${thememonth.isVoucher == 1}"> selected='selected'</c:if>>是</option>
+	    				</select>
+	    			</td>
+	    		</tr>
+	     		<tr id="voucherTr" style="display:none;">
+	    			<td>体验券:</td>
+	    			<td>
+	    			<select class="input" name="voucherId" id="voucherId">
+	    				<option value="">---请选择---</option>
+	    			</select>
+	    			</td>
+	    		</tr>
+    			 <input type="hidden" id="voucherIdEdit" value="${thememonth.voucherId}">
+	    		 
 	    		<tr>
 	    		<td>主题LOGO:</td>
 	    		<td>

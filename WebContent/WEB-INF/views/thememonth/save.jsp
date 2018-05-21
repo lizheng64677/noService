@@ -58,6 +58,31 @@ KindEditor.ready(function(K) {
 				});
 			});
 		});
+		
+		$("#isVoucher").bind("change",function(){
+			var thisvalue=$(this).val();
+			if(1==thisvalue){
+				$("#voucherTr").show();
+				setVoucher(1)
+			}else{
+				$("#voucherTr").hide();
+			}
+			
+		});
+		
+		function setVoucher(type){
+			var url="<c:url value='/expdecoratevoucher/findExpDecorateVoucherByIdList'/>";
+			$.post(url,{type:type},function(data){
+					$("#voucherId").empty();
+					var html='';
+					$(data).each(function(i,val){
+						html+="<option value="+val.id+">"+val.name+"</option>";
+					});
+					$("#voucherId").html(html);
+
+				},"json");
+
+			}
 });
 	
 
@@ -81,6 +106,23 @@ KindEditor.ready(function(K) {
 	    		<tr>
 	    			<td>主题月份:</td>
 	    			<td><input    class="easyui-validatebox input" type="text" style="width:300px;height:30px;"  missingMessage="请输入主题月份" name="months" id="month" data-options="required:true" value=""></input></td>
+	    		</tr>
+	    			<tr>
+	    			<td>是否开放体验券:</td>
+	    			<td>
+	    				<select  class="input" name="isVoucher" id="isVoucher">
+	    					<option value="0" selected="selected">否</option>
+	    					<option value="1">是</option>
+	    				</select>
+	    			</td>
+	    		</tr>
+	    		<tr id="voucherTr" style="display:none;">
+	    			<td>体验券</td>
+	    			<td>
+	    			<select class="input" name="voucherId" id="voucherId">
+	    				<option value="">---请选择---</option>
+	    			</select>
+	    			</td>
 	    		</tr>
 	    		<tr>
 	    		<td>主题LOGO:</td>

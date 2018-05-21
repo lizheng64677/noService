@@ -103,9 +103,15 @@
 				t_exp_decorate_voucher t
 			where
 				1=1
-			and
-				t.id=#{id}
 		]]>
+		<if test="null!=id and ''!=id">
+				and
+				t.id=#{id}
+		</if>
+		<if test="null!=type and ''!=type">
+				and
+				t.type=#{type}
+		</if>
 	</select>
 	
 	<!-- 分页查询信息 -->

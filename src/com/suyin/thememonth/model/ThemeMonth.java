@@ -65,7 +65,14 @@ public class ThemeMonth  implements java.io.Serializable{
      * 选择月份       db_column: month 
      */ 	
     private java.lang.String months;
-
+    /**
+     * 是否开放体验券 0 否 1 是， 默认为0
+     */
+    private java.lang.Integer isVoucher;
+    /**
+     * 体验券ID
+     */
+    private java.lang.String  voucherId;
     //columns end
 
     /**
@@ -175,6 +182,24 @@ public class ThemeMonth  implements java.io.Serializable{
     {
         this.attachments = attachments;
     }
+
+	public java.lang.Integer getIsVoucher() {
+		return isVoucher;
+	}
+
+	public void setIsVoucher(java.lang.Integer isVoucher) {
+		this.isVoucher = isVoucher;
+	}
+
+	public java.lang.String getVoucherId() {
+		return voucherId;
+	}
+
+	public void setVoucherId(java.lang.String voucherId) {
+		this.voucherId = voucherId;
+	}
+    
+    
 
 }
 
