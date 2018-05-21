@@ -128,7 +128,6 @@ function deleImagesCopy(id){
 		<div style="padding:10px 10px 10px 10px">
 	    <form id="dataForm"  method="post">
 	    	 <!-- 图片相关信息 -->
-<!-- 	        <input type="hidden" name="allImages" id="allImages" value=""/>	 -->
 	   	    <div style="width:60%;float:left;" >
 	    	<table cellpadding="3">
 	    		<tr>

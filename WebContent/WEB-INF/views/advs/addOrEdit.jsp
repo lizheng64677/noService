@@ -65,57 +65,12 @@
 	    			<td>类型:
 	    			</td>
 	    				<td>
-	    			    <select style="width:300px;height:30px;" id="type"  name="type" value="${entity.type }">
-	    			    	
-	    			    	<option value="0" <c:if test="${entity.type==0 }"> selected="selected"</c:if> >首页广告</option>	    			    	
-	    			    	<option value="1" <c:if test="${entity.type==1 }"> selected="selected"</c:if> >全民赚</option>
-	    			    	<option value="2" <c:if test="${entity.type==2 }"> selected="selected"</c:if> >齐心赚</option>
-	    			    	<option value="3" <c:if test="${entity.type==3 }"> selected="selected"</c:if> >抽奖式</option>
-	    			    	<option value="4" <c:if test="${entity.type==4 }"> selected="selected"</c:if> >人气式</option>
-	    			    	<option value="5" <c:if test="${entity.type==5 }"> selected="selected"</c:if> >试用式</option>
-	    			    	<option value="6" <c:if test="${entity.type==6 }"> selected="selected"</c:if> >兑换式</option>
+	    			    <select style="width:300px;height:30px;" id="type"  name="type" value="${entity.type }">	    			    
+	    			    	<option value="0" <c:if test="${entity.type==0 }"> selected="selected"</c:if> >福券主页</option>	    			    	
 	    			    </select>
 	    			    </td>
 	    		</tr>
-	    		
-	    		
-	    		<tr>
-	    			<td>活动id:</td>
-	    			<td>
-	    				<input class="easyui-numberbox" type="text" style="width:300px;height:30px;"  name="expId"   data-options="required:true" value="${entity.expId}"  missingMessage="输入数字" min="1" max="99999999"></input><span style="color:gray;">(首页广告请输入0)</span>
-	    			</td>
-	    		</tr>
-	    		
-	    		
-	    		<tr>
-	    		<td>客户端类型:</td>	    		
-	    		<td>	
-	    			<input type="hidden" name="clientType"/>
-	    			<c:if test="${fn:contains(entity.clientType, 0)}">
-        				<input name="clientT" type="checkbox" class="easyui-validatebox checkbox" checked="checked" value="0">
-        			</c:if>
-					<c:if test="${!fn:contains(entity.clientType, 0)}">
-        				<input name="clientT" type="checkbox" class="easyui-validatebox checkbox" value="0">
-        			</c:if>
-        			微信
-        			<c:if test="${fn:contains(entity.clientType, 1)}">
-        				<input name="clientT" type="checkbox" class="easyui-validatebox checkbox" checked="checked" value="1">
-        			</c:if>
-					<c:if test="${!fn:contains(entity.clientType, 1)}">
-        				<input name="clientT" type="checkbox" class="easyui-validatebox checkbox" value="1">
-        			</c:if>
-        			ios
-        			<c:if test="${fn:contains(entity.clientType, 2)}">
-        				<input name="clientT" type="checkbox" class="easyui-validatebox checkbox" checked="checked" value="2">
-        			</c:if>
-					<c:if test="${!fn:contains(entity.clientType, 2)}">
-        				<input name="clientT" type="checkbox" class="easyui-validatebox checkbox" value="2">
-        			</c:if>
-        			android        			
-	    		</td>
-	    		</tr>
-	    		
-	    		
+	    		   			    		    		
 	    		<tr>
 	    			<td>广告描述:
 	    			</td>
@@ -146,8 +101,7 @@
 				fileManagerJson : '<c:url value="/file/fileManager"/>',
 				filePostName:"imgFile",
 				allowFileManager : false,
-				height:500,
-				//items:['source', '|', 'undo', 'redo','|', 'cut', 'copy', 'paste','|','formatblock', 'fontname', 'fontsize','|','image'],
+				height:300,
 			    extraFileUploadParams : {
 			    	module :"advs"
 	          }
@@ -176,18 +130,6 @@
 			if(!isValid){
 				return false;
 			}
-			
-			
-			var clientType="";
-			$("input[name='clientT']:checked").each(function(){
-				clientType+=$(this).val()+",";
-			});
-			
-			$("input[name='clientType']").val(clientType);
-			if(clientType==''){
-				 $.messager.alert("操作提示","请至少选择一种客户端类型");
-				 return false;
-			}
 			$.ajax({
 				type : 'POST',
 				url : url,
@@ -198,8 +140,8 @@
 					"linkUrl" : $("input[name = 'linkUrl']").val(),
 					"picIndex" : $("input[name = 'picIndex']").val(),
 					"type" : $("#type  option:selected").val(),
-					"expId" : $("input[name = 'expId']").val(),
-					"clientType" : clientType,
+					"expId" : 0,
+					"clientType" : 0,
 					"description" : editor.html()
 				},
 				dataType : "json",

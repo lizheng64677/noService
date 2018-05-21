@@ -54,50 +54,13 @@ public class WeChatServiceImpl implements  WeChatService{
 
             if (RequestMessageUtil.REQ_MESSAGE_TYPE_TEXT.equals(msgType)) {  
 
-                String regex = "^9[0-9]{5}$";
-                if (content.matches(regex))
-                {
-
-                  //打印机访问接口连接
-                    String printUrl= SystemPropertiesHolder.get("printUrl").toString();
-
-                    String printXml = HttpClientUtils.postPrint(printUrl, resultxml);
-
-                    printXml = printXml.substring(printXml.indexOf("<Content>", 0),
-                        printXml.indexOf("</Content>", 0));
-                    String contxt = printXml.substring(printXml.indexOf("[", 0), printXml.indexOf("]", 0));
-                    if (contxt.contains("打印命令已发送"))
-                    {
-                        textReplyPrint("正在打印图片，请稍等!", fromUserName,toUserName);
-
-                    }
-                    else if (contxt.contains("请输入新的验证码"))
-                    {
-                        textReplyPrint("此验证码已经被使用,请输入新的验证码!", fromUserName,toUserName);
-                    }
-                    else if (contxt.contains("无法打印您的图片") || contxt.contains("没有需要打印的素材"))
-                    {
-                        textReplyPrint("没有找到您上传的图片，请重新上传图片!", fromUserName,toUserName);
-                    }
-                }
-                else
-                {
-                    textAndImageMessage=new TextAndImageMessage();
-                    textAndImageMessage.setKeywords(content);
-                    //统一业务逻辑处理
-                    message=this.replyWeChat(textAndImageMessage, fromUserName, toUserName);
-                }
+                textAndImageMessage=new TextAndImageMessage();
+                textAndImageMessage.setKeywords(content);
+                //统一业务逻辑处理
+                message=this.replyWeChat(textAndImageMessage, fromUserName, toUserName);            
 
             }else if(RequestMessageUtil.REQ_MESSAGE_TYPE_IMAGE.equals(msgType)){
-                //调用微信打印机业务逻辑
-                if("gh_6a54ee5a95ab".equals(toUserName))
-                {
-                    textAndImageMessage = new TextAndImageMessage();
-                    //log.info("您发送的是图片！"); 
-                    message = printImage(resultxml, fromUserName, toUserName);
-                    //log.info("您发送的是图片---结束！");
-                }
-
+                    log.info("您发送的是图片！");        
             }else if(RequestMessageUtil.REQ_MESSAGE_TYPE_LOCATION.equals(msgType)){
                 log.info("您发送的是地理位置消息！");  
             }else if(RequestMessageUtil.REQ_MESSAGE_TYPE_LINK.equals(msgType)){
@@ -128,11 +91,8 @@ public class WeChatServiceImpl implements  WeChatService{
                     message=this.replyWeChat(textAndImageMessage, fromUserName, toUserName);
                 }else if(RequestMessageUtil.EVENT_TYPE_PUSH.equals(eventType)){
                     //扫一扫事件推送
-
                 }else if(RequestMessageUtil.EVENT_TYPE_WAITMSG.equals(eventType)){                    
                     //扫一扫消息接受中
-
-
                 }
 
             }

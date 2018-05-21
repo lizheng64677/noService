@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.decoratevoucher.mapper.ExpDecorateVoucherMapper">
+
+	<resultMap type="com.suyin.decoratevoucher.model.ExpDecorateVoucher" id="ExpDecorateVoucherMap">
+	
+		<result column="id" property="id"/>
+		<result column="name" property="name"/>
+		<result column="title" property="title"/>
+		<result column="price" property="price"/>
+		<result column="use_price" property="usePrice"/>
+		<result column="type" property="type"/>
+		<result column="state" property="state"/>
+		<result column="validity_day" property="validityDay"/>
+		<result column="create_user" property="createUser"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+		<result column="content" property="content"/>
+		<result column="vouche_url" property="voucheUrl"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateExpDecorateVoucher"  parameterType="com.suyin.decoratevoucher.model.ExpDecorateVoucher">
+		<![CDATA[
+		update
+		 t_exp_decorate_voucher
+		set 
+		name=#{name},
+		title=#{title},
+		price=#{price},
+		use_price=#{usePrice},
+		type=#{type},
+		state=#{state},
+		validity_day=#{validityDay},
+		update_time=now(),
+		vouche_url=#{voucheUrl},
+		content=#{content}
+		where id =#{id}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addExpDecorateVoucher" parameterType="com.suyin.decoratevoucher.model.ExpDecorateVoucher" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_exp_decorate_voucher (
+				name,		
+				title,		
+				price,		
+				use_price,		
+				type,		
+				state,		
+				validity_day,		
+				create_user,		
+				create_time,		
+				update_time,
+				vouche_url,		
+				content		
+		)
+		values(
+				#{name},
+				#{title},
+				#{price},
+				#{usePrice},
+				#{type},
+				#{state},
+				#{validityDay},
+				#{createUser},
+				now(),
+				now(),
+				#{voucheUrl},
+				#{content}
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteExpDecorateVoucher" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_exp_decorate_voucher
+			  	where id =#{id}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findExpDecorateVoucher" parameterType="com.suyin.decoratevoucher.model.ExpDecorateVoucher" resultMap="ExpDecorateVoucherMap">
+	   <![CDATA[
+		select
+				t.id,
+				t.title,
+				t.`name`,
+				t.price,
+				t.use_price,
+				t.type,
+				t.state,
+				t.validity_day,
+				date_format(t.create_time,'%Y-%m-%d %H:%i:%s')  as create_time,
+				date_format(t.update_time,'%Y-%m-%d %H:%i:%s')  as update_time,
+				t.vouche_url,
+				t.content
+			from 
+				t_exp_decorate_voucher t
+			where
+				1=1
+			and
+				t.id=#{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findExpDecorateVoucherByPage" parameterType="com.suyin.decoratevoucher.model.ExpDecorateVoucher" resultMap="ExpDecorateVoucherMap">
+		<![CDATA[
+			SELECT
+				t.id,
+				t.title,
+				t.`name`,
+				t.price,
+				t.use_price,
+				t.type,
+				t.state,
+				t.validity_day,
+				date_format(t.create_time,'%Y-%m-%d %H:%i:%s')  as create_time,
+				date_format(t.update_time,'%Y-%m-%d %H:%i:%s')  as update_time,
+				t.vouche_url,
+				t.content
+			FROM
+				t_exp_decorate_voucher t
+			WHERE
+				1 = 1
+		]]>
+	</select>
+	
+</mapper>	

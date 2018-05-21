@@ -30,13 +30,7 @@ $(function() {
 					    { "field": 'linkUrl',"title" : '链接地址',width:$(this).width() * 0.2},
 					    { "field": 'picIndex',"title" : '显示顺序',width:$(this).width() * 0.2},
 					    { "field": 'type',"title" : '类型',width:$(this).width() * 0.2,formatter:function(value){
-					    	if(value==0) return "首页广告";
-					    	else if(value==1) return "全民赚广告";
-					    	else if(value==2) return "齐心赚广告";
-					    	else if(value==3) return "抽奖式广告";
-					    	else if(value==4) return "人气式广告";
-					    	else if(value==5) return "试用式广告";
-					    	else if(value==6) return "兑换式广告";
+					    	if(value==0) return "福券广告";
 					    }},
 						{ "field": 'createTimeString',"title" : '创建时间',width:$(this).width() * 0.2}
 		]],
