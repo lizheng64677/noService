@@ -75,11 +75,11 @@ KindEditor.ready(function(K) {
 	    			<td>活动名称:
 	    			<input type="hidden" id="id" name="id" value="${expdecorate.id }"/>
 	    			</td>
-	    			<td><input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写活动名称" name="name"  required="required" validType="isExist" value="${expdecorate.name }"></input></td>
+	    			<td><input   class="easyui-validatebox input" type="text" style="width:300px;height:30px;"   missingMessage="请填写活动名称" name="name"  required="required" validType="isExist" value="${expdecorate.name }"></input></td>
 	    		</tr>
 		    	<tr>
 	    			<td>活动标题:</td>
-	    			<td><input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写活动标题" name="title"  required="required" validType="isExist" value="${expdecorate.title }"></input></td>
+	    			<td><input   class="easyui-validatebox input" type="text" style="width:300px;height:30px;"   missingMessage="请填写活动标题" name="title"  required="required" validType="isExist" value="${expdecorate.title }"></input></td>
 	    		</tr>
 	    		<tr>
 	    		<td>活动时间：</td>
@@ -91,28 +91,28 @@ KindEditor.ready(function(K) {
 	    		<tr>
 	    		<td>金额范围：</td>
 	    		<td>
-	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="beginMoney"  required="required" validType="integer" value="${expdecorate.beginMoney }"></input>--
-	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="endMoney"  required="required" validType="integer" value="${expdecorate.endMoney }"></input>
+	    		<input   class="easyui-validatebox input" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="beginMoney"  required="required" validType="integer" value="${expdecorate.beginMoney }"></input>--
+	    		<input   class="easyui-validatebox input" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="endMoney"  required="required" validType="integer" value="${expdecorate.endMoney }"></input>
 	    		</td>
 	    		</tr>		   		
 		   		<tr>
 	    		<td>封顶金额：</td>
 	    		<td>
-	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="maxMoney"value="${expdecorate.maxMoney }" required="required" validType="integer" ></input>
+	    		<input   class="easyui-validatebox input" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="maxMoney"value="${expdecorate.maxMoney }" required="required" validType="integer" ></input>
 	    		(*)每人得到佣金的上限
 	    		</td>
 	    		</tr>		   		
 		   		<tr>
 	    		<td>起提金额：</td>
 	    		<td>
-	    		<input   class="easyui-validatebox" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="tqMoney" value="${expdecorate.tqMoney }" required="required" validType="integer" ></input>
+	    		<input   class="easyui-validatebox input"  type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="tqMoney" value="${expdecorate.tqMoney }" required="required" validType="integer" ></input>
 	    		(*)满足或大于该金额时才可以提现
 	    		</td>
 	    		</tr>	
 	    		<tr>
 	    			<td>分享标题:</td>
 	    			<td>
-	    		<input   class="easyui-validatebox" type="text" style="width:300px;height:30px;"   missingMessage="请填写分享标题" name="shareTitle"  required="required" validType="isExist" value="${expdecorate.shareTitle }"></input>
+	    		<input   class="easyui-validatebox input" type="text" style="width:300px;height:30px;"   missingMessage="请填写分享标题" name="shareTitle"  required="required" validType="isExist" value="${expdecorate.shareTitle }"></input>
 	    			</td>
 	    		</tr>
 	    		
