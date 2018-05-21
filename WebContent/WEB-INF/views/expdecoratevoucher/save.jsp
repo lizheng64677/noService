@@ -62,7 +62,11 @@ KindEditor.ready(function(K) {
 	    		<tr>
 	    			<td>券返现金额:</td>
 	    			<td><input    class="easyui-validatebox input" type="text" style="width:300px;height:30px;"  missingMessage="请输入返现金" name="usePrice" data-options="required:true" value=""></input></td>
-	    		</tr>	    	
+	    		</tr>
+	    		<tr>
+	    			<td>券总数:</td>
+	    			<td><input    class="easyui-validatebox input" type="text" style="width:300px;height:30px;"  missingMessage="请输入券的总数量" name="num" data-options="required:true" value=""></input></td>
+	    		</tr>		    	
 	    		<tr>
 			    	<td>福券示图:</td>
 			    	<td>	

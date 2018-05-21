@@ -63,6 +63,10 @@ KindEditor.ready(function(K) {
 	    			<td><input    class="easyui-validatebox input" type="text" style="width:300px;height:30px;"  missingMessage="请输入返现金" name="usePrice" data-options="required:true" value="${expdecoratevoucher.usePrice}"></input></td>
 	    		</tr>	    	
 	    		<tr>
+	    			<td>券总数:</td>
+	    			<td><input    class="easyui-validatebox input" type="text" style="width:300px;height:30px;"  missingMessage="请输入券的总数量" name="num" data-options="required:true" value="${expdecoratevoucher.num}"></input></td>
+	    		</tr>	
+	    		<tr>
 			    	<td>福券示图:</td>
 			    	<td>	
 			    		<input type="hidden" name="voucheUrl" id="voucheUrl" value="${expdecoratevoucher.voucheUrl}"> 

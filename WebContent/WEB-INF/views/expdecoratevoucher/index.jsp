@@ -63,6 +63,12 @@ $(function() {
 					    		return "未知情况";
 					    	}
 					    }},
+					    { "field": 'num',"title" : '券总数',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	return value+"(张)";
+				    	}},
+					    { "field": 'remNum',"title" : '已领数',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	return value+"(张)";
+				    	}},
 						{ "field": 'createTime',"title" : '创建时间',width:$(this).width() * 0.2},
 						{ "field": 'updateTime',"title" : '修改时间',width:$(this).width() * 0.2},
 		]],
