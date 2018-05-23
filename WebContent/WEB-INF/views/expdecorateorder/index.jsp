@@ -6,7 +6,7 @@
   </head>
   <body id="search" class="easyui-layout"  >   
 	<div id="tool">
-			<a href="#" class="easyui-linkbutton" onclick="doDelete();" data-options="iconCls:'icon-remove'">删除</a>
+<!-- 			<a href="#" class="easyui-linkbutton" onclick="doDelete();" data-options="iconCls:'icon-remove'">删除</a> -->
 			<a href="#" class="easyui-linkbutton" onclick="reviewOrder();" data-options="iconCls:'icon-remove'">提现审批</a>
 	</div>
 	<div id="mydatagrid" fit="true"></div>
