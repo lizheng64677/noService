@@ -18,89 +18,42 @@
 		<result column="count_price" property="countPrice"/>
 		<result column="balance_price" property="balancePrice"/>
 		<result column="alipay_number" property="alipayNumber"/>
-		<result column="iphone" property="iphone"/>
 		<result column="password" property="password"/>
 		<result column="head_img" property="headImg"/>
+		<result column="uhead_img" property="uheadImg"/>		
+		<result column="unick_name" property="unickName"/>
+		<result column="is_sign" property="isSign"/>
+		<result column="sleep_price" property="sleepPrice"/>
 	
 	</resultMap>
 		<!--信息更新 -->
 	<update id="updateExpDecorateUser"  parameterType="com.suyin.decorateuser.model.ExpDecorateUser">
 		<![CDATA[
 		update
-		 t_exp_decorate_user
+		 	t_exp_decorate_user t
 		set 
-		openid={openid},
-		use_openid={useOpenid},
-		use_num={useNum},
-		user_phone={userPhone},
-		is_exp_user={isExpUser},
-		is_exp_org={isExpOrg},
-		nick_name={nickName},
-		user_name={userName},
-		user_state={userState},
-		count_price={countPrice},
-		balance_price={balancePrice},
-		alipay_number={alipayNumber},
-		iphone={iphone},
-		password={password},
-		head_img={headImg},
-		where user_id ={userId}
+			t.is_sign=1
+		where 
+			t.user_id =#{userId}
 		]]>
-	</update>
-	
-	<!-- 信息插入 -->
-	<insert id="addExpDecorateUser" parameterType="com.suyin.decorateuser.model.ExpDecorateUser" useGeneratedKeys="true" keyProperty="id">
-	<![CDATA[
-
-		insert  t_exp_decorate_user (
-				openid,		
-				use_openid,		
-				use_num,		
-				user_phone,		
-				is_exp_user,		
-				is_exp_org,		
-				nick_name,		
-				user_name,		
-				user_state,		
-				count_price,		
-				balance_price,		
-				alipay_number,		
-				iphone,		
-				password,		
-				head_img,		
-		)
-		values(
-				{openid},
-				{useOpenid},
-				{useNum},
-				{userPhone},
-				{isExpUser},
-				{isExpOrg},
-				{nickName},
-				{userName},
-				{userState},
-				{countPrice},
-				{balancePrice},
-				{alipayNumber},
-				{iphone},
-				{password},
-				{headImg},
-		)
-		]]>
-	</insert>
-	
-	<!-- 根据id删除信息-->
-	<delete id="deleteExpDecorateUser" parameterType="java.lang.String">
-		<![CDATA[
-	 	delete from t_exp_decorate_user
-			  	where user_id ={userId}
-		]]>
-	</delete>
+	</update>	
 	
 	<!-- 查询信息列表 -->
 	<select id="findExpDecorateUser" parameterType="com.suyin.decorateuser.model.ExpDecorateUser" resultMap="ExpDecorateUserMap">
 	   <![CDATA[
-		select * from t_exp_decorate_user where 1=1 and user_id=#{userId}
+		SELECT
+			t.*,
+			tu.head_img as uhead_img,
+			tu.nick_name as unick_name
+		FROM
+			t_exp_decorate_user t
+		LEFT JOIN 
+		  t_exp_decorate_user tu
+		ON 
+			t.use_openid=tu.openid
+		WHERE
+			1 = 1
+		AND t.user_id =#{userId}
 		]]>
 	</select>
 	

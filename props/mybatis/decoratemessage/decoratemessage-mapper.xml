@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.decoratemessage.mapper.DecorateMessageMapper">
+
+	<resultMap type="com.suyin.decoratemessage.model.DecorateMessage" id="DecorateMessageMap">
+	
+		<result column="message_id" property="messageId"/>
+		<result column="user_id" property="userId"/>
+		<result column="openid" property="openid"/>
+		<result column="content" property="content"/>
+		<result column="send_module_name" property="sendModuleName"/>
+		<result column="send_entity" property="sendEntity"/>
+		<result column="create_time" property="createTime"/>
+		<result column="is_read" property="isRead"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateDecorateMessage"  parameterType="com.suyin.decoratemessage.model.DecorateMessage">
+		<![CDATA[
+		update
+		 t_exp_decorate_message
+		set 
+		user_id=#{userId},
+		content=#{content},
+		send_module_name=#{sendModuleName},
+		send_entity=#{sendEntity},
+		create_time=now(),
+		is_read=#{isRead}
+		where message_id =#{messageId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addDecorateMessage" parameterType="com.suyin.decoratemessage.model.DecorateMessage" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_exp_decorate_message (
+				user_id,		
+				content,		
+				send_module_name,		
+				send_entity,		
+				create_time
+		)
+		values(
+				{userId},
+				{content},
+				{sendModuleName},
+				{sendEntity},
+				now()
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteDecorateMessage" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_exp_decorate_message
+			  	where message_id =#{messageId}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findDecorateMessage" parameterType="com.suyin.decoratemessage.model.DecorateMessage" resultMap="DecorateMessageMap">
+	   <![CDATA[
+		select * from t_exp_decorate_message where 1=1 and message_id =#{messageId}
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findDecorateMessageByPage" parameterType="com.suyin.decoratemessage.model.DecorateMessage" resultMap="DecorateMessageMap">
+		<![CDATA[
+		select  * from t_exp_decorate_message where 1=1 and user_id=#{userId}
+		]]>
+	</select>
+	
+</mapper>	

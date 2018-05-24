@@ -1,5 +1,5 @@
 
-package com.suyin.decorateuser.controller;
+package com.suyin.decoraterecord.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -32,22 +32,22 @@ import com.suyin.system.model.SystemUser;
 import com.suyin.system.util.Tools;
 
 import java.util.*;
-import com.suyin.decorateuser.model.*;
-import com.suyin.decorateuser.service.*;
+import com.suyin.decoraterecord.model.*;
+import com.suyin.decoraterecord.service.*;
 
 
 /**
- * 签单管理
+ * 金额变动记录
  * @author Administrator
  *
  */
 @Controller
-@RequestMapping("/expdecorateuser")
-public class ExpDecorateUserController{
+@RequestMapping("/decoraterecord")
+public class DecorateRecordController{
 
-    private final static Logger log=Logger.getLogger(ExpDecorateUserController.class);
+    private final static Logger log=Logger.getLogger(DecorateRecordController.class);
     @Autowired
-    private ExpDecorateUserService expDecorateUserService;
+    private DecorateRecordService decorateRecordService;
 
     /**
      * 首页
@@ -57,7 +57,7 @@ public class ExpDecorateUserController{
     @RequestMapping(value="/index")
     public ModelAndView index() {
 
-        return new ModelAndView("decorateuser/index");
+        return new ModelAndView("decoraterecord/index");
     }
 
 
@@ -68,13 +68,11 @@ public class ExpDecorateUserController{
      * @see
      */
     @RequestMapping(value = "/list")
-    public @ResponseBody Map<String, Object> findForExpDecorateUserAll(HttpServletRequest request) {
+    public @ResponseBody Map<String, Object> findForDecorateRecordAll(HttpServletRequest request) {
         ModelMap map=new ModelMap();
 
         String pag = request.getParameter("page");
         String showCount = request.getParameter("rows");
-        String type=request.getParameter("type");
-        String text=request.getParameter("text");
         Page page = new Page();
         try
         {      
@@ -83,37 +81,16 @@ public class ExpDecorateUserController{
                 page.setShowCount(Integer.parseInt(showCount));
             }
 
-            ExpDecorateUser  entityInfo=new ExpDecorateUser ();
+            DecorateRecord  entityInfo=new DecorateRecord ();
             entityInfo.setPage(page);
-            if(!"-1".equals(type)){
-            		entityInfo.setSaerchType(1);
-            	if("0".equals(type)){
-                	if(!"".equals(text) && null!=text){
-                		entityInfo.setUserName(text);
-                	}
-            	}else if("1".equals(type)){
-            		if(!"".equals(text) && null!=text){
-            			entityInfo.setUserPhone(text);
-            		}
-            	}else if("2".equals(type)){
-            		if(!"".equals(text) && null!=text){
-            			entityInfo.setNickName(text);
-            		}
-            	}
-            }else{
-            	if(!"".equals(text) && null!=text){
-                	entityInfo.setText(text);
-            	}
-        		entityInfo.setSaerchType(-1);
-            }
-            List<ExpDecorateUser > list=expDecorateUserService.findExpDecorateUserByPage(entityInfo);
+            List<DecorateRecord > list=decorateRecordService.findDecorateRecordByPage(entityInfo);
             map.put("rows",list); 
             map.put("total",entityInfo.getPage().getTotalResult()); 
 
         }
         catch (Exception e)
         {
-            log.error("Controller Error ExpDecorateUserController-> findExpDecorateUserByWhere  " + e.getMessage());
+            log.error("Controller Error DecorateRecordController-> findDecorateRecordByWhere  " + e.getMessage());
         }
 
         return map;
@@ -128,10 +105,10 @@ public class ExpDecorateUserController{
      * @return
      */
     @RequestMapping(value = "/jumpAdd")
-    public ModelAndView jumpExpDecorateUserAdd(HttpServletRequest request) {
+    public ModelAndView jumpDecorateRecordAdd(HttpServletRequest request) {
         ModelMap map=new ModelMap();
 
-        return new ModelAndView("decorateuser/save",map);
+        return new ModelAndView("decoraterecord/save",map);
     }
 
     /**
@@ -140,54 +117,66 @@ public class ExpDecorateUserController{
      * @return
      */
     @RequestMapping(value = "/jumpEdit")
-    public ModelAndView jumpExpDecorateUserEdit(HttpServletRequest request) {
+    public ModelAndView jumpDecorateRecordEdit(HttpServletRequest request) {
         ModelMap map=new ModelMap();
         try
         {
 
             if(Tools.notEmpty(request.getParameter("id"))){  
                 
-                ExpDecorateUser entity=new ExpDecorateUser();
-                entity.setUserId(Integer.parseInt(request.getParameter("id")));
-                entity=expDecorateUserService.findExpDecorateUserById(entity);
-                map.put("expdecorateuser",entity);
+                DecorateRecord entity=new DecorateRecord();
+                entity.setRecordId(Integer.parseInt(request.getParameter("id")));
+                entity=decorateRecordService.findDecorateRecordById(entity);
+                map.put("decoraterecord",entity);
 
             }
         }
         catch (Exception e)
         {
 
-            log.error("Controller Error ExpDecorateUserController-> jumpExpDecorateUserEdit  " + e.getMessage());
+            log.error("Controller Error DecorateRecordController-> jumpDecorateRecordEdit  " + e.getMessage());
         }
-        return new ModelAndView("decorateuser/edit",map);
+        return new ModelAndView("decoraterecord/edit",map);
     }
 
-  
     /**
-     * 签单用户状态修改
-     * 用户签单成功后，需要向推荐人，返现佣金
-     * 并新增推荐人金额变动记录
-     *  消息提醒
+     * 信息保存
+     * Description: <br>
+     * @param 
+     * @return 
+     * @see
+     */
+    @RequestMapping(value = "/add")
+    public @ResponseBody Map<String, Object> saveDecorateRecordInfo(DecorateRecord entity) {
+        ModelMap map=new ModelMap();
+        try
+        {
+            
+            map.put("result",decorateRecordService.addDecorateRecord(entity));
+        }
+        catch (Exception e)
+        {
+            log.error("Controller Error DecorateRecordController-> saveDecorateRecordInfo " + e.getMessage());
+        }
+        return map;
+    }
+    /**
+     * 信息修改
      * Description: <br>
      * @param 
      * @return 
      * @see
      */
     @RequestMapping(value = "/update")
-    public @ResponseBody Map<String, Object> updateExpDecorateUserById(ExpDecorateUser entity) {
+    public @ResponseBody Map<String, Object> updateDecorateRecordById(DecorateRecord entity) {
         ModelMap map=new ModelMap();
         try
-        {           
-        	//签单返现佣金
-        	entity.getBackPrice();
-        	//获取推荐人信息
-        	//增加推荐人金额变动记录
-        	//增加推荐人金额消息记录
-            map.put("result",expDecorateUserService.updateExpDecorateUser(entity));
+        {            
+            map.put("result",decorateRecordService.updateDecorateRecord(entity));
         }
         catch (Exception e)
         {
-            log.error("Controller Error ExpDecorateUserController-> updateExpDecorateUserById  " + e.getMessage());
+            log.error("Controller Error DecorateRecordController-> updateDecorateRecordById  " + e.getMessage());
         }
         return map;
     }

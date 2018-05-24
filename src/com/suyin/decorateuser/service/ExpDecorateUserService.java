@@ -11,13 +11,7 @@ import com.suyin.decorateuser.service.*;
 
 public interface ExpDecorateUserService{
 
-    /**
-     * 新增信息
-     * @param entity
-     * @return
-     */
-    public Integer addExpDecorateUser(ExpDecorateUser entity);
-
+ 
     /**
      * 修改信息
      * @param entity
@@ -25,12 +19,7 @@ public interface ExpDecorateUserService{
      */
     public Integer updateExpDecorateUser(ExpDecorateUser entity);
 
-    /**
-     * 删除信息
-     * @param id
-     * @return
-     */
-    public Integer deleteExpDecorateUser(String id);
+  
 
     /**
      * 查找信息列表

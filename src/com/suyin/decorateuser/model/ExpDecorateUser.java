@@ -1,5 +1,7 @@
 package com.suyin.decorateuser.model;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -86,22 +88,41 @@ public class ExpDecorateUser  implements java.io.Serializable{
      */ 	
 	private java.lang.String alipayNumber;
     /**
-     * 手机号       db_column: iphone 
+     * 待收益金额      db_column: sleep_price 
      */ 	
-	private java.lang.String iphone;
+	private java.lang.String sleepPrice;
     /**
      * 提现密码       db_column: password 
      */ 	
 	private java.lang.String password;
     /**
+     * 用户头像
      * headImg       db_column: head_img 
      */ 	
 	private java.lang.String headImg;
+	private java.lang.String uheadImg;
+	private java.lang.String unickName;
+
 	
+	/**
+	 *  0姓名，微信昵称 ，手机号
+	 *  查询类型
+	 */
 	private java.lang.Integer saerchType;
 	
-	
+	/**
+	 * 查询内容
+	 */
 	private java.lang.String text;
+	/**
+	 * 是否签约 0未签约 1已签约  默认0
+	 */
+	private java.lang.Integer isSign;
+	/**
+	 * 签约成功后返现给推荐人的金额，
+	 * 有推荐人则返现至账户，没有则不返回任何金额
+	 */
+	private String backPrice;
 	//columns end
 
 
@@ -221,14 +242,16 @@ public class ExpDecorateUser  implements java.io.Serializable{
 		this.alipayNumber = value;
 	}
 	
-	public java.lang.String getIphone() {
-		return this.iphone;
-	}
 	
-	public void setIphone(java.lang.String value) {
-		this.iphone = value;
-	}
 	
+	public java.lang.String getSleepPrice() {
+		return sleepPrice;
+	}
+
+	public void setSleepPrice(java.lang.String sleepPrice) {
+		this.sleepPrice = sleepPrice;
+	}
+
 	public java.lang.String getPassword() {
 		return this.password;
 	}
@@ -260,6 +283,30 @@ public class ExpDecorateUser  implements java.io.Serializable{
 	public void setText(java.lang.String text) {
 		this.text = text;
 	}
+	
+	public java.lang.String getUheadImg() {
+		return uheadImg;
+	}
+
+	public void setUheadImg(java.lang.String uheadImg) {
+		this.uheadImg = uheadImg;
+	}
+
+	public java.lang.String getUnickName() {
+		return unickName;
+	}
+
+	public void setUnickName(java.lang.String unickName) {
+		this.unickName = unickName;
+	}
+	
+	public String getBackPrice() {
+		return backPrice;
+	}
+
+	public void setBackPrice(String backPrice) {
+		this.backPrice = backPrice;
+	}
 
 	public Page getPage() {
         return page;
@@ -267,6 +314,16 @@ public class ExpDecorateUser  implements java.io.Serializable{
     public void setPage(Page page) {
         this.page = page;
     }
+    
+	public java.lang.Integer getIsSign() {
+		return isSign;
+	}
+
+	public void setIsSign(java.lang.Integer isSign) {
+		this.isSign = isSign;
+	}
+	
+
 	public String toString() {
 		return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
 			.append("UserId",getUserId())
@@ -282,7 +339,7 @@ public class ExpDecorateUser  implements java.io.Serializable{
 			.append("CountPrice",getCountPrice())
 			.append("BalancePrice",getBalancePrice())
 			.append("AlipayNumber",getAlipayNumber())
-			.append("Iphone",getIphone())
+			.append("sleepPrice",getSleepPrice())
 			.append("Password",getPassword())
 			.append("HeadImg",getHeadImg())
 			.toString();

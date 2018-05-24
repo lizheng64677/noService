@@ -101,7 +101,14 @@ KindEditor.ready(function(K) {
 	    		<input   class="easyui-validatebox input" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="maxMoney"value="${expdecorate.maxMoney }" required="required" validType="integer" ></input>
 	    		(*)每人得到佣金的上限
 	    		</td>
-	    		</tr>		   		
+	    		</tr>	
+	    		<tr>
+	    		<td>签单返现金额：</td>
+	    		<td>
+	    		<input   class="easyui-validatebox input" type="text" style="width:140px;height:30px;"   missingMessage="请填写金额" name="sginPrice" value="${expdecorate.sginPrice}" required="required" validType="integer" ></input>
+	    		(*)签单成功后，返给推荐人的
+	    		</td>
+	    		</tr>	   		
 		   		<tr>
 	    		<td>起提金额：</td>
 	    		<td>

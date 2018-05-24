@@ -12,24 +12,11 @@ import com.suyin.decorateuser.service.*;
 
 public interface ExpDecorateUserMapper {
 
-    /**
-     * 新增信息
-     */
-    public Integer addExpDecorateUser(ExpDecorateUser entity);
 
     /**
      * 修改信息
      */
-    public Integer updateExpDecorateUser(ExpDecorateUser entity);
-    /**
-     * 根据id删除单条信息
-     * 
-     */
-    public Integer deleteExpDecorateUser(String id);
-    /**
-     * 批量删除
-     */
-    public Integer deleteExpDecorateUser(String[] id); 
+    public Integer updateExpDecorateUser(ExpDecorateUser entity); 
 
     /**
      * 查询列表

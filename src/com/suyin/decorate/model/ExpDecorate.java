@@ -115,6 +115,10 @@ public class ExpDecorate  implements java.io.Serializable{
 	 */
 	private BigDecimal tqMoney;
 	/**
+	 * 签单返现金额
+	 */
+	private BigDecimal sginPrice;
+	/**
 	 * 参与人数
 	 */
 	private java.lang.Integer expUv;
@@ -368,6 +372,14 @@ public class ExpDecorate  implements java.io.Serializable{
 
 	public void setActiveImg(java.lang.String activeImg) {
 		this.activeImg = activeImg;
+	}
+
+	public BigDecimal getSginPrice() {
+		return sginPrice;
+	}
+
+	public void setSginPrice(BigDecimal sginPrice) {
+		this.sginPrice = sginPrice;
 	}
 	
 	

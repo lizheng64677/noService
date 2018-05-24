@@ -26,29 +26,7 @@ public class ExpDecorateUserServiceImpl implements ExpDecorateUserService{
     @Autowired
     private ExpDecorateUserMapper ExpDecorateUserMapper; 
 
-    /**
-     * 新增信息
-     * @param entity
-     * @return
-     */
-    @Override
-    public Integer addExpDecorateUser(ExpDecorateUser entity){
-        Integer result=0;
-        try {
-
-            if(entity==null){
-                return result;
-            }else{
-                result = ExpDecorateUserMapper.addExpDecorateUser(entity);
-            }
-
-        } catch (Exception e) {
-
-            new RuntimeException();
-        }
-        return result;
-
-    }
+   
 
     /**
      * 修改信息
@@ -77,18 +55,7 @@ public class ExpDecorateUserServiceImpl implements ExpDecorateUserService{
 
     }
 
-    /**
-     * 删除信息
-     * @param id
-     * @return
-     */
-    @Override
-    public Integer deleteExpDecorateUser(String id){
-        
-        
-        return ExpDecorateUserMapper.deleteExpDecorateUser(id);
-    }
-
+  
     /**
      * 查找信息列表
      * @param entity

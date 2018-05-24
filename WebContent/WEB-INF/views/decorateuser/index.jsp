@@ -85,6 +85,13 @@ $(function() {
 		    		return "是";
 		    	}
 		    }},
+		    { "field": 'isSign',"title" : '是否签约',width:$(this).width() * 0.2,formatter:function(value,row,index){
+		    	if("0"==value){
+		    		return "否";
+		    	}else{
+		    		return "已签约";
+		    	}
+		    }},
 		    { "field": 'userState',"title" : '用户状态',width:$(this).width() * 0.2,formatter:function(value,row,index){
 		    	if("0"==value){
 		    		return "正常";
@@ -114,7 +121,17 @@ function doAdd(){
 function doUpdate(){
 	var rows=$("#mydatagrid").datagrid("getSelections");
 	if(rows.length!=1){
-		$.messager.alert("", "请选择一条数据！", true, "warning");
+		$.messager.alert("提示", "请选择一条数据！", true, "warning");
+		return;
+	}
+	var isAuth=rows[0].alipayNumber;
+	if(""==isAuth || null==isAuth){
+		$.messager.alert("提示", "暂不支持未补充资料用户的签单(未实名)！", true, "warning");
+		return;
+	}
+	var isSign=rows[0].isSign;
+	if("1"==isSing){
+		$.messager.alert("提示", "该用户已签约完成，无需再次签约！", true, "warning");
 		return;
 	}
 	window.location.href="<c:url value='/expdecorateuser/jumpEdit?id="+rows[0].userId+"'/>";

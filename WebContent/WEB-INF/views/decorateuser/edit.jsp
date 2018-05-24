@@ -17,16 +17,12 @@
 	    		<tr>
 	    			<td>微信昵称:</td> 
 	    			<td><input    type="text" style="width:300px;height:30px;"  disabled="disabled"data-options="required:true" value="${expdecorateuser.nickName }"></input></td>
-	    		</tr> 
+	    		</tr> 	    		
 	    			<tr>
-	    			<td>返佣金额:</td> 
-	    			<td><input    type="text" style="width:300px;height:30px;"  disabled="disabled" data-options="required:true" name="userPrice" ></input></td>
-	    		</tr>
-	    			<tr>
-	    			<td>用户-推荐人:</td> 
+	    			<td>用户<c:if test="${null!=expdecorateuser.unickName }">-推荐人</c:if>:</td> 
 	    			<td>
-	    			<img alt="购买用户" width="40px;" height="40px;" src="${expdecorateuser.headImg }">--<img alt="推荐人" width="40px;" height="40px;" src="${expdecorateuser.uheadImg }"></br>
-	    			${expdecorateuser.nickName }--${expdecorateuser.unickName }
+	    			<img alt="购买用户" width="40px;" height="40px;" src="${expdecorateuser.headImg }"><c:if test="${null!=expdecorateuser.unickName }">--<img alt="推荐人" width="40px;" height="40px;" src="${expdecorateuser.uheadImg }"></c:if></br>
+	    			${expdecorateuser.nickName }<c:if test="${null!=expdecorateuser.unickName }">--${expdecorateuser.unickName }</c:if>
 	    			 </td>
 	    		</tr>
 	    		<tr>
@@ -46,7 +42,15 @@
 	    					<option value="2"<c:if test="${expdecorateuser.userState==2 }">selected="selected"</c:if>>删除</option>
 	    				</select>
 	    			</td>
-	    		</tr>	   
+	    		</tr>	 
+				<c:if test="${null!=expdecorateuser.unickName }"> 
+	    		<tr id="sigPrice">
+	    			<td>返佣金额:</td> 
+	    			<td><input  class="easyui-validatebox input"  type="text" style="width:250px;height:30px;" data-options="required:true" name="backPrice" ></input>
+	    			(*)签单成功后返给推荐人的金额
+	    			</td>
+	    		</tr>
+	    		</c:if>
 	    		<tr>
 	    			<td>处理:</td> 
 	    			<td>		

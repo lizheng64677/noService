@@ -42,8 +42,11 @@ $(function() {
 					    }},
 					    { "field": 'maxMoney',"title" : '封顶金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
 					    	return value+" (元)";
-					    }},
+					    }},			
 					    { "field": 'tqMoney',"title" : '起提金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	return value+" (元)";
+					    }},
+					    { "field": 'sginPrice',"title" : '签单返现金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
 					    	return value+" (元)";
 					    }},
 						{ "field": 'beginTime',"title" : '开始时间',width:$(this).width() * 0.2},

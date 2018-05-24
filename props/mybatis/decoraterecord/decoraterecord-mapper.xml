@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.decoraterecord.mapper.DecorateRecordMapper">
+
+	<resultMap type="com.suyin.decoraterecord.model.DecorateRecord" id="DecorateRecordMap">
+	
+		<result column="record_id" property="recordId"/>
+		<result column="type" property="type"/>
+		<result column="publish_openid" property="publishOpenid"/>
+		<result column="publish_userid" property="publishUserid"/>
+		<result column="accept_openid" property="acceptOpenid"/>
+		<result column="accpt_userid" property="accptUserid"/>
+		<result column="price_state" property="priceState"/>
+		<result column="state" property="state"/>
+		<result column="create_time" property="createTime"/>
+		<result column="commission_price" property="commissionPrice"/>
+		<result column="message" property="message"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateDecorateRecord"  parameterType="com.suyin.decoraterecord.model.DecorateRecord">
+		<![CDATA[
+		update
+		 t_exp_decorate_record
+		set 
+		type=#{type},
+		publish_openid=#{publishOpenid},
+		publish_userid=#{publishUserid},
+		accept_openid=#{acceptOpenid},
+		accpt_userid=#{accptUserid},
+		price_state=#{priceState},
+		state=#{state},
+		commission_price=#{commissionPrice}
+		message=#{message}
+		where record_id =#{recordId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addDecorateRecord" parameterType="com.suyin.decoraterecord.model.DecorateRecord" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_exp_decorate_record (
+				type,		
+				publish_openid,		
+				publish_userid,		
+				accept_openid,		
+				accpt_userid,		
+				price_state,		
+				state,		
+				create_time,		
+				commission_price,		
+				message
+		)
+		values(
+				#{type},
+				#{publishOpenid},
+				#{publishUserid},
+				#{acceptOpenid},
+				#{accptUserid},
+				#{priceState},
+				#{state},
+				now(),
+				#{commissionPrice},
+				#{message}
+		)
+		]]>
+	</insert>
+
+	
+	<!-- 查询信息列表 -->
+	<select id="findDecorateRecord" parameterType="com.suyin.decoraterecord.model.DecorateRecord" resultMap="DecorateRecordMap">
+	   <![CDATA[
+		select * from t_exp_decorate_record where 1=1 and record_id =#{recordId}
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findDecorateRecordByPage" parameterType="com.suyin.decoraterecord.model.DecorateRecord" resultMap="DecorateRecordMap">
+		<![CDATA[
+		select  * from t_exp_decorate_record where 1=1
+		]]>
+	</select>
+	
+</mapper>	

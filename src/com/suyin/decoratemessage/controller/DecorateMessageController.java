@@ -1,5 +1,5 @@
 
-package com.suyin.uservoucher.controller;
+package com.suyin.decoratemessage.controller;
 
 import java.util.List;
 import java.util.Map;
@@ -32,22 +32,22 @@ import com.suyin.system.model.SystemUser;
 import com.suyin.system.util.Tools;
 
 import java.util.*;
-import com.suyin.uservoucher.model.*;
-import com.suyin.uservoucher.service.*;
+import com.suyin.decoratemessage.model.*;
+import com.suyin.decoratemessage.service.*;
 
 
 /**
- * 消券管理
+ * 个人中心我的消息记录查询
  * @author Administrator
  *
  */
 @Controller
-@RequestMapping("/expdecorateuservoucher")
-public class ExpDecorateUserVoucherController{
+@RequestMapping("/decoratemessage")
+public class DecorateMessageController{
 
-    private final static Logger log=Logger.getLogger(ExpDecorateUserVoucherController.class);
+    private final static Logger log=Logger.getLogger(DecorateMessageController.class);
     @Autowired
-    private ExpDecorateUserVoucherService expDecorateUserVoucherService;
+    private DecorateMessageService decorateMessageService;
 
     /**
      * 首页
@@ -57,7 +57,7 @@ public class ExpDecorateUserVoucherController{
     @RequestMapping(value="/index")
     public ModelAndView index() {
 
-        return new ModelAndView("uservoucher/index");
+        return new ModelAndView("decoratemessage/index");
     }
 
 
@@ -68,14 +68,11 @@ public class ExpDecorateUserVoucherController{
      * @see
      */
     @RequestMapping(value = "/list")
-    public @ResponseBody Map<String, Object> findForExpDecorateUserVoucherAll(HttpServletRequest request) {
+    public @ResponseBody Map<String, Object> findForDecorateMessageAll(HttpServletRequest request) {
         ModelMap map=new ModelMap();
 
         String pag = request.getParameter("page");
         String showCount = request.getParameter("rows");
-        String type = request.getParameter("type");
-        String vourcheCode = request.getParameter("vourcheCode");
-
         Page page = new Page();
         try
         {      
@@ -83,23 +80,17 @@ public class ExpDecorateUserVoucherController{
                 page.setCurrentPage(Integer.parseInt(pag));
                 page.setShowCount(Integer.parseInt(showCount));
             }
-            
-            ExpDecorateUserVoucher  entityInfo=new ExpDecorateUserVoucher ();
-            if(null!=type  &&!"-1".equals(type)){
-            entityInfo.setType(type);	
-            }
-            if(null!=vourcheCode  &&!"-1".equals(vourcheCode)){
-                entityInfo.setVourcheCode(vourcheCode);	
-                }
+
+            DecorateMessage  entityInfo=new DecorateMessage ();
             entityInfo.setPage(page);
-            List<ExpDecorateUserVoucher > list=expDecorateUserVoucherService.findExpDecorateUserVoucherByPage(entityInfo);
+            List<DecorateMessage > list=decorateMessageService.findDecorateMessageByPage(entityInfo);
             map.put("rows",list); 
             map.put("total",entityInfo.getPage().getTotalResult()); 
 
         }
         catch (Exception e)
         {
-            log.error("Controller Error ExpDecorateUserVoucherController-> findExpDecorateUserVoucherByWhere  " + e.getMessage());
+            log.error("Controller Error DecorateMessageController-> findDecorateMessageByWhere  " + e.getMessage());
         }
 
         return map;
@@ -114,10 +105,10 @@ public class ExpDecorateUserVoucherController{
      * @return
      */
     @RequestMapping(value = "/jumpAdd")
-    public ModelAndView jumpExpDecorateUserVoucherAdd(HttpServletRequest request) {
+    public ModelAndView jumpDecorateMessageAdd(HttpServletRequest request) {
         ModelMap map=new ModelMap();
 
-        return new ModelAndView("uservoucher/save",map);
+        return new ModelAndView("decoratemessage/save",map);
     }
 
     /**
@@ -126,26 +117,26 @@ public class ExpDecorateUserVoucherController{
      * @return
      */
     @RequestMapping(value = "/jumpEdit")
-    public ModelAndView jumpExpDecorateUserVoucherEdit(HttpServletRequest request) {
+    public ModelAndView jumpDecorateMessageEdit(HttpServletRequest request) {
         ModelMap map=new ModelMap();
         try
         {
 
             if(Tools.notEmpty(request.getParameter("id"))){  
                 
-                ExpDecorateUserVoucher entity=new ExpDecorateUserVoucher();
-                entity.setId(Integer.parseInt(request.getParameter("id")));
-                entity=expDecorateUserVoucherService.findExpDecorateUserVoucherById(entity);
-                map.put("voucher",entity);
+                DecorateMessage entity=new DecorateMessage();
+                entity.setMessageId(Integer.parseInt(request.getParameter("id")));
+                entity=decorateMessageService.findDecorateMessageById(entity);
+                map.put("decoratemessage",entity);
 
             }
         }
         catch (Exception e)
         {
 
-            log.error("Controller Error ExpDecorateUserVoucherController-> jumpExpDecorateUserVoucherEdit  " + e.getMessage());
+            log.error("Controller Error DecorateMessageController-> jumpDecorateMessageEdit  " + e.getMessage());
         }
-        return new ModelAndView("uservoucher/edit",map);
+        return new ModelAndView("decoratemessage/edit",map);
     }
 
     /**
@@ -156,43 +147,36 @@ public class ExpDecorateUserVoucherController{
      * @see
      */
     @RequestMapping(value = "/add")
-    public @ResponseBody Map<String, Object> saveExpDecorateUserVoucherInfo(ExpDecorateUserVoucher entity) {
+    public @ResponseBody Map<String, Object> saveDecorateMessageInfo(DecorateMessage entity) {
         ModelMap map=new ModelMap();
         try
         {
             
-            map.put("result",expDecorateUserVoucherService.addExpDecorateUserVoucher(entity));
+            map.put("result",decorateMessageService.addDecorateMessage(entity));
         }
         catch (Exception e)
         {
-            log.error("Controller Error ExpDecorateUserVoucherController-> saveExpDecorateUserVoucherInfo " + e.getMessage());
+            log.error("Controller Error DecorateMessageController-> saveDecorateMessageInfo " + e.getMessage());
         }
         return map;
     }
     /**
-     * 消券，更改状态
-     * 这里需要找到推荐并且为推荐增加佣金
-     * 增加推荐人金额变动记录
-     *    消息提醒
+     * 信息修改
      * Description: <br>
      * @param 
      * @return 
      * @see
      */
     @RequestMapping(value = "/update")
-    public @ResponseBody Map<String, Object> updateExpDecorateUserVoucherById(ExpDecorateUserVoucher entity) {
+    public @ResponseBody Map<String, Object> updateDecorateMessageById(DecorateMessage entity) {
         ModelMap map=new ModelMap();
         try
-        {           
-        	//获取券使用后的返现金额(返现给推荐者)
-        	//获取推荐人信息
-        	//增加推荐人金额变动 信息
-        	//增加推荐人金额变动消息提醒
-            map.put("result",expDecorateUserVoucherService.updateExpDecorateUserVoucher(entity));
+        {            
+            map.put("result",decorateMessageService.updateDecorateMessage(entity));
         }
         catch (Exception e)
         {
-            log.error("Controller Error ExpDecorateUserVoucherController-> updateExpDecorateUserVoucherById  " + e.getMessage());
+            log.error("Controller Error DecorateMessageController-> updateDecorateMessageById  " + e.getMessage());
         }
         return map;
     }
@@ -203,19 +187,19 @@ public class ExpDecorateUserVoucherController{
      * @return
      */
     @RequestMapping(value = "/delete")
-    public @ResponseBody Map<String, Object> deleteExpDecorateUserVoucherById(String id) {
+    public @ResponseBody Map<String, Object> deleteDecorateMessageById(String id) {
 
         ModelMap map=new ModelMap();
         try
         {
             if(Tools.notEmpty(id)){
                 
-                map.put("result",expDecorateUserVoucherService.deleteExpDecorateUserVoucher(id));
+                map.put("result",decorateMessageService.deleteDecorateMessage(id));
             }  
         }
         catch (Exception e)
         {
-            log.error("Controller Error ExpDecorateUserVoucherController-> deleteExpDecorateUserVoucherById  " + e.getMessage());
+            log.error("Controller Error DecorateMessageController-> deleteDecorateMessageById  " + e.getMessage());
         }
  
         return map;

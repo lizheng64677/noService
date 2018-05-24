@@ -27,6 +27,7 @@
 		<result column="exp_uv" property="expUv"/>
 		<result column="exp_pv" property="expPv"/>
 		<result column="count_price" property="countPrice"/>
+		<result column="sgin_price" property="sginPrice"/>
 	</resultMap>
 	<!-- 修改状态 -->	
 	<update id="updateExpStatus"  parameterType="com.suyin.decorate.model.ExpDecorate">
@@ -58,7 +59,8 @@
 		begin_money=#{beginMoney},
 		end_money=#{endMoney},
 		max_money=#{maxMoney},
-		tq_money=#{tqMoney}
+		tq_money=#{tqMoney},
+		sgin_price=#{sginPrice}
 		where id =#{id}
 		]]>
 	</update>
@@ -83,7 +85,8 @@
 				begin_money,		
 				end_money,
 				max_money,		
-				tq_money
+				tq_money,
+				sgin_price
 		)
 		values(
 				#{name},
@@ -101,7 +104,8 @@
 				#{beginMoney},
 				#{endMoney},
 				#{maxMoney},
-				#{tqMoney}
+				#{tqMoney},
+				#{sginPrice}
 		)
 		]]>
 	</insert>
@@ -145,6 +149,7 @@
 			exp.end_money,
 			exp.max_money,
 			exp.tq_money,
+			exp.sgin_price,
 			ifnull(exp.exp_uv,"0") as exp_uv,
 			ifnull(exp.exp_pv,"0") as exp_pv,
 			ifnull(exp.count_price,"0.00") as count_price
