@@ -56,7 +56,6 @@
 		values(
 				#{type},
 				#{publishOpenid},
-				#{publishUserid},
 				#{acceptOpenid},
 				#{accptUserid},
 				#{priceState},

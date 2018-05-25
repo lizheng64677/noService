@@ -63,7 +63,7 @@ public class DecorateRecord  implements java.io.Serializable{
     /**
      * createTime       db_column: create_time 
      */ 	
-	private java.util.Date createTime;
+	private java.lang.String createTime;
     /**
      * 本次变动金额       db_column: commission_price 
      */ 	
@@ -152,11 +152,11 @@ public class DecorateRecord  implements java.io.Serializable{
 		this.state = value;
 	}
 	
-	public java.util.Date getCreateTime() {
+	public java.lang.String getCreateTime() {
 		return this.createTime;
 	}
 	
-	public void setCreateTime(java.util.Date value) {
+	public void setCreateTime(java.lang.String value) {
 		this.createTime = value;
 	}
 	

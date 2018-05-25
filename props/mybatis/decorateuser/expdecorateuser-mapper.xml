@@ -26,7 +26,18 @@
 		<result column="sleep_price" property="sleepPrice"/>
 	
 	</resultMap>
-		<!--信息更新 -->
+	<!-- 修改金额变动信息 -->
+	<update id="updateUserPriceAndOtherInfo"  parameterType="com.suyin.decorateuser.model.ExpDecorateUser">
+		<![CDATA[
+		update
+		 	t_exp_decorate_user t
+		set 
+			t.is_sign=1
+		where 
+			t.openid =#{openid}
+		]]>
+	</update>
+		<!--更新用户状态为签单 -->
 	<update id="updateExpDecorateUser"  parameterType="com.suyin.decorateuser.model.ExpDecorateUser">
 		<![CDATA[
 		update
@@ -52,9 +63,14 @@
 		ON 
 			t.use_openid=tu.openid
 		WHERE
-			1 = 1
-		AND t.user_id =#{userId}
+			1 = 1		
 		]]>
+		<if test="null!=openid and ''!=openid">
+			AND t.openid =#{openid}
+		</if>
+		<if test="null!=userId and ''!=userId">
+			AND t.user_id =#{userId}
+		</if>
 	</select>
 	
 	<!-- 分页查询信息 -->

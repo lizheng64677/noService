@@ -179,7 +179,6 @@ public class ExpDecorateUserController{
         try
         {           
         	//签单返现佣金
-        	entity.getBackPrice();
         	//获取推荐人信息
         	//增加推荐人金额变动记录
         	//增加推荐人金额消息记录

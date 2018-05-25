@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.suyin.decoratebuyorder.mapper.DecorateBuyOrderMapper">
+
+	<resultMap type="com.suyin.decoratebuyorder.model.DecorateBuyOrder" id="DecorateBuyOrderMap">
+	
+		<result column="order_id" property="orderId"/>
+		<result column="openid" property="openid"/>
+		<result column="order_code" property="orderCode"/>
+		<result column="order_price" property="orderPrice"/>
+		<result column="order_type" property="orderType"/>
+		<result column="order_state" property="orderState"/>
+		<result column="order_name" property="orderName"/>
+		<result column="voucher_code" property="voucherCode"/>
+		<result column="create_time" property="createTime"/>
+		<result column="update_time" property="updateTime"/>
+	
+	</resultMap>
+		<!--信息更新 -->
+	<update id="updateDecorateBuyOrder"  parameterType="com.suyin.decoratebuyorder.model.DecorateBuyOrder">
+		<![CDATA[
+		update
+		 t_exp_decorate_buy_order
+		set 
+		openid=#{openid},
+		order_code=#{orderCode},
+		order_price=#{orderPrice},
+		order_type=#{orderType},
+		order_state=#{orderState},
+		order_name=#{orderName},
+		voucher_code=#{voucherCode},
+		update_time=now()
+		where order_id =#{orderId}
+		]]>
+	</update>
+	
+	<!-- 信息插入 -->
+	<insert id="addDecorateBuyOrder" parameterType="com.suyin.decoratebuyorder.model.DecorateBuyOrder" useGeneratedKeys="true" keyProperty="id">
+	<![CDATA[
+
+		insert  t_exp_decorate_buy_order (
+				openid,		
+				order_code,		
+				order_price,		
+				order_type,		
+				order_state,		
+				order_name,		
+				voucher_code,		
+				create_time,		
+				update_time		
+		)
+		values(
+				#{openid},
+				#{orderCode},
+				#{orderPrice},
+				#{orderType},
+				#{orderState},
+				#{orderName},
+				#{voucherCode},
+				now(),
+				now(),
+		)
+		]]>
+	</insert>
+	
+	<!-- 根据id删除信息-->
+	<delete id="deleteDecorateBuyOrder" parameterType="java.lang.String">
+		<![CDATA[
+	 	delete from t_exp_decorate_buy_order
+			  	where order_id =#{orderId}
+		]]>
+	</delete>
+	
+	<!-- 查询信息列表 -->
+	<select id="findDecorateBuyOrder" parameterType="com.suyin.decoratebuyorder.model.DecorateBuyOrder" resultMap="DecorateBuyOrderMap">
+	   <![CDATA[
+		SELECT
+			t.order_id,
+			t.openid,
+			t.order_code,
+			t.order_price,
+			t.order_type,
+			t.order_state,
+			t.order_name,
+			t.voucher_code,
+			date_format(tupdate_time,'%Y-%m-%d %H:%i:%s')  as update_time,
+			date_format(t.create_time,'%Y-%m-%d %H:%i:%s')  as create_time
+		FROM
+			t_exp_decorate_buy_order t
+		WHERE
+			1 = 1
+		AND 
+			t.order_id=#{orderId}
+		]]>
+	</select>
+	
+	<!-- 分页查询信息 -->
+	<select id="findDecorateBuyOrderByPage" parameterType="com.suyin.decoratebuyorder.model.DecorateBuyOrder" resultMap="DecorateBuyOrderMap">
+		<![CDATA[
+		SELECT
+			t.order_id,
+			t.openid,
+			t.order_code,
+			t.order_price,
+			t.order_type,
+			t.order_state,
+			t.order_name,
+			t.voucher_code,
+			date_format(tupdate_time,'%Y-%m-%d %H:%i:%s')  as update_time,
+			date_format(t.create_time,'%Y-%m-%d %H:%i:%s')  as create_time
+		FROM
+			t_exp_decorate_buy_order t
+		WHERE
+			1 = 1
+		]]>
+	</select>
+	
+</mapper>	

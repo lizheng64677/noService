@@ -78,11 +78,11 @@ public class ExpDecorateUser  implements java.io.Serializable{
     /**
      * 总金额       db_column: count_price 
      */ 	
-	private Long countPrice;
+	private java.lang.String countPrice;
     /**
      * 余额       db_column: balance_price 
      */ 	
-	private Long balancePrice;
+	private java.lang.String balancePrice;
     /**
      * 支付宝账号       db_column: alipay_number 
      */ 	
@@ -122,7 +122,7 @@ public class ExpDecorateUser  implements java.io.Serializable{
 	 * 签约成功后返现给推荐人的金额，
 	 * 有推荐人则返现至账户，没有则不返回任何金额
 	 */
-	private String backPrice;
+	private java.lang.String backPrice;
 	//columns end
 
 
@@ -218,19 +218,19 @@ public class ExpDecorateUser  implements java.io.Serializable{
 		this.userState = value;
 	}
 	
-	public Long getCountPrice() {
+	public java.lang.String getCountPrice() {
 		return this.countPrice;
 	}
 	
-	public void setCountPrice(Long value) {
+	public void setCountPrice(java.lang.String value) {
 		this.countPrice = value;
 	}
 	
-	public Long getBalancePrice() {
+	public java.lang.String getBalancePrice() {
 		return this.balancePrice;
 	}
 	
-	public void setBalancePrice(Long value) {
+	public void setBalancePrice(java.lang.String value) {
 		this.balancePrice = value;
 	}
 	

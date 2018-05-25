@@ -12,7 +12,13 @@ import com.suyin.decorateuser.service.*;
 
 public interface ExpDecorateUserMapper {
 
-
+	/**
+	 * 修改用户变动信息
+	 * @param entity
+	 * @return
+	 */
+    public Integer updateUserPriceAndOtherInfo(ExpDecorateUser entity); 
+	
     /**
      * 修改信息
      */

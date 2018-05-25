@@ -1,8 +1,7 @@
 package com.suyin.decorateuser.service;
 
-import java.util.List;
-
 import java.util.*;
+
 import com.suyin.decorateuser.model.*;
 import com.suyin.decorateuser.service.*;
 
@@ -11,7 +10,14 @@ import com.suyin.decorateuser.service.*;
 
 public interface ExpDecorateUserService{
 
- 
+	  /**
+     * 修改金额信息
+     * 及相关信息
+     * @param entity
+     * @return
+	 * @throws Exception 
+     */
+    public Integer updateUserPriceAndOtherInfo(ExpDecorateUser entity) throws Exception;
     /**
      * 修改信息
      * @param entity

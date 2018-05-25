@@ -36,17 +36,17 @@
 	<![CDATA[
 
 		insert  t_exp_decorate_message (
-				user_id,		
+				openid,		
 				content,		
 				send_module_name,		
 				send_entity,		
 				create_time
 		)
 		values(
-				{userId},
-				{content},
-				{sendModuleName},
-				{sendEntity},
+				#{openid},
+				#{content},
+				#{sendModuleName},
+				#{sendEntity},
 				now()
 		)
 		]]>
