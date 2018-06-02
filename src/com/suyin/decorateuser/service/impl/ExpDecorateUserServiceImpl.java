@@ -55,10 +55,10 @@ public class ExpDecorateUserServiceImpl implements ExpDecorateUserService{
 		//本次返现金额
 		double backPrice=Double.parseDouble(entity.getBackPrice());	
 		//待收益金额 (此待收益金额，是受邀用户购买券时增加的待收益佣金金额，因此这里需要将这笔金额从待收益里去掉)
-		double sleepPrice=Double.parseDouble(useEntity.getSleepPrice());
-		double lastSleepPrice=Utils.subUserPrice(backPrice, sleepPrice);
-		String saveSleepPirce=df.format(lastSleepPrice);//最终入库
-		entity.setSleepPrice(saveSleepPirce);				
+//		double sleepPrice=Double.parseDouble(useEntity.getSleepPrice());
+//		double lastSleepPrice=Utils.subUserPrice(backPrice, sleepPrice);
+//		String saveSleepPirce=df.format(lastSleepPrice);//最终入库
+//		useEntity.setSleepPrice(saveSleepPirce);				
 		//增加可提现余额
 		double balancePrice=Double.parseDouble(useEntity.getBalancePrice());
 		double lastBalancePrice=Utils.addUserPrice(backPrice, balancePrice);
@@ -69,7 +69,7 @@ public class ExpDecorateUserServiceImpl implements ExpDecorateUserService{
 		double lastCountPrice=Utils.addUserPrice(backPrice, countPrice);
 		String saveCountPrice=df.format(lastCountPrice);//最终入库
 		useEntity.setCountPrice(saveCountPrice);
-		return ExpDecorateUserMapper.updateUserPriceAndOtherInfo(entity);
+		return ExpDecorateUserMapper.updateUserPriceAndOtherInfo(useEntity);
 	}
 	
     /**

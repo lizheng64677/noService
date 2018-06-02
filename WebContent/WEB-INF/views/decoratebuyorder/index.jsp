@@ -6,9 +6,18 @@
   </head>
   <body id="search" class="easyui-layout"  >   
 	<div id="tool">
-	  		<a href="#" class="easyui-linkbutton" onclick="doAdd();" data-options="iconCls:'icon-add'">添加</a>
-	  		<a href="#" class="easyui-linkbutton" onclick="doUpdate();" data-options="iconCls:'icon-edit'">修改</a>
-			<a href="#" class="easyui-linkbutton" onclick="doDelete();" data-options="iconCls:'icon-remove'">删除</a>
+			 类别:
+			<select id="type" class="input" style="width:120px">
+			<option value="-1">---请选择---</option>
+			<option value="0">---姓名---</option>
+			<option value="1">---手机号---</option>
+			<option value="2">---微信昵称---</option>
+			</select>
+			内容:<input type="text" class="input " name="text" id="text" style="width:180px"/>
+			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="serchGrid();" data-options="iconCls:'icon-search'">查询</a>
+			<div style="float:right;padding-right:18px;">
+			<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'icon-remove'">查看信息</a> 
+			</div> 
 	</div>
 	<div id="mydatagrid" fit="true"></div>
 	
@@ -23,9 +32,13 @@ $(function() {
 		pageList : [10,20,50],
 		columns : [[
 			{ "field":'orderId',checkbox:true },
-					    { "field": 'openid',"title" : '微信openid',width:$(this).width() * 0.2},
+					    { "field": 'nickName',"title" : '微信昵称',width:$(this).width() * 0.2},
+					    { "field": 'userName',"title" : '用户实名',width:$(this).width() * 0.2},
+					    { "field": 'userPhone',"title" : '手机号',width:$(this).width() * 0.2},
 					    { "field": 'orderCode',"title" : '订单编号',width:$(this).width() * 0.2},
-					    { "field": 'orderPrice',"title" : '订单金额',width:$(this).width() * 0.2},
+					    { "field": 'orderPrice',"title" : '订单金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
+					    	return value+"(元)";
+					    }},
 					    { "field": 'orderType',"title" : '订单类型',width:$(this).width() * 0.2,formatter:function(value,row,index){
 					    	if("0"==value){
 								return "福利券";
@@ -54,7 +67,7 @@ $(function() {
 });
 
 function serchGrid(){
-	var queryParams = {directoryName:$("#directoryName").val()};
+	var queryParams = {type:$("#type").val(),text:$("#text").val()};
 	$('#mydatagrid').datagrid("load",queryParams); 
 }
 function doAdd(){

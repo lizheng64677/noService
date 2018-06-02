@@ -73,6 +73,8 @@ public class DecorateBuyOrderController{
 
         String pag = request.getParameter("page");
         String showCount = request.getParameter("rows");
+        String type=request.getParameter("type");
+        String text=request.getParameter("text");		
         Page page = new Page();
         try
         {      
@@ -83,6 +85,27 @@ public class DecorateBuyOrderController{
 
             DecorateBuyOrder  entityInfo=new DecorateBuyOrder ();
             entityInfo.setPage(page);
+            if(!"-1".equals(type)){
+        		entityInfo.setSaerchType(1);
+	        	if("0".equals(type)){
+	            	if(!"".equals(text) && null!=text){
+	            		entityInfo.setUserName(text);
+	            	}
+	        	}else if("1".equals(type)){
+	        		if(!"".equals(text) && null!=text){
+	        			entityInfo.setUserPhone(text);
+	        		}
+	        	}else if("2".equals(type)){
+	        		if(!"".equals(text) && null!=text){
+	        			entityInfo.setNickName(text);
+	        		}
+	        	}
+	        }else{
+	        	if(!"".equals(text) && null!=text){
+	            	entityInfo.setText(text);
+	        	}
+	    		entityInfo.setSaerchType(-1);
+	        }
             List<DecorateBuyOrder > list=decorateBuyOrderService.findDecorateBuyOrderByPage(entityInfo);
             map.put("rows",list); 
             map.put("total",entityInfo.getPage().getTotalResult()); 

@@ -126,8 +126,16 @@
 	<!-- 查询信息列表 -->
 	<select id="findExpDecorate" parameterType="com.suyin.decorate.model.ExpDecorate" resultMap="ExpDecorateMap">
 	   <![CDATA[
-		select * from t_exp_decorate t where 1=1  and t.id=#{id}
+		select
+		 	t.* 
+		 from 
+			 t_exp_decorate t 
+		 where
+		  1=1
 		]]>
+		<if test="null !=id and ''!=id">
+		  and t.id=#{id}
+		</if>
 	</select>
 	
 	<!-- 分页查询信息 -->

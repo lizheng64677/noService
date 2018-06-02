@@ -22,7 +22,11 @@ import com.suyin.system.model.Page;
 import com.suyin.system.util.Tools;
 
 
-
+/**
+ * 余额提现订单
+ * @author Administrator
+ *
+ */
 @Controller
 @RequestMapping("/expdecorateorder")
 public class ExpDecorateOrderController{
@@ -55,6 +59,8 @@ public class ExpDecorateOrderController{
 
         String pag = request.getParameter("page");
         String showCount = request.getParameter("rows");
+        String type=request.getParameter("type");
+        String text=request.getParameter("text");	
         Page page = new Page();
         try
         {      
@@ -64,6 +70,27 @@ public class ExpDecorateOrderController{
             }
 
             ExpDecorateOrder  entityInfo=new ExpDecorateOrder ();
+            if(!"-1".equals(type)){
+        		entityInfo.setSaerchType(1);
+	        	if("0".equals(type)){
+	            	if(!"".equals(text) && null!=text){
+	            		entityInfo.setUserName(text);
+	            	}
+	        	}else if("1".equals(type)){
+	        		if(!"".equals(text) && null!=text){
+	        			entityInfo.setUserPhone(text);
+	        		}
+	        	}else if("2".equals(type)){
+	        		if(!"".equals(text) && null!=text){
+	        			entityInfo.setNickName(text);
+	        		}
+	        	}
+	        }else{
+	        	if(!"".equals(text) && null!=text){
+	            	entityInfo.setText(text);
+	        	}
+	    		entityInfo.setSaerchType(-1);
+	        }
             entityInfo.setPage(page);
             List<DecorateOrderDTO > list=expDecorateOrderService.findExpDecorateOrderByPage(entityInfo);
             map.put("rows",list); 

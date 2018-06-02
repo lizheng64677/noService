@@ -11,7 +11,7 @@
 	    <form id="dataForm"  method="post">
 	    	<table cellpadding="3">
 	    		<tr>
-	    			<td>姓名:<input type="hidden" name="id" value="${expdecorateuser.userId }"/></td> 
+	    			<td>姓名:<input type="hidden" name="userId" value="${expdecorateuser.userId }"/></td> 
 	    			<td><input    type="text" style="width:300px;height:30px;"disabled="disabled"data-options="required:true" value="${expdecorateuser.userName }"></input></td>
 	    		</tr>
 	    		<tr>
@@ -46,7 +46,13 @@
 				<c:if test="${null!=expdecorateuser.unickName }"> 
 	    		<tr id="sigPrice">
 	    			<td>返佣金额:</td> 
-	    			<td><input  class="easyui-validatebox input"  type="text" style="width:250px;height:30px;" data-options="required:true" name="backPrice" ></input>
+	    			<td>
+	    			<select class="input" name="backPrice" id="backPrice">
+	    				<option value="-1">---请选择---</option>			
+		    			<c:forEach items="${list }" var="m">
+	  						<option value="${m.sginPrice }">${m.name}---${m.sginPrice }(元)</option>
+	  					</c:forEach>		
+	    			</select>
 	    			(*)签单成功后返给推荐人的金额
 	    			</td>
 	    		</tr>
@@ -76,6 +82,12 @@
 			if(!isValid){
 				return false;
 			}
+			var backPrice=$("#backPrice").val();
+			if("-1"==backPrice){
+				$.messager.alert("提示", "请选择返现金额", true, "warning");
+				return;
+			}
+			
 			var isSign=$("#isSign").val();
 			if("-1"==isSign){
 				$.messager.alert("提示", "请选择处理事项", true, "warning");

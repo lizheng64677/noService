@@ -8,7 +8,7 @@
 	</comment>
 	
 	<!-- 文件所在项目包路径名称 根据自己需求定义 -->
-	<entry key="basepackage">com.suyin.decorate</entry> 
+	<entry key="basepackage">com.suyin.decoratebuyorder</entry> 
 	
 	<!-- jsp namespace: web/${namespace}/${className}/list.jsp -->
 	<entry key="namespace">views</entry> 
@@ -17,7 +17,7 @@
 	<entry key="outRoot">d:\generator-output</entry>
 	
 	<!-- 需要移除的表名前缀,使用逗号进行分隔多个前缀,示例值: t_,v_ -->
-	<entry key="tableRemovePrefixes">t_</entry>
+	<entry key="tableRemovePrefixes">t_exp_</entry>
 	
 	<entry key="jdbc.username">root</entry>
 	<entry key="jdbc.password">root</entry>

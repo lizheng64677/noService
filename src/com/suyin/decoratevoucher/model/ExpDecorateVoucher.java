@@ -44,11 +44,11 @@ public class ExpDecorateVoucher  implements java.io.Serializable{
     /**
      * 优惠券金额       db_column: price 
      */ 	
-	private Long price;
+	private java.lang.String price;
     /**
      * 券试用后，返现给推荐人的佣金       db_column: use_price 
      */ 	
-	private Long usePrice;
+	private java.lang.String usePrice;
     /**
      * 券的类型:0：福利券，1：体验券，2:优惠券       db_column: type 
      */ 	
@@ -131,19 +131,19 @@ public class ExpDecorateVoucher  implements java.io.Serializable{
 		this.title = value;
 	}
 	
-	public Long getPrice() {
+	public java.lang.String getPrice() {
 		return this.price;
 	}
 	
-	public void setPrice(Long value) {
+	public void setPrice(java.lang.String value) {
 		this.price = value;
 	}
 	
-	public Long getUsePrice() {
+	public java.lang.String getUsePrice() {
 		return this.usePrice;
 	}
 	
-	public void setUsePrice(Long value) {
+	public void setUsePrice(java.lang.String value) {
 		this.usePrice = value;
 	}
 	

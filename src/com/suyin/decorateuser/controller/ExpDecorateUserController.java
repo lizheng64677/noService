@@ -3,9 +3,9 @@ package com.suyin.decorateuser.controller;
 
 import java.util.List;
 import java.util.Map;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -32,6 +32,9 @@ import com.suyin.system.model.SystemUser;
 import com.suyin.system.util.Tools;
 
 import java.util.*;
+
+import com.suyin.decorate.model.ExpDecorate;
+import com.suyin.decorate.service.ExpDecorateService;
 import com.suyin.decorateuser.model.*;
 import com.suyin.decorateuser.service.*;
 
@@ -134,6 +137,8 @@ public class ExpDecorateUserController{
         return new ModelAndView("decorateuser/save",map);
     }
 
+    @Autowired
+    private ExpDecorateService decorateUserService;
     /**
      * 跳转修改页面 
      * @param request
@@ -150,6 +155,8 @@ public class ExpDecorateUserController{
                 ExpDecorateUser entity=new ExpDecorateUser();
                 entity.setUserId(Integer.parseInt(request.getParameter("id")));
                 entity=expDecorateUserService.findExpDecorateUserById(entity);
+        		List<ExpDecorate> list=decorateUserService.findExpDecorate(null);
+        		map.put("list",list);
                 map.put("expdecorateuser",entity);
 
             }

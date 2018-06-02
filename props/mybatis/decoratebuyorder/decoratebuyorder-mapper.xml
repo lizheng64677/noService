@@ -15,8 +15,31 @@
 		<result column="voucher_code" property="voucherCode"/>
 		<result column="create_time" property="createTime"/>
 		<result column="update_time" property="updateTime"/>
+		<result column="nick_name" property="nickName"/>
+		<result column="user_name" property="userName"/>
+		<result column="user_phone" property="userPhone"/>
 	
 	</resultMap>
+	<!-- 根据编号查询订单 -->
+	<select id="findByOrderNumInfo" parameterType="String" resultMap="DecorateBuyOrderMap">
+		<![CDATA[
+		SELECT
+			t.order_id,
+			t.openid,
+			t.order_code,
+			t.order_price,
+			t.order_type,
+			t.order_state,
+			t.order_name,
+			t.voucher_code,
+			date_format(t.update_time,'%Y-%m-%d %H:%i:%s')  as update_time,
+			date_format(t.create_time,'%Y-%m-%d %H:%i:%s')  as create_time
+		FROM
+			t_exp_decorate_buy_order t
+		WHERE
+			t.order_code=#{tradeNo}
+		]]>
+	</select>
 		<!--信息更新 -->
 	<update id="updateDecorateBuyOrder"  parameterType="com.suyin.decoratebuyorder.model.DecorateBuyOrder">
 		<![CDATA[
@@ -84,10 +107,17 @@
 			t.order_state,
 			t.order_name,
 			t.voucher_code,
-			date_format(tupdate_time,'%Y-%m-%d %H:%i:%s')  as update_time,
+			u.nick_name,
+			u.user_name,
+			u.user_phone,
+			date_format(t.update_time,'%Y-%m-%d %H:%i:%s')  as update_time,
 			date_format(t.create_time,'%Y-%m-%d %H:%i:%s')  as create_time
 		FROM
 			t_exp_decorate_buy_order t
+		LEFT JOIN
+			t_exp_decorate_user u
+		ON 
+			t.openid=u.openid
 		WHERE
 			1 = 1
 		AND 
@@ -107,13 +137,45 @@
 			t.order_state,
 			t.order_name,
 			t.voucher_code,
-			date_format(tupdate_time,'%Y-%m-%d %H:%i:%s')  as update_time,
+			u.nick_name,
+			u.user_name,
+			u.user_phone,
+			date_format(t.update_time,'%Y-%m-%d %H:%i:%s')  as update_time,
 			date_format(t.create_time,'%Y-%m-%d %H:%i:%s')  as create_time
 		FROM
 			t_exp_decorate_buy_order t
+		LEFT JOIN
+			t_exp_decorate_user u
+		ON 
+			t.openid=u.openid
 		WHERE
 			1 = 1
 		]]>
+			<if test="-1==saerchType and null!=text">
+			AND
+			u.user_phone like '%${text}%'
+			OR
+			u.nick_name like '%${text}%'
+			OR
+			u.user_name like '%${text}%'
+		</if>
+		<if test="null!=saerchType and 1==saerchType">
+			<if test="null!=userPhone and ''!=userPhone">
+			AND
+			u.user_phone like '%${userPhone}%'
+			</if>
+			<if test="null!=nickName and ''!=nickName">
+			AND 
+			u.nick_name like '%${nickName}%'
+			</if>
+			<if test="null!=userName and ''!=userName">	
+			AND 
+			u.user_name like '%${userName}%'
+			</if>
+		</if>
+		ORDER BY 
+			t.create_time
+		DESC
 	</select>
 	
 </mapper>	

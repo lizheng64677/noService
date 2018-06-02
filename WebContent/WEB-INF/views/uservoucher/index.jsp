@@ -41,13 +41,11 @@ $(function() {
 					    { "field": 'usePrice',"title" : '返佣金额',width:$(this).width() * 0.2,formatter:function(value,row,index){
 					    	return value+"(元)";
 					    }},
-					    { "field": 'headImg',"hidden" : '',width:$(this).width() * 0.2},
 					    { "field": 'nickName',"title" : '购买者',width:$(this).width() * 0.2,formatter:function(value,row,index){
-					    	return "<img src="+row.headImg+" style='width:40px;height:40px'>"+""+value;
+					    	return "<img src="+row.headImg+" style='width:40px;height:40px'>"+value;
 					    }},		
-					    { "field": 'uheadImg',"hidden" : '',width:$(this).width() * 0.2},						
 					    { "field": 'unickName',"title" : '推荐人',width:$(this).width() * 0.2,formatter:function(value,row,index){
-					    	return "<img src="+row.uheadImg+" style='width:40px;height:40px'>"+""+value;
+					    	return "<img src="+row.uheadImg+" style='width:40px;height:40px'>"+value;
 					    }},
 					    { "field": 'type',"title" : '券类型',width:$(this).width() * 0.2,formatter:function(value,row,index){
   						 	if(0==value){					    		

@@ -59,9 +59,45 @@ public class ExpDecorateOrder  implements java.io.Serializable{
      * 审核人编号       db_column: review_user 
      */ 	
 	private java.lang.String reviewUser;
+	/**
+	 * 用户微信昵称
+	 */
+	private java.lang.String  nickName;
+	/**
+	 * 用户实名
+	 */
+	private java.lang.String  userName;
+	/**
+	 * 用户手机号
+	 */
+	private java.lang.String  userPhone;
+	/*
+	 * 支付宝
+	 */
+	private java.lang.String alipayNumber;
+	
+	/**
+	 *  0姓名，微信昵称 ，手机号
+	 *  查询类型
+	 */
+	private java.lang.Integer saerchType;
+	
+	/**
+	 * 查询内容
+	 */
+	private java.lang.String text;
+	
 	
 	//columns end
 
+
+	public java.lang.String getAlipayNumber() {
+		return alipayNumber;
+	}
+
+	public void setAlipayNumber(java.lang.String alipayNumber) {
+		this.alipayNumber = alipayNumber;
+	}
 
 	public ExpDecorateOrder(){
 	}
@@ -133,12 +169,53 @@ public class ExpDecorateOrder  implements java.io.Serializable{
 		this.reviewUser = value;
 	}
 	
-    public Page getPage() {
+    public java.lang.Integer getSaerchType() {
+		return saerchType;
+	}
+
+	public void setSaerchType(java.lang.Integer saerchType) {
+		this.saerchType = saerchType;
+	}
+
+	public java.lang.String getText() {
+		return text;
+	}
+
+	public void setText(java.lang.String text) {
+		this.text = text;
+	}
+
+	public Page getPage() {
         return page;
     }
     public void setPage(Page page) {
         this.page = page;
     }
+    
+	public java.lang.String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(java.lang.String nickName) {
+		this.nickName = nickName;
+	}
+
+	public java.lang.String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(java.lang.String userName) {
+		this.userName = userName;
+	}
+
+	public java.lang.String getUserPhone() {
+		return userPhone;
+	}
+
+	public void setUserPhone(java.lang.String userPhone) {
+		this.userPhone = userPhone;
+	}
+
 	public String toString() {
 		return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
 			.append("OrderId",getOrderId())

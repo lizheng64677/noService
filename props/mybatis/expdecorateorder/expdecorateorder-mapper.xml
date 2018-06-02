@@ -13,6 +13,12 @@
 		<result column="create_time" property="createTime"/>
 		<result column="review_time" property="reviewTime"/>
 		<result column="review_user" property="reviewUser"/>
+		<result column="nick_name" property="nickName"/>
+		<result column="user_name" property="userName"/>
+		<result column="user_phone" property="userPhone"/>
+		<result column="alipay_number" property="alipayNumber"/>
+		<result column="withdraw_price" property="withdrawPrice"/>
+		
 	
 	</resultMap>
 	
@@ -102,24 +108,51 @@
 	</select>
 	
 	<!-- 分页查询信息 -->
-	<select id="findExpDecorateOrderByPage" parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder" resultType="com.suyin.expdecorateorder.model.DecorateOrderDTO">
+	<select id="findExpDecorateOrderByPage" parameterType="com.suyin.expdecorateorder.model.ExpDecorateOrder" resultMap="ExpDecorateOrderMap">
 		<![CDATA[
 		select  
-				t1.order_id as orderId,	
+				t1.order_id,	
 				t1.openid,		
-				t1.user_id,		
-				t2.nick_name as nickName,		
-				t2.user_phone as userPhone,		
-				t2.user_name as userName,			
-				t2.alipay_number as alipayNumber,					
-				t1.withdraw_price as withdrawPrice,		
+				t1.user_id,			
+				t2.alipay_number,					
+				t1.withdraw_price,	
+				t2.nick_name,
+				t2.user_phone,
+				t2.user_name,	
 				t1.state,				
-				t1.review_user as reviewUser,
-				date_format(t1.create_time,'%Y-%m-%d %H:%i:%s') as createTime,
-			    date_format(t1.review_time,'%Y-%m-%d %H:%i:%s') as reviewTime
-			
-		 from t_exp_decorate_order t1 ,t_exp_decorate_user t2 where 1=1 and t1.user_id = t2.user_id
+				t1.review_user,
+				date_format(t1.create_time,'%Y-%m-%d %H:%i:%s') as create_time,
+			    date_format(t1.review_time,'%Y-%m-%d %H:%i:%s') as review_time			
+		 from t_exp_decorate_order t1 ,t_exp_decorate_user t2 
+		 where 1=1
+		  and
+		   t1.user_id = t2.user_id
 		]]>
+			<if test="-1==saerchType and null!=text">
+			AND
+			t2.user_phone like '%${text}%'
+			OR
+			t2.nick_name like '%${text}%'
+			OR
+			t2.user_name like '%${text}%'
+		</if>
+		<if test="null!=saerchType and 1==saerchType">
+			<if test="null!=userPhone and ''!=userPhone">
+			AND
+			t2.user_phone like '%${userPhone}%'
+			</if>
+			<if test="null!=nickName and ''!=nickName">
+			AND 
+			t2.nick_name like '%${nickName}%'
+			</if>
+			<if test="null!=userName and ''!=userName">	
+			AND 
+			t2.user_name like '%${userName}%'
+			</if>
+		</if>
+		ORDER BY 
+			t1.create_time
+		DESC
 	</select>
 	
 </mapper>	

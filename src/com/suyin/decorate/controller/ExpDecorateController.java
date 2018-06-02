@@ -99,7 +99,17 @@ public class ExpDecorateController{
 		return new ModelAndView("expdecorate/index");
 	}
 	
-	
+	/**
+	 * 查询所有单位
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/findByAllList")
+	public 	List<ExpDecorate>  findByAllList(HttpServletRequest request){
+		ExpDecorate entity=new ExpDecorate();
+		List<ExpDecorate> list=expDecorateService.findExpDecorate(entity);
+		return list;
+	}
 	/**
 	 * 读取列表
 	 * @param request

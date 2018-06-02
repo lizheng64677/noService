@@ -44,9 +44,7 @@
 		insert  t_exp_decorate_record (
 				type,		
 				publish_openid,		
-				publish_userid,		
 				accept_openid,		
-				accpt_userid,		
 				price_state,		
 				state,		
 				create_time,		
@@ -57,7 +55,6 @@
 				#{type},
 				#{publishOpenid},
 				#{acceptOpenid},
-				#{accptUserid},
 				#{priceState},
 				#{state},
 				now(),

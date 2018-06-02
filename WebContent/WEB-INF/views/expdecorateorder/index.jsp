@@ -4,10 +4,20 @@
 <html>
   <head>
   </head>
-  <body id="search" class="easyui-layout"  >   
+  <body id="search" class="easyui-layout"  >  
 	<div id="tool">
-<!-- 			<a href="#" class="easyui-linkbutton" onclick="doDelete();" data-options="iconCls:'icon-remove'">删除</a> -->
+			 类别:
+			<select id="type" class="input" style="width:120px">
+			<option value="-1">---请选择---</option>
+			<option value="0">---姓名---</option>
+			<option value="1">---手机号---</option>
+			<option value="2">---微信昵称---</option>
+			</select>
+			内容:<input type="text" class="input " name="text" id="text" style="width:180px"/>
+			<a href="javascript:void(0);" class="easyui-linkbutton" onclick="serchGrid();" data-options="iconCls:'icon-search'">查询</a>
+			<div style="float:right;padding-right:18px;">
 			<a href="#" class="easyui-linkbutton" onclick="reviewOrder();" data-options="iconCls:'icon-remove'">提现审批</a>
+			</div> 
 	</div>
 	<div id="mydatagrid" fit="true"></div>
 	
@@ -22,9 +32,9 @@ $(function() {
 		pageList : [10,20,50],
 		columns : [[
 			{ "field":'orderId',checkbox:true },
-					    { "field": 'userName',"title" : '姓名',width:$(this).width() * 0.2},
-					    { "field": 'nickName',"title" : '昵称',width:$(this).width() * 0.2},
-					    { "field": 'userPhone',"title" : '电话',width:$(this).width() * 0.2},
+					    { "field": 'userName',"title" : '用户姓名',width:$(this).width() * 0.2},
+					    { "field": 'nickName',"title" : '微信昵称',width:$(this).width() * 0.2},
+					    { "field": 'userPhone',"title" : '手机号',width:$(this).width() * 0.2},
 					    { "field": 'alipayNumber',"title" : '支付宝账号',width:$(this).width() * 0.2},	   
 					    { "field": 'withdrawPrice',"title" : '提现金额（元）',width:$(this).width() * 0.2},
 					    { "field": 'state',"title" : '提现状态',width:$(this).width() * 0.2,
@@ -38,7 +48,7 @@ $(function() {
 						    	}
 						    }},
 						
-					    { "field": 'reviewUser',"title" : '审核人编号',width:$(this).width() * 0.2},
+// 					    { "field": 'reviewUser',"title" : '审核人编号',width:$(this).width() * 0.2},
 					    { "field": 'createTime',"title" : '创建时间',width:$(this).width() * 0.2},
 						{ "field": 'reviewTime',"title" : '审核时间',width:$(this).width() * 0.2},
 		]],
@@ -49,7 +59,7 @@ $(function() {
 });
 
 function serchGrid(){
-	var queryParams = {directoryName:$("#directoryName").val()};
+	var queryParams = {type:$("#type").val(),text:$("#text").val()};
 	$('#mydatagrid').datagrid("load",queryParams); 
 }
 function doAdd(){

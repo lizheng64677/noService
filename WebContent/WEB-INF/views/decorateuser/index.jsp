@@ -130,7 +130,7 @@ function doUpdate(){
 		return;
 	}
 	var isSign=rows[0].isSign;
-	if("1"==isSing){
+	if(1==isSign){
 		$.messager.alert("提示", "该用户已签约完成，无需再次签约！", true, "warning");
 		return;
 	}

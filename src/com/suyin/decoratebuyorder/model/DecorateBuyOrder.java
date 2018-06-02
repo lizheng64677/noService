@@ -42,7 +42,7 @@ public class DecorateBuyOrder  implements java.io.Serializable{
     /**
      * 订单金额       db_column: order_price 
      */ 	
-	private Long orderPrice;
+	private java.lang.String orderPrice;
     /**
      * 订单类型:0:福利券，1 体验券，2优惠券       db_column: order_type 
      */ 	
@@ -67,10 +67,31 @@ public class DecorateBuyOrder  implements java.io.Serializable{
      * 修改时间       db_column: update_time 
      */ 	
 	private java.lang.String  updateTime;
-	
+	/**
+	 * 用户微信昵称
+	 */
+	private java.lang.String  nickName;
+	/**
+	 * 用户实名
+	 */
+	private java.lang.String  userName;
+	/**
+	 * 用户手机号
+	 */
+	private java.lang.String  userPhone;
 	//columns end
 
-
+	
+	/**
+	 *  0姓名，微信昵称 ，手机号
+	 *  查询类型
+	 */
+	private java.lang.Integer saerchType;
+	
+	/**
+	 * 查询内容
+	 */
+	private java.lang.String text;
 	public DecorateBuyOrder(){
 	}
 
@@ -81,6 +102,22 @@ public class DecorateBuyOrder  implements java.io.Serializable{
 	}
 
 	
+
+	public java.lang.Integer getSaerchType() {
+		return saerchType;
+	}
+
+	public void setSaerchType(java.lang.Integer saerchType) {
+		this.saerchType = saerchType;
+	}
+
+	public java.lang.String getText() {
+		return text;
+	}
+
+	public void setText(java.lang.String text) {
+		this.text = text;
+	}
 
 	public void setOrderId(java.lang.Integer value) {
 		this.orderId = value;
@@ -107,14 +144,38 @@ public class DecorateBuyOrder  implements java.io.Serializable{
 		this.orderCode = value;
 	}
 	
-	public Long getOrderPrice() {
+	public java.lang.String getOrderPrice() {
 		return this.orderPrice;
 	}
 	
-	public void setOrderPrice(Long value) {
+	public void setOrderPrice(java.lang.String value) {
 		this.orderPrice = value;
 	}
 	
+	public java.lang.String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(java.lang.String nickName) {
+		this.nickName = nickName;
+	}
+
+	public java.lang.String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(java.lang.String userName) {
+		this.userName = userName;
+	}
+
+	public java.lang.String getUserPhone() {
+		return userPhone;
+	}
+
+	public void setUserPhone(java.lang.String userPhone) {
+		this.userPhone = userPhone;
+	}
+
 	public java.lang.Integer getOrderType() {
 		return this.orderType;
 	}

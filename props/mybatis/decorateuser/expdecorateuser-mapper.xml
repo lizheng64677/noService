@@ -32,7 +32,9 @@
 		update
 		 	t_exp_decorate_user t
 		set 
-			t.is_sign=1
+			t.balance_price=#{balancePrice},
+			t.count_price=#{countPrice},
+			t.sleep_price=#{sleepPrice}
 		where 
 			t.openid =#{openid}
 		]]>
@@ -105,6 +107,7 @@
 			t.user_name like '%${userName}%'
 			</if>
 		</if>
+		
 	</select>
 	
 </mapper>	
